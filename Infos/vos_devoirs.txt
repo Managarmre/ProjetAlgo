@@ -1,0 +1,8 @@
+Les fonctions que vous devez implémenter, comme points d'entrée du robot-joueur pour qu'il puisse dialoguer avec le serveur de jeu, sont les suivantes :
+
+    register_pooo(uid) : inscrit le joueur et initialise le robot pour la compétition
+    init_pooo(init_string) : initialise le robot pour un match
+    play_pooo() : active le robot-joueur
+
+Ces fonctions sont documentées dans le modèle de fichier disponible ici.
+Ces fonctions sont à incorporer dans un seul module (un fichier .py) dont le nom vous est propre et qui sera chargé au moment de lancer le programme client. Tout le reste (vos structures de données, vos fonctions, etc.) est à définir et à organiser par vos soins.
