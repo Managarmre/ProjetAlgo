@@ -1,1 +1,2 @@
 # fichiers à ne pas prendre en compte lors des commits
+#./Code/__pycache__

@@ -2,10 +2,12 @@
 voir le site : https://docs.c9.io/setting_up_github_workspace.html
 
 
-1) ajouter un 'remote'
+1) ajouter un remote / depot distant
 
 git remote add [remote name] [remote url]
 git remote add depot git@github.com:/syffer/ProjetAlgo
+
+
 
 
 
@@ -15,6 +17,13 @@ git add [file1, file2, file3, ...]
 git add Code Gant
 
 
+2-bis) supprimer des fichiers pris en compte lors des commits 
+
+git rm fichier
+
+
+
+
 
 3) faire un commit 
 
@@ -22,7 +31,16 @@ git commit -m depot 'description de ce qui a été fait'
 
 
 
+
 4) pousser le commit (prendre en compte le commit)
 
 git push [remote] [branche]
 git puch depot master
+
+
+
+
+5) voir ce qui a été modifier par rapport au git 
+
+git status
+
