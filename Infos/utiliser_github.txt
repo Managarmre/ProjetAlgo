@@ -32,9 +32,8 @@ git rm fichier
 
 3) faire un commit 
 
-git commit [remote] '[description]'
-git commit -m depot 'description de ce qui a été fait'
-(git commit -am depot 'description' => si des fichier on été déplacés/supprimés)
+git commit -am [remote] '[description]'
+git commit -am depot 'description de ce qui a été fait'
 
 
 
