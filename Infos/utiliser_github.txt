@@ -48,8 +48,8 @@ git puch depot master
 
 4-bis) prendre les modifications du dépot
 
-git fetch [nom-distant]
-git fetch depot
+git fetch [nom-distant] [branche]
+git fetch depot master
 
 
 
