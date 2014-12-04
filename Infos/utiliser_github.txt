@@ -3,6 +3,7 @@ voir le site :
     https://docs.c9.io/setting_up_github_workspace.html
     http://git-scm.com/book/fr/v1/Les-bases-de-Git-Enregistrer-des-modifications-dans-le-d%C3%A9p%C3%B4t
 
+    https://www.atlassian.com/git/tutorials/saving-changes/git-commit   <= avec des schémas
 
 1) ajouter un remote / depot distant
 
