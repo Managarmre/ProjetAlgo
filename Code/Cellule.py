@@ -19,8 +19,24 @@ class Cellule:
 		Int rayon : le rayon de la cellule (graphique)
 	"""
 	def __init__(self, numero, attaque, defense, attaqueMax, defenseMax, production, couleurJoueur, x, y, rayon):
-
 		
+		# on vérifie les paramètres entrés pour la création de la cellule
+		noms = [ "numero", "attaque", "defense", "attaqueMax", "defenseMax", "production", "couleurJoueur", "x", "y", "rayon" ]
+		valeurs = [ numero, attaque, defense, attaqueMax, defenseMax, production, couleurJoueur, x, y, rayon ]
+		for nom_param, valeur_param in zip( noms , valeurs ):
+			if( not isinstance( valeur_param , int ) ):
+				raise Exception("le paramètre '" + nom_param + "' doit être un entier")
+			
+			if( nom_param != "x" and nom_param != "y" and valeur_param < 0 ):
+				raise Exception("le paramètre '" + nom_param + "' ne peut pas être inférieur à 0")
+		
+		if( attaque > attaqueMax ):
+			raise Exception("l'attaque de la cellule ne peut pas être supérieur à l'attaque maximale de la cellule")
+			
+		if( defense > defenseMax ):
+			raise Exception("la defense de la cellule ne peut pas être supérieur à la defense maximale de la cellule")
+
+
 
 		self.numero = numero
 		

@@ -27,7 +27,7 @@ class Robot:
             raise Exception("la chaine entrée est invalide (ne correspond pas à la regex)")
             
             
-        # on récupère autemps d'information qu epossible sur la chaine d'origine 
+        # on récupère autemps d'information que possible sur la chaine d'origine 
         regex_init = re.compile( r"INIT(?P<id_match>.+)TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>.*)" )
         informations = regex_init.match( init_string )
 
@@ -45,7 +45,7 @@ class Robot:
         regex_cellules = re.compile( r"[0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+" )
         regex_uneCellule = re.compile( r"(?P<id_cellule>[0-9]+)\((?P<x>[0-9]+),(?P<y>[0-9]+)\)'(?P<rayon>[0-9]+)'(?P<maxATT>[0-9]+)'(?P<maxDEF>[0-9]+)'(?P<production>I+)" )
         for chaine in regex_cellules.findall( informations.group('cellules') ):
-            
+
             ifs = regex_uneCellule.match( chaine )
 
             numero = int( ifs.group('id_cellule') )

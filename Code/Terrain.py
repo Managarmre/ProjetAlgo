@@ -62,11 +62,14 @@ class Terrain:
 	# dijkstra ici
 
 
-	# ????????????????????????????? ==> problème si la cellule n'est pas dans le graphe
 	# retourne la cellule du graphe ayant le numéro associé
+	# si la cellule correspondant à ce numéro n'est pas dans le terrain, une exception est lancée.
 	# Int numero : le numéro de la cellule recherchée
 	def getCellule(self, numero):
-		return self.cellules[ numero ]
+		try:
+			return self.cellules[ numero ]
+		except Exception:
+			raise Exception("il n'y a aucune cellule ayant ce numéro dans ce terrain")
 
 
 	def getCellulesJoueur(self, couleurJoueur):
