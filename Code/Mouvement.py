@@ -32,3 +32,5 @@ class Mouvement:
         
     def getTrajet(self):
         return self.trajet
+        
+    

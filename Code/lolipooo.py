@@ -103,9 +103,9 @@ def play_pooo():
         # traitement ici
         # retourne une/des chaines donnant le/les ordres
         #
-        ordres = []
-        for ordre in ordres:
-            order( ordre )
+        decisions = cheshire.getDecisions()
+        for decision in decisions:
+            order( decision )
             
     pass
     

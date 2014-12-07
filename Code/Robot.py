@@ -83,6 +83,15 @@ class Robot:
         pass
 
 
+    # retourne la liste des decisions, chacune conforme au protocole du serveur
+    # 
+    def getDecisions(self):
+        pass
+    
+
+
+
+
     # ----- getters ----
 
     # retourne l'uid du robot (string)
