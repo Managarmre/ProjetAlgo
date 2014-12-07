@@ -114,6 +114,8 @@ state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3
 register_pooo(uid)
 init_pooo(s)
 
+
+
 print( cheshire.getTerrain().toString() )
 print( cheshire.getTerrain().getCellulesJoueur(0) )
 for lien in cheshire.getTerrain().getCellule(1).getLiens() :

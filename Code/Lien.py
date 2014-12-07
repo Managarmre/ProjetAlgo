@@ -1,6 +1,7 @@
 
-from Cellule import *
-
+#from Cellule import *
+import Cellule as ce
+import Mouvement as mouv
 
 # les liens reliant les cellules du terrain
 # représente les arêtes du graphe
@@ -10,6 +11,19 @@ class Lien:
 	# Cellule v : l'autre cellule au bout du lien
 	# Int distance : la distance séparant les cellules u et v
 	def __init__(self, u, v, distance):
+
+		# on vérifie les paramètres
+		
+		if( not isinstance( u , ce.Cellule ) ):
+			raise Exception("le parametre 'u' soit être une cellule")
+
+		if( not isinstance( v , ce.Cellule ) ):
+			raise Exception("le paramètre 'v' doit être une cellule")
+			
+		if( not isinstance( distance , int ) ):
+			raise Exception("le paramètre 'distance' doit être de type Entier")
+		
+
 
 		# on mettra toujours la cellule ayant le plus petit numéro en premier
 		if( u.getNumero() > v.getNumero() ):
@@ -48,6 +62,7 @@ class Lien:
 
 
 	
+		
 	# ajoute un mouvement VERS la cellule enregistrée sous V
 	# Mouvement mouvement : le mouvement à ajouter
 	def ajouterMouvementVersV( self, mouvement ):
@@ -57,6 +72,33 @@ class Lien:
 	# Mouvement mouvement : le mouvement à ajouter
 	def ajouterMouvementVersU( self, mouvement ):
 		self.vers_u.append( mouvement )
+	
+	
+	# ajoute un mouvement VERS la cellule spécifiée
+	# si la cellule ne fait pas partie de ce lien, on lance une Exception
+	# Cellule cellule : la cellule vers lequel le mouvement est en direction
+	# Mouvement mouvement : le mouvement à ajouter
+	def ajouterMouvementVersCellule( self, cellule , mouvement ):
+		
+		# on vérifie les types des paramètres entrés
+		if( not isinstance( cellule , ce.Cellule ) ):
+			raise Exception("le paramètre 'cellule' doit être une instance de l'objet Cellule")
+		
+		if( not isinstance( mouvement , mouv.Mouvement ) ):
+			raise Exception("le parametre 'mouvement' doit petre une instance de l'objet Mouvement")
+		
+		
+		# on vérifie que la cellule est bien l'un des bords du lien
+		if( cellule == self.getU() ): 		# si c'est U
+			self.ajouterMouvementVersU(mouvement)
+			
+		elif( cellule == self.getV() ): 	# si c'est V
+			self.ajouterMouvementVersV(mouvement)
+			
+		else:
+			raise Exception("la cellule spécifiée ne fait pas partie de ce lien (ajouterMouvementCellule)")
+	
+
 	
 	
 	
@@ -73,27 +115,7 @@ class Lien:
 		self.clearVersU()
 		self.clearVersV()
 		
-	
-	# ajoute un mouvement VERS la cellule spécifiée
-	# si la cellule ne fait pas partie de ce lien, on lance une Exception
-	# Cellule cellule : la cellule vers lequel le mouvement est en direction
-	# Mouvement mouvement : le mouvement à ajouter
-	def ajouterMouvementVersCellule( self, cellule , mouvement ):
 		
-		# on vérifie que la cellule est bien l'un des bords du lien
-		
-		if( cellule == self.getU() ): 		# si c'est U
-			self.ajouterMouvementVersU(mouvement)
-			
-		elif( cellule == self.getV() ): 	# si c'est V
-			self.ajouterMouvementVersV(mouvement)
-			
-		else:
-			raise Exception("la cellule spécifiée ne fait pas partie de ce lien (ajouterMouvementCellule)")
-	
-	
-	
-	
 	
 	
 
@@ -113,6 +135,10 @@ class Lien:
 	# Cellule cellule1
 	# Cellule cellule2
 	def hashage(cellule1 , cellule2):
+		
+		if( not ( isinstance( cellule1 , ce.Cellule ) and isinstance( cellule2 , ce.Cellule ) ) ):
+			raise Exception("les deux paramètres doivent êtres des instances de l'objet Cellule")
+		
 		n1, n2 = cellule1.getNumero(), cellule2.getNumero()
 		if( n1 > n2 ):
 			n1, n2 = n2, n1

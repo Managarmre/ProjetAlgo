@@ -4,6 +4,7 @@ import re
 
 # le graphe modélisant le terrain
 from Terrain import *
+from Cellule import *
 
 
 class Robot:
@@ -21,9 +22,15 @@ class Robot:
     # init_string : (String) chaine regroupant les informations envoyé par le serveur pour l'initialisation d'un nouveau match
     def initialiserMatch( self, init_string ):
 
+        regex_verifier = re.compile( r"\AINIT.{8}-.{4}-.{4}-.{4}-.{12}TO[0-9]*\[[0-9]*\];[0-9]*;[0-9]*CELLS:([0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+,?)*;[0-9]*LINES:([0-9]+@[0-9]+OF[0-9]+,?)*\Z" )
+        if( not regex_verifier.match(init_string) ):
+            raise Exception("la chaine entrée est invalide (ne correspond pas à la regex)")
+            
+            
         # on récupère autemps d'information qu epossible sur la chaine d'origine 
-        regex_init = r"INIT(?P<id_match>.+)TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>.*)"
-        informations = re.match( regex_init , init_string )
+        regex_init = re.compile( r"INIT(?P<id_match>.+)TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>.*)" )
+        informations = regex_init.match( init_string )
+
 
         self.vitesse = int( informations.group('vitesse') )
         self.id_match = informations.group('id_match')
@@ -32,16 +39,14 @@ class Robot:
 
         # création d'un terrain vide, que l'on remplira au fure et à mesure
         self.terrain = Terrain()
-        #print( informations.groupdict() )
-
 
         # on trouve toutes les correspondance au pattern correspondant à la description d'une cellule
         # et pour chaque correspondance, on en extraits les informations de la cellule
-        pattern_cellule = r"[0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+"
-        regex_cellule = r"(?P<id_cellule>[0-9]+)\((?P<x>[0-9]+),(?P<y>[0-9]+)\)'(?P<rayon>[0-9]+)'(?P<maxATT>[0-9]+)'(?P<maxDEF>[0-9]+)'(?P<production>I+)"
-        for chaine in re.findall( pattern_cellule , informations.group('cellules') ):
+        regex_cellules = re.compile( r"[0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+" )
+        regex_uneCellule = re.compile( r"(?P<id_cellule>[0-9]+)\((?P<x>[0-9]+),(?P<y>[0-9]+)\)'(?P<rayon>[0-9]+)'(?P<maxATT>[0-9]+)'(?P<maxDEF>[0-9]+)'(?P<production>I+)" )
+        for chaine in regex_cellules.findall( informations.group('cellules') ):
             
-            ifs = re.match( regex_cellule , chaine )
+            ifs = regex_uneCellule.match( chaine )
 
             numero = int( ifs.group('id_cellule') )
             attaque, defense, couleurJoueur = 0, 0, 0    # cellule neutre, n'a ni attaque, ni defense
@@ -58,11 +63,11 @@ class Robot:
             #print( informations_cellule.groupdict() )
 
         # on fait de même pour les liens entres les cellules
-        pattern_lien = r"[0-9]+@[0-9]+OF[0-9]+"
-        regex_lien = r"(?P<id_cellule_u>[0-9]+)@(?P<distance>[0-9]+)OF(?P<id_cellule_v>[0-9]+)"
-        for chaine in re.findall( pattern_lien , informations.group('lignes') ):
+        regex_liens = re.compile( r"[0-9]+@[0-9]+OF[0-9]+" )
+        regex_unLien = re.compile( r"(?P<id_cellule_u>[0-9]+)@(?P<distance>[0-9]+)OF(?P<id_cellule_v>[0-9]+)" )
+        for chaine in regex_liens.findall( informations.group('lignes') ):
             
-            ifs = re.match( regex_lien , chaine )
+            ifs = regex_unLien.match( chaine )
             #print( ifs.groupdict() )
             
             numero_u = int( ifs.group('id_cellule_u') )

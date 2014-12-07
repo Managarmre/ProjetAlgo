@@ -1,6 +1,9 @@
 
-from Cellule import *
-from Lien import *
+#from Cellule import *
+#from Lien import *
+
+import Cellule as ce 
+import Lien as li 
 
 
 # le terrain du jeu
@@ -23,6 +26,10 @@ class Terrain:
 	# ajoute une cellule dans le graphe
 	# Cellule cellule : la cellule à ajouter
 	def ajouterCellule(self, cellule):
+		
+		if( not isinstance( cellule , ce.Cellule ) ):
+			raise Exception("ce n'est pas une instance de l'objet Cellule")
+		
 		# comme un numéro de cellule n'identifie qu'une seule cellule, on l'utilise pour retrouver la cellule
 		self.cellules[ cellule.getNumero() ] = cellule
 	
@@ -32,11 +39,15 @@ class Terrain:
 	# Cellule cellule2
 	# Int distance
 	def ajouterLien(self, cellule1, cellule2, distance = 1):
-		lien = Lien( cellule1, cellule2, distance )
+		lien = li.Lien( cellule1, cellule2, distance )
 		self.liens[ lien.hash() ] = lien
 
 
-
+	#
+	#
+	# ===>>> NON FINI !!!!!
+	#
+	#
 	def getSousGraphe(self, listeCellules):
 		terrain = Terrain()
 
