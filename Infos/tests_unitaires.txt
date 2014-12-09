@@ -1,0 +1,6 @@
+
+les tests unitaires de nos fonctions pourront être effectués à l'aide du module : unittest
+
+
+
+=> pour lancer tout les tests présents dasn un dossier : python -m unittest discover
