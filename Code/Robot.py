@@ -6,6 +6,9 @@ import re
 from Terrain import *
 from Cellule import *
 
+# permet de générer l'aléatoire
+import random
+
 
 class Robot:
 
@@ -86,7 +89,32 @@ class Robot:
     # retourne la liste des decisions, chacune conforme au protocole du serveur
     # 
     def getDecisions(self):
-        pass
+        
+        #
+        # ==> RANDOM ! 
+        #
+        
+        mesCellules = self.getTerrain().getCellulesJoueur( self.getMaCouleur() )
+        
+        # liste des mouvements que le robot va faire
+        mouvements = []
+        
+        for maCellule in mesCellules :
+            
+            # si il y a au moins 10% des unitées max de la cellule
+            if( maCellule.getAttaque() >= maCellule.getAttaqueMax() * 10 / 100 ):
+                
+                lesLiens = maCellule.getLiens()
+                leLien = lesLiens[ random.randint(0, len(lesLiens)-1 ) ]
+                
+                pourcentage = random.randint(1, maCellule.getAttaque() ) / maCellule.getAttaque()
+                
+                # [<userid>]MOV<%offunits>FROM<cellid>TO<cellid>
+                ordre = "[" + self.getUID() + "]" + "MOV" + str(pourcentage) + "FROM" + maCellule.getNumero() + "TO" + leLien.getOtherCellule( maCellule ).getNumero()
+                
+                mouvements.append( ordre )
+                
+        return mouvements
     
 
 

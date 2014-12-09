@@ -74,14 +74,14 @@ class Terrain:
 
 	def getCellulesJoueur(self, couleurJoueur):
 		liste = []
-		for cellule in self.getCellules():
+		for numero,cellule in self.getCellules().items() :
 			if( cellule.getCouleurJoueur() == couleurJoueur ):
 				liste.append( cellule )
 		return liste
 
 	# retourne la liste des cellules du terrain
 	def getCellules(self):
-		return self.cellules.values()
+		return self.cellules
 
 	# retourne la liste des liens du terrain
 	def getLiens(self):

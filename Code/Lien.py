@@ -60,8 +60,15 @@ class Lien:
 		return self.distance
 
 
-
-	
+	# retourne l'autre cellule, si l'on donne U, on retourne V, et vise et versa
+	def getOtherCellule( self, cellule_inconnue ):
+		if( cellule_inconnue == self.getU() ):
+			return self.getV()
+		elif( cellule_inconnue == self.getV() ):
+			return self.getU() 
+		else:
+			raise Exception("Cette cellule n'est pas présente sur ce lien....")
+			
 		
 	# ajoute un mouvement VERS la cellule enregistrée sous V
 	# Mouvement mouvement : le mouvement à ajouter
