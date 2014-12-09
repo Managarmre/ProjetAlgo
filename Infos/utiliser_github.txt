@@ -43,7 +43,7 @@ git commit -am depot 'description de ce qui a été fait'
 4) pousser le commit dans le dépot distant
 
 git push [remote] [branche]
-git puch depot master
+git push depot master
 
 
 
@@ -56,7 +56,7 @@ git fetch depot master
 
 
 
-5) voir ce qui a été modifier par rapport au git 
+5) voir ce qui a été modifi par rapport au git 
 
 git status
 
