@@ -9,8 +9,9 @@ from Cellule import *
 # permet de générer l'aléatoire
 import random
 
+# on import les différentes stratégies utilisées
+from StrategieRandom import *
 
-import StrategieRandom
 
 class Robot:
 
@@ -20,7 +21,7 @@ class Robot:
     def __init__( self, uid ):
         self.uid = uid
         
-        self.strategie = StrategieRandom( self )
+        self.strategie = None #StrategieRandom( self )
 
 
 
@@ -93,32 +94,7 @@ class Robot:
     # retourne la liste des decisions, chacune conforme au protocole du serveur
     # 
     def getDecisions(self):
-        
-        #
-        # ==> RANDOM ! 
-        #
-        
-        mesCellules = self.getTerrain().getCellulesJoueur( self.getMaCouleur() )
-        
-        # liste des mouvements que le robot va faire
-        mouvements = []
-        
-        for maCellule in mesCellules :
-            
-            # si il y a au moins 10% des unitées max de la cellule
-            if( maCellule.getAttaque() >= maCellule.getAttaqueMax() * 10 / 100 ):
-                
-                lesLiens = maCellule.getLiens()
-                leLien = lesLiens[ random.randint(0, len(lesLiens)-1 ) ]
-                
-                pourcentage = random.randint(1, maCellule.getAttaque() ) / maCellule.getAttaque()
-                
-                # [<userid>]MOV<%offunits>FROM<cellid>TO<cellid>
-                ordre = "[" + self.getUID() + "]" + "MOV" + str(pourcentage) + "FROM" + maCellule.getNumero() + "TO" + leLien.getOtherCellule( maCellule ).getNumero()
-                
-                mouvements.append( ordre )
-                
-        return mouvements
+        return [ mouv.toOrder( self.getUID() ) for mouv in selg.getStrategie().decider() ]
     
 
 
@@ -145,6 +121,9 @@ class Robot:
     # retourne le terrain du match en cours (Terrain)
     def getTerrain(self):
         return self.terrain
-
+        
+    # retourne la stratégie du robot (une instance de la classe abstraite Strategie)
+    def getStrategie():
+        return self.strategie
     
 
