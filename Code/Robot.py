@@ -10,6 +10,8 @@ from Cellule import *
 import random
 
 
+import StrategieRandom
+
 class Robot:
 
     # initialise le robot (crée le robot)
@@ -17,6 +19,8 @@ class Robot:
     # uid : (String) l'identifiant unique du robot que le serveur lui a attribué
     def __init__( self, uid ):
         self.uid = uid
+        
+        self.strategie = StrategieRandom( self )
 
 
 

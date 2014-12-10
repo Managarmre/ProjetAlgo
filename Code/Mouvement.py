@@ -1,6 +1,9 @@
 
 import Cellule as ce
 
+# on utilise 'math' pour trouver l'entier supérieur ou égal le plus proche
+import math
+
 class Mouvement:
     
     # Cellule depuis
@@ -50,3 +53,9 @@ class Mouvement:
         return self.trajet
         
     
+    
+    
+    
+    def toOrder( self, uid ):
+        pourcentage = math.ceil( self.getNbUnites() * 100 / self.fromCellule().getAttaque() )
+        return "[" + uid + "]" + "MOV" + str( pourcentage ) + "FROM" + str( self.fromCellule().getNumero() ) + "TO" + str( self.toCellule().getNumero() )
