@@ -1,0 +1,67 @@
+ 	
+voir le site : 	
+ https://docs.c9.io/setting_up_github_workspace.html 	
+ http://git-scm.com/book/fr/v1/Les-bases-de-Git-Enregistrer-des-modifications-dans-le-d%C3%A9p%C3%B4t 	
+ 
+ 
+ 
+ http://ndpsoftware.com/git-cheatsheet.html#loc=workspace;              <== explication en français
+ 
+ https://www.atlassian.com/git/tutorials/saving-changes/git-commit      <= avec des schémas 
+ 
+ cf cheat sheet sur le depot (pdf)
+ 	
+1) ajouter un remote / depot distant 	
+ 	
+git remote add [remote name] [remote url] 	
+git remote add depot git@github.com:/syffer/ProjetAlgo 	
+ 	
+ 	
+ 	
+ 	
+ 	
+2) ajouter de fichiers à prendre en compte lors des commits 	
+ 	
+git add [file1, file2, file3, ...] 	
+git add Code Gant 	
+ 	
+ 	
+2-bis) supprimer de fichiers pris en compte lors des commits 	
+ 	
+git rm fichier 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+ 	
+3) faire un commit 	
+ 	
+git commit -am [remote] '[description]' 	
+git commit -am depot 'description de ce qui a été fait' 	
+ 	
+ 	
+ 	
+ 	
+ 	
+4) pousser le commit dans le dépot distant 	
+ 	
+git push [remote] [branche] 	
+git push depot master 	
+ 	
+ 	
+ 	
+4-bis) prendre les modifications du dépot 	
+ 	
+git fetch [nom-distant] [branche] 	
+git fetch depot master 	
+ 	
+ 	
+ 	
+ 	
+ 	
+5) voir ce qui a été modifi par rapport au git 	
+ 	
+git status 	
