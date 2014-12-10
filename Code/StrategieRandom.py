@@ -1,7 +1,7 @@
 
-
+import random
 from Strategie import *
-
+from Mouvement import *
 
 class StrategieRandom( Strategie ):
     
@@ -33,9 +33,8 @@ class StrategieRandom( Strategie ):
                 mouv = Mouvement( maCellule, leLien.getOtherCellule( maCellule ), nbUnitees, robot.getMaCouleur(), 0 )
                 
                 # [<userid>]MOV<%offunits>FROM<cellid>TO<cellid>
-                ordre = "[" + robot.getUID() + "]" + "MOV" + str(pourcentage) + "FROM" + maCellule.getNumero() + "TO" + leLien.getOtherCellule( maCellule ).getNumero()
                 
-                mouvements.append( ordre )
+                mouvements.append( mouv )
                 
         return mouvements
         

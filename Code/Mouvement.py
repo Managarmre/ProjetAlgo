@@ -13,17 +13,17 @@ class Mouvement:
     # Integer trajet
     def __init__(self, depuis, vers, nbUnites, couleurJoueur, trajet ):
         
-        if( not ( isinstance( de, ce.Cellule ) and isinstance( vers, ce.Cellule ) ) ):
+        if( not ( isinstance( depuis, ce.Cellule ) and isinstance( vers, ce.Cellule ) ) ):
             raise Exception("les paramètres 'de' et 'vers' sont des cellules")
         
-        if( not instance( nbUnites , int ) or nbUnites <= 0 ):
+        if( not isinstance( nbUnites , int ) or nbUnites <= 0 ):
             raise Exception("le paramètre 'nbUnites' doit être un entier supérieur à 0")
         
-        if( not instance( couleurJoueur , int ) or couleurJoueur < 0 ):
+        if( not isinstance( couleurJoueur , int ) or couleurJoueur < 0 ):
             raise Exception("le paramètre 'couleurJoueur' doit être un entier supérieur à 0")
             
-        if( not instance( trajet , int ) or trajet <= 0 ):
-            raise Exception("le paramètre 'trajet' doit être un entier supérieur à 0")
+        if( not isinstance( trajet , int ) or trajet < 0 ):
+            raise Exception("le paramètre 'trajet' ne peut pas être inférieur à 0")
             
             
         self.depuis = depuis
