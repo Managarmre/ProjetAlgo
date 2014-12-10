@@ -21,7 +21,7 @@ class Robot:
     def __init__( self, uid ):
         self.uid = uid
         
-        self.strategie = None #StrategieRandom( self )
+        self.strategie = StrategieRandom( self )
 
 
 
@@ -94,7 +94,7 @@ class Robot:
     # retourne la liste des decisions, chacune conforme au protocole du serveur
     # 
     def getDecisions(self):
-        return [ mouv.toOrder( self.getUID() ) for mouv in selg.getStrategie().decider() ]
+        return [ mouv.toOrder( self.getUID() ) for mouv in self.getStrategie().decider() ]
     
 
 
@@ -123,7 +123,7 @@ class Robot:
         return self.terrain
         
     # retourne la stratégie du robot (une instance de la classe abstraite Strategie)
-    def getStrategie():
+    def getStrategie(self):
         return self.strategie
     
 
