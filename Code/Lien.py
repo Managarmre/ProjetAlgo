@@ -124,7 +124,32 @@ class Lien:
 		
 		
 	
+	def getMouvementsVersU(self):
+		return self.vers_u
+		
+	def getMouvementsVersV(self):
+		return self.vers_v
 	
+	def getMouvementVersCellule( self, cellule ):
+		# on vérifie les types des paramètres entrés
+		if( not isinstance( cellule , ce.Cellule ) ):
+			raise Exception("le paramètre 'cellule' doit être une instance de l'objet Cellule")
+		
+		# on vérifie que la cellule est bien l'un des bords du lien
+		if( cellule == self.getU() ): 		# si c'est U
+			return self.getMouvementsVersU()
+			
+		elif( cellule == self.getV() ): 	# si c'est V
+			return self.getMouvementsVersV()
+			
+		else:
+			raise Exception("la cellule spécifiée ne fait pas partie de ce lien (ajouterMouvementCellule)")
+		
+
+
+
+
+
 
 	def toString(self):
 		return "( " + self.u.toString() + " ; " + self.v.toString() + " ; " + str(self.distance) + " )" 

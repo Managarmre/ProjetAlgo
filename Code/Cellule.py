@@ -82,7 +82,13 @@ class Cellule:
 	def getLiens(self):
 		return self.liens
 
-
+	
+	# non fini !!!!!!
+	def getCout(self):
+		cout_sur_liens = 0 
+		return self.getAttaque() + self.getDefense() + cout_sur_liens
+	
+	
 
 	def setAttaque(self, attaque):
 		
