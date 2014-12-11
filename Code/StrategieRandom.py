@@ -20,7 +20,7 @@ class StrategieRandom( Strategie ):
         
         for maCellule in mesCellules :
             
-            # si il y a au moins 10% des unitées max de la cellule
+            # si il y a au moins 10% des unités max de la cellule
             if( maCellule.getAttaque() >= maCellule.getAttaqueMax() * 10 / 100 ):
                 
                 lesLiens = maCellule.getLiens()
