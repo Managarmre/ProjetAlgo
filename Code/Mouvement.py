@@ -34,7 +34,7 @@ class Mouvement:
         self.trajet = trajet 
         
         
-    # retourne la cellule vers laquelle le mouvement ce dirige
+    # retourne la cellule vers laquelle le mouvement se dirige
     def toCellule(self):
         return self.vers
         
@@ -48,7 +48,7 @@ class Mouvement:
     def getCouleurJoueur(self):
         return self.couleurJoueur
     
-    # retourne la distance déja parcourut par le mouvement
+    # retourne la distance déja effectuée par le mouvement
     def getTrajet(self):
         return self.trajet
         

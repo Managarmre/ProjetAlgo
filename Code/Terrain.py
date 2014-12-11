@@ -16,7 +16,7 @@ class Terrain:
 		# comme un numéro de cellule n'identifie qu'une seule cellule, on l'utilise pour retrouver la cellule
 		self.cellules = {}
 
-		# la liste des liens du terrain (représentent des arêtes)
+		# la liste des liens du terrain (représentation des arêtes)
 		self.liens = {}
 
 		# on utilise ici des dictionnaires (équivalent des hashmap en python)

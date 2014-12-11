@@ -8,10 +8,10 @@ class Cellule:
 
 	"""
 		Int numero : le numéro identifiant la cellule (unique pour chaque cellule)
-		Int attaque : le nombre d'unités attaquante sur la cellule actuellement
-		Int defense : le nombre d'unités defensive sur la cellule actuellement
-		Int attaqueMax : le nombre d'unités attaquante maximal sur la cellule
-		Int defenseMax : le nombre d'unités defensive maximal sur la cellule 
+		Int attaque : le nombre d'unités attaquantes sur la cellule actuellement
+		Int defense : le nombre d'unités defensives sur la cellule actuellement
+		Int attaqueMax : le nombre d'unités attaquantes maximal sur la cellule
+		Int defenseMax : le nombre d'unités defensives maximal sur la cellule 
 		Int production : vitesse de production des unités de la cellule
 		Int couleurJoueur: couleur du joueur à qui appartient la cellule (0 si neutre)
 		Int x : la coordonnée x de la cellule sur le terrain (graphique)
@@ -31,10 +31,10 @@ class Cellule:
 				raise Exception("le paramètre '" + nom_param + "' ne peut pas être inférieur à 0")
 		
 		if( attaque > attaqueMax ):
-			raise Exception("l'attaque de la cellule ne peut pas être supérieur à l'attaque maximale de la cellule")
+			raise Exception("l'attaque de la cellule ne peut pas être supérieure à l'attaque maximale de la cellule")
 			
 		if( defense > defenseMax ):
-			raise Exception("la defense de la cellule ne peut pas être supérieur à la defense maximale de la cellule")
+			raise Exception("la defense de la cellule ne peut pas être supérieure à la defense maximale de la cellule")
 
 
 
@@ -48,7 +48,7 @@ class Cellule:
 		
 		self.couleurJoueur = couleurJoueur
 
-		# attributs 'graphique' de la cellule
+		# attributs 'graphiques' de la cellule
 		self.x = x
 		self.y = y
 		self.rayon = rayon
@@ -90,10 +90,10 @@ class Cellule:
 			raise Exception("la valeur entrée n'est pas un entier")
 			
 		elif( self.getAttaqueMax() < attaque ):
-			raise Exception("la valeur de l'attaque est trop grande pour cette cellule (setAttaque), elle doit être inférieur à " + str(self.getAttaqueMax()) ) 
+			raise Exception("la valeur de l'attaque est trop grande pour cette cellule (setAttaque), elle doit être inférieure à " + str(self.getAttaqueMax()) ) 
 			
 		elif( attaque < 0 ):
-			raise Exception("la valeur entrée doit être supérieur ou égale à zéro")
+			raise Exception("la valeur entrée doit être supérieure ou égale à zéro")
 			
 		self.attaque = attaque
 
@@ -108,7 +108,7 @@ class Cellule:
 			raise Exception("la valeur de la defense est trop grande pour cette cellule (setDefense)")
 			
 		elif( defense < 0 ):
-			raise Exception("la valeur entrée doit être suppérieur ou égale à 0")
+			raise Exception("la valeur entrée doit être suppérieure ou égale à 0")
 			
 		self.defense = defense 
 
@@ -120,7 +120,7 @@ class Cellule:
 			raise Excpetion("la couleur d'un joueur doit être un entier")
 			
 		elif( couleurJoueur < 0 ):
-			raise Exception("la couleur d'un joueur doit être suppérieur ou égale à 0")
+			raise Exception("la couleur d'un joueur doit être suppérieure ou égale à 0")
 			
 		self.couleurJoueur = couleurJoueur
 

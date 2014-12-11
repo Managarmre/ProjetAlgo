@@ -88,12 +88,12 @@ class TestCellule(unittest.TestCase):
         self.assertEqual( self.cellule.getCouleurJoueur() , valeur )
 
     # entrée d'une valeur non entière
-    # excpetion attendue
+    # exception attendue
     def test_setDefense_pasEntier(self):
         self.assertRaises( Exception, self.cellule.setCouleurJoueur, "pas une couleur" )
     
     # entrée d'une valeur négative
-    # excpetion attendue
+    # exception attendue
     def test_setDefense_negatif(self):
         self.assertRaises( Exception, self.cellule.setCouleurJoueur, -9 )
 
@@ -117,7 +117,7 @@ class TestCellule(unittest.TestCase):
     def test_ajouterLien_pasLien(self):
         self.assertRaises( Exception, self.cellule.ajouterLien, "pas un lien" )
     
-    # ajouter un lien à une cellule, et dont cette cellule ne fait pas partie de ce lien (donc pas l'un des bords de l'arête)
+    # ajouter un lien à une cellule, cette dernière ne faisant pas partie de ce lien (donc pas l'un des bords de l'arête)
     # exception attendue
     def test_ajouterLien_pasCellule(self):
         cellule1 = Cellule( numero = 0, attaque = 0, defense = 5, attaqueMax = 25, defenseMax = 30, production = 2, couleurJoueur = 8, x = 10, y = 60, rayon = 45 )

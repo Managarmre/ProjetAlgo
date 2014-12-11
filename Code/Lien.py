@@ -4,7 +4,7 @@ import Cellule as ce
 import Mouvement as mouv
 
 # les liens reliant les cellules du terrain
-# représente les arêtes du graphe
+# représentent les arêtes du graphe
 class Lien:
 
 	# Cellule u : une cellule de l'un des bouts du lien
@@ -15,7 +15,7 @@ class Lien:
 		# on vérifie les paramètres
 		
 		if( not isinstance( u , ce.Cellule ) ):
-			raise Exception("le parametre 'u' soit être une cellule")
+			raise Exception("le parametre 'u' doit être une cellule")
 
 		if( not isinstance( v , ce.Cellule ) ):
 			raise Exception("le paramètre 'v' doit être une cellule")
@@ -44,12 +44,12 @@ class Lien:
 		self.vers_v = []		# mouvements de U vers V
 
 
-	# retourne la cellule enregistré sous U
+	# retourne la cellule enregistrée sous U
 	# return : Cellule
 	def getU(self):
 		return self.u
 
-	# retourne la cellule enregistré sous V
+	# retourne la cellule enregistrée sous V
 	# return : Cellule
 	def getV(self):
 		return self.v
@@ -117,7 +117,7 @@ class Lien:
 	def clearVersU( self ):
 		self.vers_u = []
 	
-	# supprime tous les mouvements présent sur ce lien
+	# supprime tous les mouvements présents sur ce lien
 	def clearAllMouvements( self ):
 		self.clearVersU()
 		self.clearVersV()
@@ -132,7 +132,7 @@ class Lien:
 
 
 
-	# utlisé pour ranger les liens dans un dictionnaire
+	# utliser pour ranger les liens dans un dictionnaire
 	def hash(self):
 		return str( self.u.getNumero() ) + str( self.v.getNumero() )
 
@@ -144,7 +144,7 @@ class Lien:
 	def hashage(cellule1 , cellule2):
 		
 		if( not ( isinstance( cellule1 , ce.Cellule ) and isinstance( cellule2 , ce.Cellule ) ) ):
-			raise Exception("les deux paramètres doivent êtres des instances de l'objet Cellule")
+			raise Exception("les deux paramètres doivent être des instances de l'objet Cellule")
 		
 		n1, n2 = cellule1.getNumero(), cellule2.getNumero()
 		if( n1 > n2 ):
