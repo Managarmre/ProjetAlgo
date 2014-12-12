@@ -86,7 +86,17 @@ class Cellule:
 	# non fini !!!!!!
 	def getCout(self):
 		cout_sur_liens = 0 
-		return self.getAttaque() + self.getDefense() + cout_sur_liens
+		
+		for lien in self.getLiens():
+			
+			mouv_vers_cellule = lien.getMouvementVersCellule( self )
+			
+			for mouvement in mouv_vers_cellule:
+				
+				coeff = 1 if mouvement.getCouleurJoueur() == cellule.getCouleurJoueur()  else -1
+				cout_sur_liens += mouvement.getNbUnites() * coeff
+			
+		return self.getAttaque() + self.getDefense() + cout_sur_liens + 1
 	
 	
 
