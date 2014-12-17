@@ -55,7 +55,7 @@ class Mouvement:
     
     
     
-    
+    # retourne dans la forme du protocole du serveur, l'ordre correspondant au mouvement associé
     def toOrder( self, uid ):
         pourcentage = math.ceil( self.getNbUnites() * 100 / self.fromCellule().getAttaque() )
         return "[" + uid + "]" + "MOV" + str( pourcentage ) + "FROM" + str( self.fromCellule().getNumero() ) + "TO" + str( self.toCellule().getNumero() )

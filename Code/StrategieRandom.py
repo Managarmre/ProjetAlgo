@@ -1,7 +1,8 @@
-
+import logging
 import random
 from Strategie import *
 from Mouvement import *
+
 
 class StrategieRandom( Strategie ):
     
@@ -10,6 +11,8 @@ class StrategieRandom( Strategie ):
         
         
     def decider(self):
+        
+        logging.info( "prise de décision en cours...." )
         
         robot = self.getRobot()
         

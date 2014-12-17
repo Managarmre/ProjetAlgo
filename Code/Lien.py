@@ -130,6 +130,9 @@ class Lien:
 	def getMouvementsVersV(self):
 		return self.vers_v
 	
+	# retourne la liste des mouvements allant vers la cellule donnée en paramètre
+	# lance une exception si cette cellule ne fait pas partie de ce lien
+	# Cellule cellule : la cellulle dont on veut récupérer les mouvements qui vont vers elle
 	def getMouvementVersCellule( self, cellule ):
 		# on vérifie les types des paramètres entrés
 		if( not isinstance( cellule , ce.Cellule ) ):
@@ -158,11 +161,13 @@ class Lien:
 
 
 	# utliser pour ranger les liens dans un dictionnaire
+	# retourne la valeur unique qui identifie ce lien
 	def hash(self):
 		return str( self.u.getNumero() ) + str( self.v.getNumero() )
 
 
 	# détermine la valeur du hash d'un lien à partir de deux cellules
+	# permet de calculer à partir des cellules qui le compose, la valeur unique qui identifie ce lien
 	# appel : Lien.hashage(...)
 	# Cellule cellule1
 	# Cellule cellule2

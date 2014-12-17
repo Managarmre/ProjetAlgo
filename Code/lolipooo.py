@@ -67,7 +67,7 @@ def register_pooo(uid):
 """
 def init_pooo(init_string):
     global cheshire
-  
+    
     if( cheshire ):
         cheshire.initialiserMatch( init_string )
     else:
@@ -109,7 +109,7 @@ def play_pooo():
             
     pass
     
-
+"""
 # test 
 uid = "0947e717-02a1-4d83-9470-a941b6e8ed07"
 s = "INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)'2'30'8'I,2(41,55)'1'30'8'II,3(23,103)'1'20'5'I;2LINES:1@3433OF2,1@6502OF3"
@@ -136,3 +136,4 @@ for cellule in terrain.getCellules().values():
     break
 
 print( cheshire.getDecisions() )
+"""

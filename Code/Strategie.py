@@ -1,6 +1,6 @@
 
 
-
+# classe abstraite
 class Strategie:
     
     
@@ -11,8 +11,8 @@ class Strategie:
     def getRobot(self):
         return self.robot
     
-    
-    
+    # méthode abstraite
+    # retourne la liste des mouvements à effectuer après analyse du terrain (prise de décision)
     def decider(self):
         raise NotImplementedError( "Abstract Class : Should have implemented this" )
         

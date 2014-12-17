@@ -72,6 +72,7 @@ class Terrain:
 			raise Exception("il n'y a aucune cellule ayant ce numéro dans ce terrain")
 
 
+	# retourne la liste des cellules appartenant au joueur ayant la couleur donnée (un entier)
 	def getCellulesJoueur(self, couleurJoueur):
 		liste = []
 		for numero,cellule in self.getCellules().items() :
@@ -79,18 +80,19 @@ class Terrain:
 				liste.append( cellule )
 		return liste
 
-	# retourne la liste des cellules du terrain
+	# retourne la liste des cellules du terrain (sous forme d'un dictionnaire)
 	def getCellules(self):
 		return self.cellules
 
-	# retourne la liste des liens du terrain
+	# retourne la liste des liens du terrain (sous forme d'un dictionnaire)
 	def getLiens(self):
 		return self.liens.values()
 
-
+	# retourne le nombre de cellules présentes dans le graphe
 	def getNbCellules(self):
 		return len(self.cellules)
 
+	# retourne le nombre de liens présents dans le graphe
 	def getNbLiens(self):
 		return len(self.liens)
 
