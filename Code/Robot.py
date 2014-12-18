@@ -144,7 +144,7 @@ class Robot:
             cellule1 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_u' ) ) )
             cellule2 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_v' ) ) )
             
-            # attantion => peut lancer une exception...
+            # attention => peut lancer une exception...
             lien = self.getTerrain().getLien( Lien.hachage(cellule1,cellule2) )
             
             
