@@ -35,7 +35,7 @@ class Robot:
             raise Exception("la chaine entrée est invalide (ne correspond pas à la regex)")
             
             
-        # on récupère autemps d'information que possible sur la chaine d'origine 
+        # on récupère autant d'informations que possible sur la chaine d'origine 
         regex_init = re.compile( r"INIT(?P<id_match>.+)TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>.*)" )
         informations = regex_init.match( init_string )
 
@@ -88,6 +88,77 @@ class Robot:
 
 
     def updateTerrain(self, state):
+        #exemple de chaine state
+        #state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
+        regex_state = re.compile( r"STATE(?P<id_match>.+)IS(?P<nbJoueurs>[0-9]+);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbMoves>[0-9]*)MOVES:(?P<moves>.*)" )
+        informations = regex_state.match( state )
+        #récupération du nombre de joueurs en cours
+        self.nbJoueur = int( informations.group('nbJoueurs') )
+        
+        
+        # on récupère le format des cellules
+        regex_cellules = re.compile( r"[0-9]+\[[0-9]+\][0-9]+'[0-9]+" )
+        regex_uneCellule = re.compile( r"(?P<id_cellule>[0-9]+)\[(?P<owner>[0-9]+)\](?P<offunits>[0-9]+)'(?P<defunits>[0-9]+)+" )
+        
+        for chaine in regex_cellules.findall( informations.group( 'cellules' ) ):
+             
+             ifs = regex_uneCellule.match( chaine )
+             
+             cellule = self.getTerrain().getCellule(int (ifs.group( 'id_cellule' ) ))
+             cellule.setCouleurJoueur(int (ifs.group( 'owner' ) ))
+             cellule.setAttaque(int (ifs.group( 'offunits' ) ))
+             cellule.setDefense(int (ifs.group( 'defunits' ) ))
+        
+        regex_liens = re.compile(r"[0-9]+.*[0-9]+")
+        regex_unLien = re.compile(r"(?P<id_cellule_u>[0-9]+(?P<deplacements>.+)(?P<id_cellule_v>[0-9]+)),+")
+       
+        #parcourt de tous les liens qui ont des déplacements 
+        for chaine in regex_liens.findall( informations.group( 'moves' )):
+            
+            ifs = regex_unLien.match ( chaine )
+            
+            # on fait de même pour les déplacements entre les cellules
+            regex_deplacement = re.compile( r"[0-9]+\<|\>[0-9]+\[[0-9]+\]\>|\<@[0-9]+" )
+            regex_unDeplacement = re.compile( r"(?P<id_cellule_u>[0-9]+)(?P<direction>\<|\>)(?P<offunits>[0-9]+)\[(?P<owner>[0-9]+)\]@(?P<timestamp>[0-9]+)" )
+            
+            #pour chaque lien on parcourt la liste des déplacements en cours sur ce lien
+            for chaine2 in regex_deplacement.findall( ifs.group( 'deplacements' )):
+                
+                ifs = regex_unDeplacement.match ( chaine2 )
+                # on supprime les mouvements
+                for numero,lien in self.getTerrain().getliens().items():
+                    lien.clearAllMouvements()
+                
+                
+                # on les recréé de nouveau 
+                cellule1 = Cellule.getCellule(int (ifs.group( 'id_cellule_u' ) ) )
+                cellule2 = Cellule.getCellule(int (ifs.group( 'id_cellule_v' ) ) )
+                
+                #on récupère le lien entre les 2 cellules
+                id_lien = Lien.hashage(cellule1, cellule2)
+                lienOk = None
+                
+                for numero, lien in self.getTerrain().getLiens().items():
+                    if numero == id_lien:
+                        lienOk = lien
+                        
+                        
+                        
+                
+                
+                # si la direction est de gauche à droite:
+                if (ifs.group( 'direction' )) == ">":
+                    # on créé le mouvement et on l'ajoute au lien
+                    mvt = Mouvement(cellule1, cellule2, int ( ifs.group( 'offunits' )), int ( ifs.group( 'owner' )), int ( ifs.group( 'timestamp' )) )
+                    lienOk.ajouterMouvementVersCellule(cellule1, mvt)
+                    # si la direction est de droite à gauche
+                elif (ifs.group( 'direction' )) == "<":
+                    mvt = Mouvement(cellule2, cellule1, int ( ifs.group( 'offunits' )), int ( ifs.group( 'owner' )), int ( ifs.group( 'timestamp' )) )
+                    lienOk.ajouterMouvementVersCellule(cellule1, mvt)
+                else:
+                    print( "Erreur, la direction indiquée est mauvaise" )
+
+
         pass
 
 
