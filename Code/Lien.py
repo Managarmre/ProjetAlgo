@@ -163,15 +163,15 @@ class Lien:
 	# utliser pour ranger les liens dans un dictionnaire
 	# retourne la valeur unique qui identifie ce lien
 	def hash(self):
-		return str( self.u.getNumero() ) + str( self.v.getNumero() )
+		return int( str( self.u.getNumero() ) + str( self.v.getNumero() ) )
 
 
 	# détermine la valeur du hash d'un lien à partir de deux cellules
 	# permet de calculer à partir des cellules qui le compose, la valeur unique qui identifie ce lien
-	# appel : Lien.hashage(...)
+	# appel : Lien.hachage(...)
 	# Cellule cellule1
 	# Cellule cellule2
-	def hashage(cellule1 , cellule2):
+	def hachage(cellule1 , cellule2):
 		
 		if( not ( isinstance( cellule1 , ce.Cellule ) and isinstance( cellule2 , ce.Cellule ) ) ):
 			raise Exception("les deux paramètres doivent être des instances de l'objet Cellule")
@@ -179,4 +179,4 @@ class Lien:
 		n1, n2 = cellule1.getNumero(), cellule2.getNumero()
 		if( n1 > n2 ):
 			n1, n2 = n2, n1
-		return str(n1) + str(n2)
+		return int(  str(n1) + str(n2) )

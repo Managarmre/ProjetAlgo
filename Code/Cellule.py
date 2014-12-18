@@ -13,7 +13,7 @@ class Cellule:
 		Int attaqueMax : le nombre d'unités attaquantes maximal sur la cellule
 		Int defenseMax : le nombre d'unités defensives maximal sur la cellule 
 		Int production : vitesse de production des unités de la cellule
-		Int couleurJoueur: couleur du joueur à qui appartient la cellule (0 si neutre)
+		Int couleurJoueur: couleur du joueur à qui appartient la cellule (-1 si neutre)
 		Int x : la coordonnée x de la cellule sur le terrain (graphique)
 		Int y : la coordonnée y de la cellule sur le terrain (graphique)
 		Int rayon : le rayon de la cellule (graphique)
@@ -23,12 +23,26 @@ class Cellule:
 		# on vérifie les paramètres entrés pour la création de la cellule
 		noms = [ "numero", "attaque", "defense", "attaqueMax", "defenseMax", "production", "couleurJoueur", "x", "y", "rayon" ]
 		valeurs = [ numero, attaque, defense, attaqueMax, defenseMax, production, couleurJoueur, x, y, rayon ]
-		for nom_param, valeur_param in zip( noms , valeurs ):
+		
+		params = { 
+				"numero" : numero, 
+				"attaque": attaque, 
+				"defense": defense, 
+				"attaqueMax": attaqueMax, 
+				"defenseMax": defenseMax, 
+				"production": production, 
+				"couleurJoueur": couleurJoueur, 
+				"x": x, 
+				"y": y 
+		}
+		
+		for nom_param, valeur_param in params.items():
 			if( not isinstance( valeur_param , int ) ):
 				raise Exception("le paramètre '" + nom_param + "' doit être un entier")
 			
-			if( nom_param != "x" and nom_param != "y" and valeur_param < 0 ):
+			if( nom_param not in [ "x", "y", "couleurJoueur" ] and valeur_param < 0 ):
 				raise Exception("le paramètre '" + nom_param + "' ne peut pas être inférieur à 0")
+		
 		
 		if( attaque > attaqueMax ):
 			raise Exception("l'attaque de la cellule ne peut pas être supérieure à l'attaque maximale de la cellule")
@@ -88,7 +102,13 @@ class Cellule:
 		# comme chaque cellule n'est relié qu'au plus 1 seule fois à chaques cellules, pas besoin de vérifier les doublons ici
 		return [ lien.getOtherCellule(self) for lien in self.getLiens() ]
 	
+	
+	
 	# non fini !!!!!!
+	#
+	#
+	#
+	#
 	def getCout(self):
 		cout_sur_liens = 0 
 		
@@ -111,7 +131,7 @@ class Cellule:
 			raise Exception("la valeur entrée n'est pas un entier")
 			
 		elif( self.getAttaqueMax() < attaque ):
-			raise Exception("la valeur de l'attaque est trop grande pour cette cellule (setAttaque), elle doit être inférieure à " + str(self.getAttaqueMax()) ) 
+			raise Exception("la valeur de l'attaque donnée (" , str(attaque) ,") est trop grande pour cette cellule (setAttaque), elle doit être inférieure à " + str(self.getAttaqueMax()) ) 
 			
 		elif( attaque < 0 ):
 			raise Exception("la valeur entrée doit être supérieure ou égale à zéro")
@@ -126,7 +146,7 @@ class Cellule:
 			raise Exception("la valeur entrée n'est pas un entier")
 			
 		elif( self.getDefenseMax() < defense ):
-			raise Exception("la valeur de la defense est trop grande pour cette cellule (setDefense)")
+			raise Exception("la valeur de la defense donnée (" , str(defense) ,") est trop grande pour cette cellule (setDefense), elle doit être inférieure à " + str( self.getDefenseMax() ) )
 			
 		elif( defense < 0 ):
 			raise Exception("la valeur entrée doit être suppérieure ou égale à 0")

@@ -82,10 +82,6 @@ class Terrain:
 		return [ self.getSousGraphe(sommets_composante) for sommets_composante in composantes.values()  ]
 
 
-	#
-	#
-	# ===>>> NON FINI !!!!!
-	#
 	# retourne le sous graphe contenant les cellules données en paramètre
 	# List<Cellule> listeCellules : la liste des cellules contenu dans le sous graphe
 	def getSousGraphe(self, listeCellules):
@@ -132,6 +128,16 @@ class Terrain:
 	# retourne la liste des cellules du terrain (sous forme d'un dictionnaire)
 	def getCellules(self):
 		return self.cellules
+
+	# retourne le lien du graohe ayant le numéro associé
+	# ce numéro peut être calculer en utilisant la méthode Lien.hashage(cellule1,cellule2) 
+	# Int numeroLien : le numéro unique identifiant le lien
+	def getLien(self, numeroLien):
+		try:
+			return self.liens[ numeroLien ]
+		except Exception:
+			raise Exception("il n'y a aucun lien ayant ce numéro dans ce terrain")
+
 
 	# retourne la liste des liens du terrain (sous forme d'un dictionnaire)
 	def getLiens(self):
