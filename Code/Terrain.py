@@ -34,27 +34,76 @@ class Terrain:
 		self.cellules[ cellule.getNumero() ] = cellule
 	
 
-	# ajoute un lien entre deux cellules
-	# Cellule cellule1
-	# Cellule cellule2
-	# Int distance
-	def ajouterLien(self, cellule1, cellule2, distance = 1):
-		lien = li.Lien( cellule1, cellule2, distance )
+	# ajoute un lien entre deux cellules dans le terrain
+	# Lien lien : le lien à ajouter
+	def ajouterLien(self, lien):
+		print( lien.getU().getNumero()  , " " , lien.getV().getNumero() )
+		if( not isinstance(lien, li.Lien ) ):
+			raise Exception("le parametre lien n'est pas une instance de l'objet Lien ")
+		if( lien.getU() not in self.getCellules().values() or lien.getV() not in self.getCellules().values() ):
+			raise Exception("l'une des cellules (ou les deux) n'est pas présente dans le graphe")
 		self.liens[ lien.hash() ] = lien
+
+
+
+	
+	
+	
+	# retourne la liste des composantes du graphe, attention, cette liste est une liste de terrain.
+	# return : List<Terrain>
+	def getComposantesConnexes(self):
+
+		# initialisation
+		# au debut, à chaque sommet on fait correspondre un numéro de composante connexe différente
+		composante_des_sommets = { cellule.getNumero(): cellule.getNumero() for cellule in self.getCellules().values() }
+
+		# on parcourt tous les sommets
+		for numero,cellule in self.getCellules().items():
+
+			# on récupère les voisins de la cellule courante
+			cesVoisins = cellule.getVoisins()
+
+			# on change son numéro de composante connexe
+			# car, comme elle est voisine avec cette cellule
+			# elles sont toutes deux dans la même composante connexe
+			for voisin in cesVoisins:
+
+				if( voisin.getNumero() > numero ):
+					composante_des_sommets[ voisin.getNumero() ] = numero
+
+		# on inverse
+		# pour chaque numéro de composantes connexes, on y fait correspondre les numéro des sommets qui y sont présents
+		composantes = {}
+		for key, value in composante_des_sommets.items():
+			composantes.setdefault( value, [] ).append( self.getCellule(key) )
+
+		# on retourne la liste des sous graphes ayant ces sommets
+		# une composante est un sous graphe du graphe actuel
+		return [ self.getSousGraphe(sommets_composante) for sommets_composante in composantes.values()  ]
 
 
 	#
 	#
 	# ===>>> NON FINI !!!!!
 	#
-	#
+	# retourne le sous graphe contenant les cellules données en paramètre
+	# List<Cellule> listeCellules : la liste des cellules contenu dans le sous graphe
 	def getSousGraphe(self, listeCellules):
+		
+		# on crée un nouveau terrain
 		terrain = Terrain()
 
+		# on ajoute les cellules dans ce nouveau terrain
 		for cellule in listeCellules:
 			terrain.ajouterCellule(cellule)
 
-		# => il manque les liens des cellules
+		# on ajoute les liens reliant les cellules du terrain
+		for cellule in listeCellules:
+			
+			for lien in cellule.getLiens():
+
+				if( lien.getOtherCellule( cellule ) in listeCellules ):
+					terrain.ajouterLien(lien)
 
 		return terrain
 
