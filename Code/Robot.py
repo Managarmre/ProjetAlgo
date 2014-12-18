@@ -92,7 +92,6 @@ class Robot:
 
 
     # retourne la liste des decisions, chacune conforme au protocole du serveur
-    # 
     def getDecisions(self):
         return [ mouv.toOrder( self.getUID() ) for mouv in self.getStrategie().decider() ]
     

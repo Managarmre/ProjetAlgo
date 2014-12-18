@@ -86,7 +86,7 @@ class Terrain:
 
 	# retourne la liste des liens du terrain (sous forme d'un dictionnaire)
 	def getLiens(self):
-		return self.liens.values()
+		return self.liens
 
 	# retourne le nombre de cellules présentes dans le graphe
 	def getNbCellules(self):

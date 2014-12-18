@@ -38,7 +38,9 @@ cheshire = None
 """
 def register_pooo(uid):
     global cheshire
+    logging.info( "--Initialisation du robot--" )
     cheshire = Robot( uid )
+    
     
     
 
@@ -68,10 +70,13 @@ def register_pooo(uid):
 def init_pooo(init_string):
     global cheshire
     
+    logging.info( "--Initialisation d'un match--" )
+    
     if( cheshire ):
         cheshire.initialiserMatch( init_string )
     else:
         raise Exception("cheshire doit être initialisé avant d'initialiser un match !")
+    
     
     
     
@@ -91,25 +96,28 @@ def play_pooo():
     # (4)     state = state_on_update()    
     # (5)     TODO: traitement de state et transmission d'ordres order(msg)
     
-    
+    logging.info( "demande de l'état du jeu initial" )
     init_state = state()        # bloquant
     cheshire.updateTerrain( init_state )
     
     while True:
         
+        logging.info( "demande de l'état du jeu" )
         state = state_on_update()   # bloquant
+        
+        logging.info( "mise à jour du terrain" )
         cheshire.updateTerrain(state)
-        #
-        # traitement ici
-        # retourne une/des chaines donnant le/les ordres
-        #
+        
+        logging.info( "prise de décision" )
         decisions = cheshire.getDecisions()
+        
+        logging.info( "envoie des décisions au serveur" )
         for decision in decisions:
             order( decision )
             
     pass
     
-"""
+
 # test 
 uid = "0947e717-02a1-4d83-9470-a941b6e8ed07"
 s = "INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)'2'30'8'I,2(41,55)'1'30'8'II,3(23,103)'1'20'5'I;2LINES:1@3433OF2,1@6502OF3"
@@ -136,4 +144,3 @@ for cellule in terrain.getCellules().values():
     break
 
 print( cheshire.getDecisions() )
-"""

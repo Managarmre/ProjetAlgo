@@ -38,7 +38,8 @@ class StrategieRandom( Strategie ):
                 # [<userid>]MOV<%offunits>FROM<cellid>TO<cellid>
                 
                 mouvements.append( mouv )
-                
+        
+        
         return mouvements
         
     
