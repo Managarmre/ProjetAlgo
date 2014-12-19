@@ -24,8 +24,10 @@ class Robot:
     def __init__( self, uid ):
         self.uid = uid
         
-        self.strategie = StrategieNormale( self )
-        #self.strategie = StrategieRandom( self )
+        #self.strategie = StrategieNormale( self )
+        self.strategie = StrategieRandom( self )
+        
+        self.joue = False
 
 
 
@@ -34,6 +36,7 @@ class Robot:
     # init_string : (String) chaine regroupant les informations envoyé par le serveur pour l'initialisation d'un nouveau match
     def initialiserMatch( self, init_string ):
         
+        logging.info( "==== chaine d'initialisation reçu : {chaine}".format(chaine=init_string)  )
         
         regex_verifier = re.compile( r"\AINIT.{8}-.{4}-.{4}-.{4}-.{12}TO[0-9]*\[[0-9]*\];[0-9]*;[0-9]*CELLS:([0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+,?)*;[0-9]*LINES:([0-9]+@[0-9]+OF[0-9]+,?)*\Z" )
         if( not regex_verifier.match(init_string) ):
@@ -54,6 +57,10 @@ class Robot:
         # création d'un terrain vide, que l'on remplira au fure et à mesure
         self.terrain = Terrain()
 
+        nbCellules = informations.group("nbCellules")
+        logging.info( "==== création de {nb} cellules".format(nb=nbCellules)  )
+        
+        
         # on trouve toutes les correspondance au pattern correspondant à la description d'une cellule
         # et pour chaque correspondance, on en extraits les informations de la cellule
         regex_cellules = re.compile( r"[0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+" )
@@ -77,6 +84,11 @@ class Robot:
             cellule = Cellule( numero, attaque, defense, attaqueMax, defenseMax, production, couleurJoueur, x, y, rayon )
             self.terrain.ajouterCellule( cellule )
 
+
+        nbLines = informations.group("nbLines")
+        logging.info( "création de {nb} liens".format(nb=nbLines)  )
+        
+        
         # on fait de même pour les liens entres les cellules
         regex_unLien = re.compile( r"(?P<id_cellule_u>[0-9]+)@(?P<distance>[0-9]+)OF(?P<id_cellule_v>[0-9]+)" )
         
@@ -90,11 +102,32 @@ class Robot:
 
             lien = Lien( self.terrain.getCellule(numero_u) , self.terrain.getCellule(numero_v) , distance )
             self.terrain.ajouterLien( lien )
-                    
+                  
+        self.joue = True
+        
         pass
 
 
-
+    def analyseMessage( self, state ):
+        
+        end_of_game = re.compile( r"ENDOFGAME.*" )
+        state_of_game = re.compile( r"STATE.*" )
+        gameover = re.compile( r"GAMEOVER.*" ) 
+        
+        if( end_of_game.match( state ) ):
+            self.joue = False
+            logging.info("==== arret du match")
+            
+        elif( gameover.match(state) ) :
+            self.joue = False
+            logging.info("==== gameover, ne joue plus")
+            
+        elif( state_of_game.match( state ) ):
+            logging.info( "==> maj du terrain" )
+            self.updateTerrain(state)
+            
+        else:
+            raise Exception("je ne comprend pas ce que c'est : {quezako} ".format( quezako=state ) )
 
     #
     #
@@ -104,29 +137,43 @@ class Robot:
     # state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
     def updateTerrain(self, state):
         
+        logging.info( "==== chaine update reçu : {chaine}".format(chaine=state)  )
+        
+        logging.info( "==== suppression des anciens mouvements"  )
+        
         # on supprime tous les déplacements
         for numero,lien in self.getTerrain().getLiens().items():
             lien.clearAllMouvements()
         
-        regex_state = re.compile( r"STATE(?P<id_match>.+)IS(?P<nbJoueurs>[0-9]+);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbMoves>[0-9]*)MOVES:(?P<moves>.*)" )
+        
+        
+        regex_state = re.compile( r"STATE(?P<id_match>.+)IS(?P<nbJoueurs>[0-9]+);(?P<nbCellules>[0-9]+)CELLS:?(?P<cellules>.*);(?P<nbMoves>[0-9]+)MOVES:?(?P<moves>.*)" )
         informations = regex_state.match( state )
         
         #récupération du nombre de joueurs en cours
-        self.nbJoueur = int( informations.group('nbJoueurs') )
+        self.nbJoueurs = int( informations.group('nbJoueurs') )
         
+        
+        nbCellules = informations.group("nbCellules")
+        logging.info( "==== maj de {nb} cellules".format(nb=nbCellules)  )
         
         # on récupère les cellules modifiées
         regex_uneCellule = re.compile( r"(?P<id_cellule>[0-9]+)\[(?P<owner>-?[0-9]+)\](?P<offunits>[0-9]+)'(?P<defunits>[0-9]+)" )
-        for chaine in re.split( "," , informations.group("cellules") ) :
-             
-             ifs_cellule = regex_uneCellule.match( chaine )
-             
-             # maj de la cellule
-             cellule = self.getTerrain().getCellule(int (ifs_cellule.group( 'id_cellule' ) ))
-             cellule.setCouleurJoueur(int (ifs_cellule.group( 'owner' ) ))
-             cellule.setAttaque(int (ifs_cellule.group( 'offunits' ) ))
-             cellule.setDefense(int (ifs_cellule.group( 'defunits' ) ))
         
+        if( int( informations.group( "nbCellules" ) ) > 0 ):
+            for chaine in re.split( "," , informations.group("cellules") ) :
+                 
+                 ifs_cellule = regex_uneCellule.match( chaine )
+                 
+                 # maj de la cellule
+                 cellule = self.getTerrain().getCellule(int (ifs_cellule.group( 'id_cellule' ) ))
+                 cellule.setCouleurJoueur(int (ifs_cellule.group( 'owner' ) ))
+                 cellule.setAttaque(int (ifs_cellule.group( 'offunits' ) ))
+                 cellule.setDefense(int (ifs_cellule.group( 'defunits' ) ))
+        
+        
+        nbMoves = informations.group("nbMoves")
+        logging.info( "==== maj de {nb} mouvements".format(nb=nbMoves)  )
         
         # ======= regex sur les liens =======
         regex_unLien = re.compile(r"(?P<id_cellule_u>[0-9]+)((?P<deplacements>.+)')+(?P<id_cellule_v>[0-9]+)")
@@ -136,45 +183,46 @@ class Robot:
           
 
         # parcourt de tous les liens qui ont des déplacements 
-        for chaine_lien in re.split( ',' , informations.group( "moves" ) ):
-            
-            
-            ifs_lien = regex_unLien.match ( chaine_lien )
-            
-            # on récupère les identifiants des cellules du lien
-            cellule1 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_u' ) ) )
-            cellule2 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_v' ) ) )
-            
-            # attention => peut lancer une exception...
-            lien = self.getTerrain().getLien( Lien.hachage(cellule1,cellule2) )
-            
-            
-            # on récupère tous les mouvements sur le lien actuel
-            for chaine_deplacement in re.split( "'", ifs_lien.group("deplacements") ) :
+        if( int( informations.group( "nbMoves" ) ) > 0 ):
+        
+            for chaine_lien in re.split( ',' , informations.group( "moves" ) ):
                 
-                ifs_deplacement = regex_unDeplacement.match( chaine_deplacement )
+                ifs_lien = regex_unLien.match ( chaine_lien )
                 
-                couleurJoueur = int( ifs_deplacement.group("owner") )
-                nbUnites = int( ifs_deplacement.group("offunits") )
-                trajet = int( ifs_deplacement.group("timestamp") )
-                direction = ifs_deplacement.group("direction") 
+                # on récupère les identifiants des cellules du lien
+                cellule1 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_u' ) ) )
+                cellule2 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_v' ) ) )
+                
+                # attention => peut lancer une exception...
+                lien = self.getTerrain().getLien( Lien.hachage(cellule1,cellule2) )
                 
                 
-                # on ajoute le mouvement de cellule1 vers cellule2 (donc ajout VERS cellule2 )
-                if( direction == ">" ):
-                    depuis = cellule1
-                    vers = cellule2
-                
-                # mouvement de cellule2 vers cellule1 ( donc ajout VERS cellule1 )
-                elif( direction == "<" ):
-                    depuis = cellule2
-                    vers = cellule1 
-                
-                else:
-                    raise Exception("la direction n'est pas bonne... : " , direction )
-                
-                mouvement = Mouvement( depuis, vers, nbUnites, couleurJoueur, trajet )
-                lien.ajouterMouvementVersCellule( vers, mouvement )
+                # on récupère tous les mouvements sur le lien actuel
+                for chaine_deplacement in re.split( "'", ifs_lien.group("deplacements") ) :
+                    
+                    ifs_deplacement = regex_unDeplacement.match( chaine_deplacement )
+                    
+                    couleurJoueur = int( ifs_deplacement.group("owner") )
+                    nbUnites = int( ifs_deplacement.group("offunits") )
+                    trajet = int( ifs_deplacement.group("timestamp") )
+                    direction = ifs_deplacement.group("direction") 
+                    
+                    
+                    # on ajoute le mouvement de cellule1 vers cellule2 (donc ajout VERS cellule2 )
+                    if( direction == ">" ):
+                        depuis = cellule1
+                        vers = cellule2
+                    
+                    # mouvement de cellule2 vers cellule1 ( donc ajout VERS cellule1 )
+                    elif( direction == "<" ):
+                        depuis = cellule2
+                        vers = cellule1 
+                    
+                    else:
+                        raise Exception( "la direction n'est pas bonne... : {d}".format( d=direction)  )
+                    
+                    mouvement = Mouvement( depuis, vers, nbUnites, couleurJoueur, trajet )
+                    lien.ajouterMouvementVersCellule( vers, mouvement )
                 
         pass
 
@@ -221,3 +269,6 @@ class Robot:
     def getNbJoueurInitial(self):
         return self.nbJoueursInitial
 
+    # retourne vrai si une partie est en cours, faux sinon
+    def partieEnCours(self):
+        return self.joue

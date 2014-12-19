@@ -116,7 +116,7 @@ class Terrain:
 		try:
 			return self.cellules[ numero ]
 		except Exception:
-			raise Exception("il n'y a aucune cellule ayant ce numéro dans ce terrain")
+			raise Exception( "il n'y a aucune cellule ayant ce numéro ({numero}) dans ce terrain".format(numero=numero) )
 
 
 	# retourne la liste des cellules appartenant au joueur ayant la couleur donnée (un entier)

@@ -96,12 +96,13 @@ class Cellule:
 	def getLiens(self):
 		return self.liens
 
-	"""
+	
 	# retourne la liste de cellules voisines de celle-ci
+	# ATTENTION, peut renvoyer un résultat différent de la méthode Terrain.getVoisinsCellule(cellule)
 	def getVoisins(self):
 		# comme chaque cellule n'est relié qu'au plus 1 seule fois à chaques cellules, pas besoin de vérifier les doublons ici
 		return [ lien.getOtherCellule(self) for lien in self.getLiens() ]
-	"""
+	
 	
 	
 	# non fini !!!!!!
@@ -160,8 +161,8 @@ class Cellule:
 		if( not isinstance( couleurJoueur, int ) ):
 			raise Excpetion("la couleur d'un joueur doit être un entier")
 			
-		elif( couleurJoueur < 0 ):
-			raise Exception("la couleur d'un joueur doit être suppérieure ou égale à 0")
+		elif( couleurJoueur < -1 ):
+			raise Exception("la couleur d'un joueur doit être suppérieure ou égale à -1")
 			
 		self.couleurJoueur = couleurJoueur
 

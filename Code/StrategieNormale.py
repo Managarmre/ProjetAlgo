@@ -21,29 +21,29 @@ class StrategieNormale( Strategie ):
         for composante in terrain.getSousGraphe( self.getMesCellules() ).getComposantesConnexes() :
             print( composante.toString() )
         
-        """
-        mesCellules = self.getMesCellules()
         
-        productrices = self.getCellulesProductrices( mesCellules )
-        attaquantes = self.getCellulesAttaquantes( mesCellules, productrices )
-        
-        semi_productrices = self.getSemiProductrices( productrices, attaquantes )
-        full_productrices = self.getFullProductrices( productrices , semi_productrices )
-        
-        attaquantes_en_dangees = []
-        attaquantes_en_suretees = []
-        
-        print( mesCellules )
-        print( attaquantes )
-        print( productrices )
-        print( semi_productrices )
-        print( full_productrices )
-        print( attaquantes_en_dangees )
-        print( attaquantes_en_suretees )
-        
-        """
-        
-        return []
+            mesCellules = composante.getCellules().values()
+            
+            productrices = self.getCellulesProductrices( mesCellules )
+            attaquantes = self.getCellulesAttaquantes( mesCellules, productrices )
+            
+            semi_productrices = self.getSemiProductrices( productrices, attaquantes )
+            full_productrices = self.getFullProductrices( productrices , semi_productrices )
+            
+            attaquantes_en_dangees = []
+            attaquantes_en_suretees = []
+            
+            print( mesCellules )
+            print( attaquantes )
+            print( productrices )
+            print( semi_productrices )
+            print( full_productrices )
+            print( attaquantes_en_dangees )
+            print( attaquantes_en_suretees )
+            
+            
+            
+            return []
         
     
     
