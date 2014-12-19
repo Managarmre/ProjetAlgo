@@ -14,7 +14,7 @@ from Lien import *
 
 # on import les différentes stratégies utilisées
 from StrategieRandom import *
-
+from StrategieNormale import *
 
 class Robot:
 
@@ -24,7 +24,8 @@ class Robot:
     def __init__( self, uid ):
         self.uid = uid
         
-        self.strategie = StrategieRandom( self )
+        self.strategie = StrategieNormale( self )
+        #self.strategie = StrategieRandom( self )
 
 
 

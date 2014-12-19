@@ -96,12 +96,12 @@ class Cellule:
 	def getLiens(self):
 		return self.liens
 
-
+	"""
 	# retourne la liste de cellules voisines de celle-ci
 	def getVoisins(self):
 		# comme chaque cellule n'est relié qu'au plus 1 seule fois à chaques cellules, pas besoin de vérifier les doublons ici
 		return [ lien.getOtherCellule(self) for lien in self.getLiens() ]
-	
+	"""
 	
 	
 	# non fini !!!!!!

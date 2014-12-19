@@ -37,7 +37,6 @@ class Terrain:
 	# ajoute un lien entre deux cellules dans le terrain
 	# Lien lien : le lien à ajouter
 	def ajouterLien(self, lien):
-		print( lien.getU().getNumero()  , " " , lien.getV().getNumero() )
 		if( not isinstance(lien, li.Lien ) ):
 			raise Exception("le parametre lien n'est pas une instance de l'objet Lien ")
 		if( lien.getU() not in self.getCellules().values() or lien.getV() not in self.getCellules().values() ):
@@ -61,7 +60,7 @@ class Terrain:
 		for numero,cellule in self.getCellules().items():
 
 			# on récupère les voisins de la cellule courante
-			cesVoisins = cellule.getVoisins()
+			cesVoisins = self.getVoisinsCellule( cellule )
 
 			# on change son numéro de composante connexe
 			# car, comme elle est voisine avec cette cellule
@@ -107,6 +106,9 @@ class Terrain:
 	# dijkstra ici
 
 
+
+
+
 	# retourne la cellule du graphe ayant le numéro associé
 	# si la cellule correspondant à ce numéro n'est pas dans le terrain, une exception est lancée.
 	# Int numero : le numéro de la cellule recherchée
@@ -125,9 +127,28 @@ class Terrain:
 				liste.append( cellule )
 		return liste
 
+
 	# retourne la liste des cellules du terrain (sous forme d'un dictionnaire)
 	def getCellules(self):
 		return self.cellules
+
+
+	# retourne la liste des voisins de la cellule donnée en paramètre
+	# lance une exception si on n'enttre autre chose qu'une Cellule
+	# lance une exception si la cellule n'appartient pas à ce graphe
+	def getVoisinsCellule( self, cellule ):
+		
+		if( not isinstance( cellule , ce.Cellule ) ):
+			raise Exception("le paramètre entrée n'est pas une instance de l'objet Cellule")
+		if( cellule not in self.getCellules().values() ):
+			raise Exception("cette cellule n'est aps présente dasn ce terrain/graphe")
+			
+		return [ lien.getOtherCellule( cellule ) for numero,lien in self.getLiens().items() if lien.celluleAppartientAuLien(cellule) ]
+			
+
+
+
+
 
 	# retourne le lien du graohe ayant le numéro associé
 	# ce numéro peut être calculer en utilisant la méthode Lien.hashage(cellule1,cellule2) 
@@ -143,6 +164,12 @@ class Terrain:
 	def getLiens(self):
 		return self.liens
 
+
+
+
+
+
+
 	# retourne le nombre de cellules présentes dans le graphe
 	def getNbCellules(self):
 		return len(self.cellules)
@@ -153,12 +180,15 @@ class Terrain:
 
 
 
+
+
 	def toString(self):
 
 		chaine = "S = { "
 
 		for numero_cellule, cellule in self.cellules.items():
-			chaine += str(numero_cellule) + " ; "
+			chaine += "\n( {numero}, {owner} ),".format( numero = cellule.getNumero(), owner = cellule.getCouleurJoueur() )
+
 
 		chaine += "}" + "\n" + "A = { "
 

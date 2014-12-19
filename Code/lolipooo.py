@@ -129,10 +129,14 @@ register_pooo(uid)
 init_pooo(s)
 cheshire.updateTerrain(state)
 
-for lien in cheshire.getTerrain().getLiens().values():
-    print( "lien : " , lien.hash() )
-    print( "vers u : " , lien.getMouvementsVersU() )
-    print( "vers v : " , lien.getMouvementsVersV() )
+print( cheshire.getDecisions() )
+
+"""
+terrain = cheshire.getTerrain()
+print( terrain.toString() )
+print( terrain.getSousGraphe( terrain.getCellulesJoueur(cheshire.getMaCouleur()) ).toString() )
+"""
+
 
 """
 print( cheshire.getTerrain().toString() )
@@ -144,7 +148,7 @@ for lien in cheshire.getTerrain().getCellule(1).getLiens() :
 terrain = cheshire.getTerrain()
 
 
-print( cheshire.getDecisions() )
+
 
 for numero,lien in cheshire.getTerrain().getLiens().items():
     print(lien.vers_u)

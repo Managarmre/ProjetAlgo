@@ -150,7 +150,9 @@ class Lien:
 		
 
 
-
+	# renvoie vrai si la cellule passée en paramètre appartient à ce lien
+	def celluleAppartientAuLien( self, cellule ):
+		return cellule == self.getU() or cellule == self.getV() 
 
 
 
