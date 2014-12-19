@@ -11,6 +11,9 @@
 nomfichier=log_savePID.txt
 
 
+
+echo "ATTENTION, ne marche qu'une seule fois pour tout les terminaux, si vous voulez le relancer sans bugs, faite cracher le serveur c9.io avec une belle boucle infini..."
+
 echo "en cours de lancement"
 
 
@@ -69,20 +72,20 @@ echo "lancement des bots dans 5 secondes"
 # lancement du serveur
 
 
-#( python3 poooserver.py &> log_serveur.txt )& 
-#echo $!" " >> $nomfichier
-
-
-coproc python3 poooserver.py &> log_serveur.txt
+coproc processus { python3 poooserver.py &> log_serveur.txt ; echo "ok" ; }
 
 echo $!" " >> $nomfichier
 
 echo "lancement du serveur"
 
+
+
 # on attent 12 secondes avant d'écrit "init" et de lancer le match
 sleep 8
-echo "init" >&${COPROC[1]}
+echo "init" >&${processus[1]}
+
 
 echo "début du match"
 
 echo "regarde dans ton répertoire maintenant"
+
