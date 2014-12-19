@@ -11,11 +11,14 @@
 nomfichier=log_savePID.txt
 
 
+echo "en cours de lancement"
+
 
 # ===========================================
 #   partie supression des anciens processus
 # ===========================================
 
+echo "supression des anciens processus"
 
 # si le fichier existe
 if [ -e $nomfichier ]
@@ -23,11 +26,11 @@ then
 
     # on tue les anciens processus s'ils sont encore en cours d'exécution
     for ligne in $(cat $nomfichier); do
-        kill -9 ligne #2> /dev/null
+        kill -9 $ligne 2> /dev/null
     done
 
     # on vide le fichier
-    #echo "" > $nomfichier
+    echo "" > $nomfichier
 
 fi
 
@@ -56,17 +59,30 @@ function lancer_4_bot(){
 }
 
 
+echo "lancement des bots dans 5 secondes"
+
 # on attent 8 secondes avant de lancer les bots
 ( sleep 5 && lancer_4_bot )&
 
 
 
 # lancement du serveur
-python3 poooserver.py &> log_serveur.txt 
-echo $$" " >> $nomfichier
 
 
+#( python3 poooserver.py &> log_serveur.txt )& 
+#echo $!" " >> $nomfichier
+
+
+coproc python3 poooserver.py &> log_serveur.txt
+
+echo $!" " >> $nomfichier
+
+echo "lancement du serveur"
 
 # on attent 12 secondes avant d'écrit "init" et de lancer le match
 sleep 8
-echo "init"         # ne marche pas...., le faire manuellement
+echo "init" >&${COPROC[1]}
+
+echo "début du match"
+
+echo "regarde dans ton répertoire maintenant"
