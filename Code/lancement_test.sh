@@ -69,4 +69,7 @@ echo $$" " >> $nomfichier
 
 # on attent 12 secondes avant d'écrit "init" et de lancer le match
 sleep 8
-echo "init"
+echo "init"         # ne marche pas...., le faire manuellement
+
+
+
