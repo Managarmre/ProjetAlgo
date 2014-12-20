@@ -81,7 +81,9 @@ Chaîne d'initialisation :
 : - < cellid >@< dist >OF< cellid >,...
 :  
 > "INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)'2'30'8'I,2(41,55)'1'30'8'II,3(23,103)'1'20'5'I;2LINES:1@3433OF2,1@6502OF3"  
+
 : < me > et < owner > désignent des numéros de 'couleur' attribués aux joueurs.
+
 : < dist > est la distance qui sépare 2 cellules, exprimée en... millisecondes !
 : -- La couleur -1 est le neutre.
 : -- Le neutre n'est pas compté dans l'effectif de joueurs (<#players>).
@@ -101,6 +103,7 @@ Chaîne d'état du jeu :
 : - < cellid >, ...
 : 
 > "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"  
+
 : < timestamp > en millisecondes, donnée à vitesse 1 : top départ des unités de la cellule source.
 
 : < direction > désigne le caractère '>' ou '<' et indique le sens des unités en mouvement en suivant la pointe de flèche.
