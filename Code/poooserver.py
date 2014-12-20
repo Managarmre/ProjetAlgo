@@ -11,6 +11,17 @@ import threading
 import logging
 import re
 
+
+#######################################
+import sys
+try:
+    monPort = int( sys.argv[1] )
+except Exception:
+    print("pas de port, ou le paramètre entrée n'est pas un entier")
+    monPort = 9876
+#######################################
+
+
 ROOM_SIZE=4
 
 from pooogame import Room, Contest, Player
@@ -18,7 +29,7 @@ from pooogame import Room, Contest, Player
 
 BUFSIZE=2048
 
-HOST, PORT = "localhost", 9876
+HOST, PORT = "localhost", monPort
 
 
 #LOG_FILENAME=
