@@ -23,7 +23,7 @@ class Robot:
     # uid : (String) l'identifiant unique du robot que le serveur lui a attribué
     def __init__( self, uid ):
         self.uid = uid
-        
+        logging.info( "==== uid du robot : {chaine}".format(chaine=uid)  )
         #self.strategie = StrategieNormale( self )
         self.strategie = StrategieRandom( self )
         
@@ -113,6 +113,8 @@ class Robot:
         end_of_game = re.compile( r"ENDOFGAME.*" )
         state_of_game = re.compile( r"STATE.*" )
         gameover = re.compile( r"GAMEOVER.*" ) 
+        
+        logging.info( "==== chaine reçue : {chaine}".format(chaine=state) )
         
         if( end_of_game.match( state ) ):
             self.joue = False

@@ -39,6 +39,7 @@ cheshire = None
 def register_pooo(uid):
     global cheshire
     logging.info( "-- Initialisation du robot --" )
+    logging.info( "==== chaine uid reçu : {chaine}".format(chaine=uid)  )
     cheshire = Robot( uid )
     
     
