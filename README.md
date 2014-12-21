@@ -36,9 +36,13 @@ jeu de stratégie temps réel multi-joueurs
 
 - Cellule:  nœud du graphe, avec ses propriétés : 
 
+
 1. capacités offensive et défensive
+
 2. effectifs offensif et défensif
+
 3. cadences de production offensive et défensive
+  
 
 - Cellule occupée: cellule appartenant à un joueur
 
@@ -86,8 +90,11 @@ INIT< matchid >TO<#players>[< me >];< speed >;\
 < dist > est la distance qui sépare 2 cellules, exprimée en... millisecondes !
 
 -- La couleur -1 est le neutre.
+
 -- Le neutre n'est pas compté dans l'effectif de joueurs (<#players>).
+
 -- '...' signifie que l'on répète la séquence précédente autant de fois qu'il y a de cellules (ou d'arêtes).
+
 -- 0CELLS ou 0LINES sont des cas particuliers sans suffixe.
 
 /!\ attention: un match à vitesse x2 réduit de moitié le temps 'effectif' de trajet d'une cellule à l'autre par rapport à l'indication < dist >. De manière générale temps_de_trajet=< dist >/vitesse (division entière)
@@ -191,7 +198,9 @@ etime()
 - Les fonctions que vous devez implémenter, comme points d'entrée du robot-joueur pour qu'il puisse dialoguer avec le serveur de jeu, sont les suivantes :
 
 1. register_pooo(uid) : inscrit le joueur et initialise le robot pour la compétition
-2. init_pooo(init_string) : initialise le robot pour un match
+
+2. init\_pooo(init_string) : initialise le robot pour un match
+
 3. play_pooo() : active le robot-joueur
 
 - Ces fonctions sont documentées dans le modèle de fichier disponible.
