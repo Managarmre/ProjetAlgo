@@ -201,12 +201,21 @@ etime()
 
 ## **Task List**
 
-- [x] Compréhension du protocole
-- [x] Compréhension des objectifs
-- [x] Compréhension des objectifs
-- [x] Compréhension des objectifs
-- [ ] normal **formatting**, @mentions, #1234 refs
-- [ ] incomplete
-- [x] completed
-- [ ] task
+- [x] Préparation/Préambule
+  - [x] Compréhension du protocole
+  - [x] Compréhension des objectifs
+  - [x] Mise en place de l'environnement de développement
+- [x] Structuration des données
+  - [x] Modélisation UML : diagrammes de classes
+  - [x] Implémentation du modèle en python
+- [x] Réalisation des 3 fonctions demandés 
+  - [x] fonction register
+  - [x] fonction init
+  - [x] fonction play
+- [ ] Les stratégies
+  - [ ] Réglexion sur les stratégies
+  - [ ] Implémentations des stratégies
+- [ ] Tests unitaires
+- [ ] Tests d'intégrations
+- [ ] Génération de la documentation
 
