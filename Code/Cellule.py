@@ -111,18 +111,18 @@ class Cellule:
 	#
 	#
 	def getCout(self):
-		cout_sur_liens = 0 
-		
-		for lien in self.getLiens():
-			
-			mouv_vers_cellule = lien.getMouvementVersCellule( self )
-			
-			for mouvement in mouv_vers_cellule:
-				
-				coeff = 1 if mouvement.getCouleurJoueur() == cellule.getCouleurJoueur()  else -1
-				cout_sur_liens += mouvement.getNbUnites() * coeff
-			
-		return self.getAttaque() + self.getDefense() + cout_sur_liens + 1
+		return self.getAttaque() + self.getDefense() + 1
+	
+	
+	
+	def getPourcentageAttaque( self ):
+		return self.getAttaque() / self.getAttaqueMax()
+	
+	
+	def getExcedent( self ):
+		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() ] )
+		excedent = somme - self.getAttaqueMax() if somme > self.getAttaqueMax() else 0
+		return excedent
 	
 	
 
@@ -165,6 +165,9 @@ class Cellule:
 			raise Exception("la couleur d'un joueur doit être suppérieure ou égale à -1")
 			
 		self.couleurJoueur = couleurJoueur
+
+
+
 
 
 

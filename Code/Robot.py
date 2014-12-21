@@ -22,10 +22,13 @@ class Robot:
     # à appeler dans la procédure 'register_pooo(uid)'
     # uid : (String) l'identifiant unique du robot que le serveur lui a attribué
     def __init__( self, uid ):
+        
         self.uid = uid
+        
         logging.info( "==== uid du robot : {chaine}".format(chaine=uid)  )
-        #self.strategie = StrategieNormale( self )
-        self.strategie = StrategieRandom( self )
+        
+        self.strategie = StrategieNormale( self )
+        #self.strategie = StrategieRandom( self )
         
         self.joue = False
 
@@ -86,7 +89,7 @@ class Robot:
 
 
         nbLines = informations.group("nbLines")
-        logging.info( "création de {nb} liens".format(nb=nbLines)  )
+        logging.info( "==== création de {nb} liens".format(nb=nbLines)  )
         
         
         # on fait de même pour les liens entres les cellules

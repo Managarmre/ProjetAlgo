@@ -125,7 +125,7 @@ def play_pooo():
 
 
 # test 
-"""
+
 uid = "0947e717-02a1-4d83-9470-a941b6e8ed07"
 
 init = "INITc71db0bc-9863-4d51-bd6f-459de3fafdb7TO2[1];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF1,0@4800OF2,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
@@ -143,4 +143,4 @@ init_pooo( init )
 cheshire.updateTerrain(state)
 
 print( cheshire.getDecisions() )
-"""
+
