@@ -35,6 +35,7 @@ jeu de stratégie temps réel multi-joueurs
 - Terrain: graphe géométrique planaire dont les nœuds sont les cellules du jeu
 
 - Cellule:  nœud du graphe, avec ses propriétés : 
+
 1. capacités offensive et défensive
 2. effectifs offensif et défensif
 3. cadences de production offensive et défensive
@@ -58,7 +59,7 @@ jeu de stratégie temps réel multi-joueurs
 ## **Le Protocole**
 
 
-* **Chaîne d'enregistrement du joueur :  **
+* **Chaîne d'enregistrement du joueur :**
 
 REG< uid >
 
@@ -68,9 +69,13 @@ REG< uid >
 * **Chaîne d'initialisation :**
 
 INIT< matchid >TO<#players>[< me >];< speed >;\
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#cells>CELLS:
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >(< x >,< y >)'< radius >'< offsize >'< defsize >'< prod >,...;\
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#lines>LINES:
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >@< dist >OF< cellid >,...
 
 
@@ -92,12 +97,19 @@ INIT< matchid >TO<#players>[< me >];< speed >;\
 * **Chaîne d'état du jeu :**
 
 STATE< matchid >IS<#players>;
+
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#cells>CELLS:
+ 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >[< owner >]< offunits >'< defunits >,...;\
+
  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#moves>MOVES:
+ 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< direction ><#units>[< owner >]@< timestamp >'...
+
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >, ...
+
 
 > "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"  
 
@@ -186,4 +198,15 @@ etime()
 - Ces fonctions sont à incorporer dans un seul module (un fichier .py) dont le nom vous est propre et qui sera chargé au moment de lancer le programme client. 
 - Tout le reste (vos structures de données, vos fonctions, etc.) est à définir et à organiser par vos soins.
 
+
+## **Task List**
+
+- [x] Compréhension du protocole
+- [x] Compréhension des objectifs
+- [x] Compréhension des objectifs
+- [x] Compréhension des objectifs
+- [ ] normal **formatting**, @mentions, #1234 refs
+- [ ] incomplete
+- [x] completed
+- [ ] task
 
