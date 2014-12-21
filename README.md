@@ -1,13 +1,6 @@
 **Projet Algo 3ème année**
 =====================
 
-
-## **Sommaire**
-
-[TOC]
-
-----------
-
 ## **Introduction**
 
 Ce projet a pour but la programmation d'une IA pour du jeu Little Wars For Little Stars 2.
@@ -37,8 +30,6 @@ jeu de stratégie temps réel multi-joueurs
 
 
 
-----------
-
 ## **Petit lexique**
 
 - Terrain: graphe géométrique planaire dont les nœuds sont les cellules du jeu
@@ -62,114 +53,126 @@ jeu de stratégie temps réel multi-joueurs
 
 - Cadence de production: vitesse à laquelle sont créées les unités dans une cellule
 
-----------
+
 
 ## **Le Protocole**
 
 
-Chaîne d'enregistrement du joueur :  
-: REG< uid >
-:  
+* **Chaîne d'enregistrement du joueur :  **
+
+REG< uid >
+
 > "REG0947e717-02a1-4d83-9470-a941b6e8ed07"
   
 
-Chaîne d'initialisation :
-: INIT< matchid >TO<#players>[< me >];< speed >;\
-:  <#cells>CELLS:
-: - < cellid >(< x >,< y >)'< radius >'< offsize >'< defsize >'< prod >,...;\
-:  <#lines>LINES:
-: - < cellid >@< dist >OF< cellid >,...
-:  
+* **Chaîne d'initialisation :**
+
+INIT< matchid >TO<#players>[< me >];< speed >;\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#cells>CELLS:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >(< x >,< y >)'< radius >'< offsize >'< defsize >'< prod >,...;\
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#lines>LINES:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >@< dist >OF< cellid >,...
+
+
 > "INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)'2'30'8'I,2(41,55)'1'30'8'II,3(23,103)'1'20'5'I;2LINES:1@3433OF2,1@6502OF3"  
 
-: < me > et < owner > désignent des numéros de 'couleur' attribués aux joueurs.
+< me > et < owner > désignent des numéros de 'couleur' attribués aux joueurs.
 
-: < dist > est la distance qui sépare 2 cellules, exprimée en... millisecondes !
-: -- La couleur -1 est le neutre.
-: -- Le neutre n'est pas compté dans l'effectif de joueurs (<#players>).
-: -- '...' signifie que l'on répète la séquence précédente autant de fois qu'il y a de cellules (ou d'arêtes).
-: -- 0CELLS ou 0LINES sont des cas particuliers sans suffixe.
+< dist > est la distance qui sépare 2 cellules, exprimée en... millisecondes !
 
-: /!\ attention: un match à vitesse x2 réduit de moitié le temps 'effectif' de trajet d'une cellule à l'autre par rapport à l'indication < dist >. De manière générale temps_de_trajet=< dist >/vitesse (division entière)
+-- La couleur -1 est le neutre.
+-- Le neutre n'est pas compté dans l'effectif de joueurs (<#players>).
+-- '...' signifie que l'on répète la séquence précédente autant de fois qu'il y a de cellules (ou d'arêtes).
+-- 0CELLS ou 0LINES sont des cas particuliers sans suffixe.
 
+/!\ attention: un match à vitesse x2 réduit de moitié le temps 'effectif' de trajet d'une cellule à l'autre par rapport à l'indication < dist >. De manière générale temps_de_trajet=< dist >/vitesse (division entière)
+   
+  
 
-Chaîne d'état du jeu :
-: STATE< matchid >IS<#players>;
-: <#cells>CELLS:
-: - < cellid >[< owner >]< offunits >'< defunits >,...;\
-: <#moves>MOVES:
-: - < cellid >
-: - - < direction ><#units>[< owner >]@< timestamp >'...
-: - < cellid >, ...
-: 
+* **Chaîne d'état du jeu :**
+
+STATE< matchid >IS<#players>;
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#cells>CELLS:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >[< owner >]< offunits >'< defunits >,...;\
+ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#moves>MOVES:
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< direction ><#units>[< owner >]@< timestamp >'...
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >, ...
+
 > "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"  
 
-: < timestamp > en millisecondes, donnée à vitesse 1 : top départ des unités de la cellule source.
+< timestamp > en millisecondes, donnée à vitesse 1 : top départ des unités de la cellule source.
 
-: < direction > désigne le caractère '>' ou '<' et indique le sens des unités en mouvement en suivant la pointe de flèche.
+< direction > désigne le caractère '>' ou '<' et indique le sens des unités en mouvement en suivant la pointe de flèche.
+  
+  
 
+* **Ordre de mouvement (MOVe FROM TO)  :**
 
-Ordre de mouvement (MOVe FROM TO)  :
-: [< userid >]MOV<%offunits>FROM< cellid >TO< cellid >   
-:   
+[< userid >]MOV<%offunits>FROM< cellid >TO< cellid >   
+
 > "[0947e717-02a1-4d83-9470-a941b6e8ed07]MOV33FROM1TO4"
 
-: -- le pourcentage des unités offensives utilise la division entière. 
+-- le pourcentage des unités offensives utilise la division entière. 
 
-: Par exemple : 25% de 50=50*25/100=12.   
+Par exemple : 25% de 50=50*25/100=12.   
 
-: -- un ordre dont l'effectif d'unités off est nul (par ex., 33% de 2 unités) est ignoré.    
+-- un ordre dont l'effectif d'unités off est nul (par ex., 33% de 2 unités) est ignoré.    
+   
+     
 
+* **Fin de jeu pour le joueur (éliminé ou vainqueur) :**
 
-
-
-Fin de jeu pour le joueur (éliminé ou vainqueur) :
-: GAMEOVER[ < color > ]IN< matchid >  
-: 
+GAMEOVER[ < color > ]IN< matchid >  
+ 
 >"GAMEOVER[ 2 ]IN20ac18ab-6d18-450e-94af-bee53fdc8fca"
-: 
+  
+  
 
 
-Fin du jeu :
-: ENDOFGAME< matchid >
-: 
+* **Fin du jeu :**
+
+ENDOFGAME< matchid >
+
 > "ENDOFGAME20ac18ab-6d18-450e-94af-bee53fdc8fca"
 
-
---------------------
 
 ## **Vos Droits**
 
 Les fonctions disponibles pour obtenir/transmettre de l'information du/au serveur
 sont exposées par le module poooc. Ces fonctions sont au nombre de 4 :
 
-Ordonne un mouvement
-: order(msg)
+* **Ordonne un mouvement**
 
-: param msg: type chaîne de caractères (utf-8 string), conforme au protocole "Ordre de mouvement"
+order(msg)
 
-
-Demande l'état courant du jeu
-: state()
-
-: retourne un message sous la forme d'une "Chaîne d’état du jeu" selon le protocole 
-
-Demande l'état du jeu modifié
-: state_on_update()
-: -- La valeur de retour est identique à celle de la fonction state().
-: -- La principale différence provient du fait que le processus est mis en attente d'une mise à jour de l'état du jeu.
-
-: -- L'appel de state_on_update() est bloquant.
-
-Obtenir le temps écoulé (elapsed time) depuis le début du match
-: etime()
-: -- retourne temps écoulé (elapsed time) en millisecondes (un entier).
-: /!\ le temps indiqué n'est qu'une approximation (la plus précise possible)
+-- param msg: type chaîne de caractères (utf-8 string), conforme au protocole "Ordre de mouvement"
 
 
+* **Demande l'état courant du jeu**
+
+state()
+
+-- retourne un message sous la forme d'une "Chaîne d’état du jeu" selon le protocole 
+
+* **Demande l'état du jeu modifié**
+
+state_on_update()
+
+-- La valeur de retour est identique à celle de la fonction state().
+-- La principale différence provient du fait que le processus est mis en attente d'une mise à jour de l'état du jeu.
+
+-- L'appel de state_on_update() est bloquant.
+  
+
+* **Obtenir le temps écoulé (elapsed time) depuis le début du match**
+
+etime()
+
+-- retourne temps écoulé (elapsed time) en millisecondes (un entier).
+/!\ le temps indiqué n'est qu'une approximation (la plus précise possible)
 
 
---------------------
 
 ## **Vos Devoirs**
 
