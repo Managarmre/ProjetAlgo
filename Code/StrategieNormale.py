@@ -24,6 +24,8 @@ class StrategieNormale( Strategie ):
         
         terrain = self.getRobot().getTerrain()
         
+        mouvements = []
+        
         for composante in terrain.getSousGraphe( self.getMesCellules() ).getComposantesConnexes() :
             
             # self.getMesCellules() 
@@ -39,21 +41,21 @@ class StrategieNormale( Strategie ):
             attaquantes_en_danger = self.getAttaquantesEnDanger( attaquantes )
             attaquantes_en_surete = self.getAttaquantesEnSurete( attaquantes , attaquantes_en_danger )
             
-            logging.info( "mes cellules : {cell} ".format(cell=mesCellules) )
-            logging.info( "cellules attaquantes : {cell} ".format(cell=attaquantes) )
-            logging.info( "cellules productrices : {cell} ".format(cell=productrices) )
-            logging.info( "cellules semi-productrices : {cell} ".format(cell=semi_productrices) )
-            logging.info( "cellules full-productrices : {cell} ".format(cell=full_productrices) )
-            logging.info( "cellules attaquantes en dangées : {cell} ".format(cell=attaquantes_en_danger) )
-            logging.info( "cellules attaquantes en suretées : {cell} ".format(cell=attaquantes_en_surete) )
-            
-            
+
+
+            StrategieNormale.afficherCellulesLogging( "mes cellules" , mesCellules )
+            StrategieNormale.afficherCellulesLogging( "cellules attaquantes" , attaquantes )
+            StrategieNormale.afficherCellulesLogging( "cellules productrices" , productrices )
+            StrategieNormale.afficherCellulesLogging( "cellules semi-productrices" , semi_productrices )
+            StrategieNormale.afficherCellulesLogging( "cellules full-productrices" , full_productrices )
+            StrategieNormale.afficherCellulesLogging( "cellules attaquantes en dangées" , attaquantes_en_danger )
+            StrategieNormale.afficherCellulesLogging( "cellules attaquantes en suretées" , attaquantes_en_surete )
             # 
             #   ====> appel de dijkstra quelque part....
             #
             
             
-            mouvements = []
+            
             
             
             for cellule in productrices :
@@ -96,12 +98,25 @@ class StrategieNormale( Strategie ):
                     pass
                 
                 
+                #
+                # ne sais pas quoi mettre ....
+                #
+                vers = cellule.getLiens()[0].getOtherCellule( cellule )
                 
-                pass
+                if( cellule.getPourcentageAttaque() > 0.10 ):
+                    mouvements.append( Mouvement( cellule, vers, cellule.getAttaque(), cellule.getCouleurJoueur(), 0 ) )
             
-            
-            return mouvements
+        return mouvements
         
+        
+    ######
+    ######
+    ###### pour l'affichage
+    def afficherCellulesLogging( message , cellules ):
+        
+        liste = [ cellule.getNumero() for cellule in cellules ]
+        chaine = message + " : {liste}" 
+        logging.info( chaine.format(liste=liste) )
         
         
     
@@ -192,7 +207,7 @@ class StrategieNormale( Strategie ):
         
         maCouleur = self.getRobot().getMaCouleur()
         
-        en_danger = {}
+        en_danger = set()
         for cellule in attaquantes:
             
             for lien in cellule.getLiens() :
@@ -202,9 +217,9 @@ class StrategieNormale( Strategie ):
                     if( mouvement.getCouleurJoueur() != maCouleur ):
                         en_danger.add(cellule)
                 
-                    
-                ennemie = lien.getOtherCellule( cellule )
-                if( ennemie.getAttaque() > cellule.getCout() ):
+                 
+                autre_cellule = lien.getOtherCellule( cellule )
+                if( autre_cellule.getAttaque() > cellule.getCout() and autre_cellule.getCouleurJoueur() != maCouleur ):
                     en_danger.add( cellule )
                 
             

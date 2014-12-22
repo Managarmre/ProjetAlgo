@@ -68,7 +68,8 @@ class Terrain:
 			for voisin in cesVoisins:
 
 				if( voisin.getNumero() > numero ):
-					composante_des_sommets[ voisin.getNumero() ] = numero
+					composante_des_sommets[ voisin.getNumero() ] = composante_des_sommets[ numero ]
+
 
 		# on inverse
 		# pour chaque numéro de composantes connexes, on y fait correspondre les numéro des sommets qui y sont présents
@@ -92,14 +93,18 @@ class Terrain:
 		for cellule in listeCellules:
 			terrain.ajouterCellule(cellule)
 
+		
+		a_faire = listeCellules
 		# on ajoute les liens reliant les cellules du terrain
 		for cellule in listeCellules:
 			
 			for lien in cellule.getLiens():
 
-				if( lien.getOtherCellule( cellule ) in listeCellules ):
+				if( lien.getOtherCellule( cellule ) in a_faire ):
 					terrain.ajouterLien(lien)
-
+			
+			a_faire.remove(cellule)
+			
 		return terrain
 
 
@@ -196,3 +201,8 @@ class Terrain:
 			chaine += "\n" + lien.toString()
 
 		return chaine + "\n}"
+		
+		
+	def toString2(self):
+		
+		return [ numero for numero,cellule in self.getCellules().items() ]
