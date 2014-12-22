@@ -34,6 +34,54 @@ class Robot:
 
 
 
+
+    def analyseMessage( self, state ):
+        
+        end_of_game = re.compile( r"ENDOFGAME.*" )
+        state_of_game = re.compile( r"STATE.*" )
+        gameover = re.compile( r"GAMEOVER.*" ) 
+        
+        logging.info( "==== chaine reçue : {chaine}".format(chaine=state) )
+        
+        if( end_of_game.match( state ) ):
+            self.end_of_game()
+            
+        elif( gameover.match(state) ) :
+            self.game_over(state)
+            
+            
+        elif( state_of_game.match( state ) ):
+            self.updateTerrain(state)
+            
+        else:
+            raise Exception("je ne comprend pas ce que c'est : {quezako} ".format( quezako=state ) )
+            
+            
+    
+    # arrête le match en cours 
+    def end_of_game(self):
+        self.joue = False
+        logging.info("==== arret du match")
+    
+    
+    
+    def game_over( self, state_game_over ):
+        
+        regex_GameOver = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\](?P<id_match>.+)\Z" )
+        informations = regex_GameOver.match( state_game_over )
+        
+        id_joueur = int( informations.group(id_joueur) )
+        
+        logging.info( "==== gameover du joueur {id_joueur}".format(id_joueur=id_joueur) )
+        
+        if( self.getMaCouleur() == id_joueur ):
+            logging.info( "==== gameover : je ne joue plus" )
+            self.joue = False
+        
+        self.nbJoueurs -= 1
+        
+        
+
     # initialise le robot pour un match
     # à appeler dans la procédure 'init_pooo(init_string)'
     # init_string : (String) chaine regroupant les informations envoyé par le serveur pour l'initialisation d'un nouveau match
@@ -111,28 +159,7 @@ class Robot:
         pass
 
 
-    def analyseMessage( self, state ):
-        
-        end_of_game = re.compile( r"ENDOFGAME.*" )
-        state_of_game = re.compile( r"STATE.*" )
-        gameover = re.compile( r"GAMEOVER.*" ) 
-        
-        logging.info( "==== chaine reçue : {chaine}".format(chaine=state) )
-        
-        if( end_of_game.match( state ) ):
-            self.joue = False
-            logging.info("==== arret du match")
-            
-        elif( gameover.match(state) ) :
-            self.joue = False
-            logging.info("==== gameover, ne joue plus")
-            
-        elif( state_of_game.match( state ) ):
-            logging.info( "==> maj du terrain" )
-            self.updateTerrain(state)
-            
-        else:
-            raise Exception("je ne comprend pas ce que c'est : {quezako} ".format( quezako=state ) )
+    
 
     #
     #
@@ -141,6 +168,8 @@ class Robot:
     # exemple de chaine state
     # state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
     def updateTerrain(self, state):
+        
+        logging.info( "==> maj du terrain" )
         
         logging.info( "==== chaine update reçu : {chaine}".format(chaine=state)  )
         
