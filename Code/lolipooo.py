@@ -21,6 +21,7 @@ import logging
 # pour faire de l'introspection
 import inspect
 
+import time
 
 # notre robot
 from Robot import *
@@ -39,7 +40,7 @@ cheshire = None
 def register_pooo(uid):
     global cheshire
     logging.info( "-- Initialisation du robot --" )
-    logging.info( "==== chaine uid reçu : {chaine}".format(chaine=uid)  )
+    #logging.info( "==== chaine uid reçu : {chaine}".format(chaine=uid)  )
     cheshire = Robot( uid )
     
     
@@ -92,6 +93,7 @@ def play_pooo():
     
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
+    
     logging.info( "==> demande de l'état du jeu initial" )
     
     """
@@ -115,6 +117,7 @@ def play_pooo():
             logging.info( "==> envoie des décisions au serveur" )
             for decision in decisions:
                 order( decision )
+                time.sleep(0.2)
                 
         else:
             logging.info( "==> partie fini" )

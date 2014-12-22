@@ -70,7 +70,7 @@ class Robot:
         regex_GameOver = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\](?P<id_match>.+)\Z" )
         informations = regex_GameOver.match( state_game_over )
         
-        id_joueur = int( informations.group(id_joueur) )
+        id_joueur = int( informations.group("id_joueur") )
         
         logging.info( "==== gameover du joueur {id_joueur}".format(id_joueur=id_joueur) )
         
@@ -109,7 +109,7 @@ class Robot:
         self.terrain = Terrain()
 
         nbCellules = informations.group("nbCellules")
-        logging.info( "==== création de {nb} cellules".format(nb=nbCellules)  )
+        #logging.info( "==== création de {nb} cellules".format(nb=nbCellules)  )
         
         
         # on trouve toutes les correspondance au pattern correspondant à la description d'une cellule
@@ -137,7 +137,7 @@ class Robot:
 
 
         nbLines = informations.group("nbLines")
-        logging.info( "==== création de {nb} liens".format(nb=nbLines)  )
+        #logging.info( "==== création de {nb} liens".format(nb=nbLines)  )
         
         
         # on fait de même pour les liens entres les cellules
@@ -171,9 +171,9 @@ class Robot:
         
         logging.info( "==> maj du terrain" )
         
-        logging.info( "==== chaine update reçu : {chaine}".format(chaine=state)  )
+        #logging.info( "==== chaine update reçu : {chaine}".format(chaine=state)  )
         
-        logging.info( "==== suppression des anciens mouvements"  )
+        #logging.info( "==== suppression des anciens mouvements"  )
         
         # on supprime tous les déplacements
         for numero,lien in self.getTerrain().getLiens().items():
@@ -189,7 +189,7 @@ class Robot:
         
         
         nbCellules = informations.group("nbCellules")
-        logging.info( "==== maj de {nb} cellules".format(nb=nbCellules)  )
+        #logging.info( "==== maj de {nb} cellules".format(nb=nbCellules)  )
         
         # on récupère les cellules modifiées
         regex_uneCellule = re.compile( r"(?P<id_cellule>[0-9]+)\[(?P<owner>-?[0-9]+)\](?P<offunits>[0-9]+)'(?P<defunits>[0-9]+)" )
@@ -207,7 +207,7 @@ class Robot:
         
         
         nbMoves = informations.group("nbMoves")
-        logging.info( "==== maj de {nb} mouvements".format(nb=nbMoves)  )
+        #logging.info( "==== maj de {nb} mouvements".format(nb=nbMoves)  )
         
         # ======= regex sur les liens =======
         regex_unLien = re.compile(r"(?P<id_cellule_u>[0-9]+)((?P<deplacements>.+)')+(?P<id_cellule_v>[0-9]+)")
