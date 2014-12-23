@@ -104,6 +104,11 @@ class Cellule:
 		return [ lien.getOtherCellule(self) for lien in self.getLiens() ]
 	
 	
+	# retourne la liste des voisins ennemis
+	def getVoisinsEnnemis( self ):
+		return [ lien.getOtherCellule(self) for lien in self.getLiens() if lien.getOtherCellule(self).getCouleurJoueur() != self.getCouleurJoueur() ]
+	
+	
 	
 	# non fini !!!!!!
 	#

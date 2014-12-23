@@ -4,9 +4,11 @@ from Mouvement import *
 
 import logging
 
+import random
 import math
 import functools 
 import operator 
+
 
 class StrategieNormale( Strategie ):
     
@@ -14,12 +16,8 @@ class StrategieNormale( Strategie ):
         Strategie.__init__( self, robot )
         
         
-    # liste1 - liste2 : totu ce qui est présent dans liste1 mais pas dans liste2
-    def difference_liste( liste1, liste2 ):
-        return [ val for val in liste1 if val not in liste2 ]
-        
-        
-        
+    
+    
     def decider(self):
         
         terrain = self.getRobot().getTerrain()
@@ -98,10 +96,22 @@ class StrategieNormale( Strategie ):
                     pass
                 
                 
-                #
-                # ne sais pas quoi mettre ....
-                #
-                vers = cellule.getLiens()[0].getOtherCellule( cellule )
+                tableau_p = {}
+                for ennemi in cellule.getVoisinsEnnemis() :
+                    # tablea_p[ ennemi.getNumero() ] = self.indiceP(ennemi)
+                    #tablea_p[ self.indiceP(ennemi) ] = ennemi.getNumero()
+                    tableau_p.setdefault( self.indiceP(ennemi), [] ).append( ennemi.getNumero() )
+                    
+
+                # on prend l'indice p minimale
+                indice_p_min = min( tableau_p.keys() )
+                
+                # on récupère les cellules prossibles ayant cet indice p
+                cellules_possibles = tableau_p[ indice_p_min ]
+                
+                # on en choisie une aléatoirement dans celles possibles
+                cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
+                vers = terrain.getCellule(cellule_choisie) #cellule.getLiens()[0].getOtherCellule( cellule )
                 
                 if( cellule.getPourcentageAttaque() > 0.10 ):
                     mouvements.append( Mouvement( cellule, vers, cellule.getAttaque(), cellule.getCouleurJoueur(), 0 ) )
@@ -109,24 +119,22 @@ class StrategieNormale( Strategie ):
         return mouvements
         
         
-    ######
-    ######
-    ###### pour l'affichage
-    def afficherCellulesLogging( message , cellules ):
         
-        liste = [ cellule.getNumero() for cellule in cellules ]
-        chaine = message + " : {liste}" 
-        logging.info( chaine.format(liste=liste) )
-        
-        
-    
-    def calculerCoutCellule( self, cellule ):
+    #
+    # ===> a terminer
+    #
+    def indiceP( self, cellule ):
         
         cout = cellule.getCout()
         
+        production = cellule.getProduction()
+        
+        nbVoisins = len( cellule.getVoisins() )
+        
+        
         maCouleur = self.getRobot().getMaCouleur()
         
-        
+        """
         for lien in cellule.getLiens():
             
             # les unités vers cette cellules
@@ -151,14 +159,25 @@ class StrategieNormale( Strategie ):
             for mouvement in lien.getMouvementVersCellule( lien.getOtherCellule( cellule ) ):
                 
                 pass
-            
-            
-            
+        """
         
-        pass
+        return cout
     
+
+    ###### pour l'affichage
+    def afficherCellulesLogging( message , cellules ):
+        
+        liste = [ cellule.getNumero() for cellule in cellules ]
+        chaine = message + " : {liste}" 
+        logging.info( chaine.format(liste=liste) )
         
         
+    
+    
+    # ==============================================
+    #   Fonctions permettant de récupérer mes 
+    # cellules full-productrices, semi-productrices...
+    # ==============================================
     
     # retourne la liste des cellules m'appartenant
     def getMesCellules( self ):
@@ -174,7 +193,8 @@ class StrategieNormale( Strategie ):
         maCouleur = self.getRobot().getMaCouleur()
         
         # funtools.reduce() correspond à un sum, fold left (on replie la liste sur elle même)
-        return [ cellule for cellule in mesCellules if functools.reduce( operator.and_, [ voisin.getCouleurJoueur() == maCouleur for voisin in cellule.getVoisins() ]  ) ]
+        # return [ cellule for cellule in mesCellules if functools.reduce( operator.and_, [ voisin.getCouleurJoueur() == maCouleur for voisin in cellule.getVoisins() ]  ) ]
+        return [ cellule for cellule in mesCellules if all( [ voisin.getCouleurJoueur() == maCouleur for voisin in cellule.getVoisins() ] ) ]
     
     
     # retourne la liste de mes cellules attaquantes à partir de mes cellules productrices
@@ -192,12 +212,11 @@ class StrategieNormale( Strategie ):
     # retourne la liste de mes cellules semi-productrices
     # une cellule est semi-prodictrice si c'est une cellule productrice relié à au moins une cellule attaquante
     def getSemiProductrices( self, productrices, attaquantes ):
-        return [ cellule for cellule in productrices if functools.reduce( operator.or_ , [ voisin in attaquantes for voisin in cellule.getVoisins() ]  ) ]
+        return [ cellule for cellule in productrices if any( [ voisin in attaquantes for voisin in cellule.getVoisins() ]  ) ]
     
     # retourne la liste de mes cellules full-productrices
     # une cellule est full-productrice si c'est un ecellule productrice qui n'est relié à aucune cellule attaquante
     def getFullProductrices( self, productrices, semi_productrices ):
-        
         return list( set(productrices) - set(semi_productrices) )
         
         

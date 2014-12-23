@@ -61,16 +61,18 @@ class Terrain:
 
 			# on récupère les voisins de la cellule courante
 			cesVoisins = self.getVoisinsCellule( cellule )
-
+			
 			# on change son numéro de composante connexe
 			# car, comme elle est voisine avec cette cellule
 			# elles sont toutes deux dans la même composante connexe
 			for voisin in cesVoisins:
 
-				if( voisin.getNumero() > numero ):
+				# si mon voisin a un numéro plus grand que mon numero
+				# alors son numéro devient le mien
+				if( composante_des_sommets[ voisin.getNumero() ] > composante_des_sommets[ numero ]  ):
 					composante_des_sommets[ voisin.getNumero() ] = composante_des_sommets[ numero ]
-
-
+			
+			
 		# on inverse
 		# pour chaque numéro de composantes connexes, on y fait correspondre les numéro des sommets qui y sont présents
 		composantes = {}
@@ -93,8 +95,8 @@ class Terrain:
 		for cellule in listeCellules:
 			terrain.ajouterCellule(cellule)
 
-		
-		a_faire = listeCellules
+
+		a_faire = listeCellules[:]
 		# on ajoute les liens reliant les cellules du terrain
 		for cellule in listeCellules:
 			
@@ -139,15 +141,15 @@ class Terrain:
 
 
 	# retourne la liste des voisins de la cellule donnée en paramètre
-	# lance une exception si on n'enttre autre chose qu'une Cellule
+	# lance une exception si on entre autre chose qu'une Cellule
 	# lance une exception si la cellule n'appartient pas à ce graphe
 	def getVoisinsCellule( self, cellule ):
 		
 		if( not isinstance( cellule , ce.Cellule ) ):
 			raise Exception("le paramètre entrée n'est pas une instance de l'objet Cellule")
 		if( cellule not in self.getCellules().values() ):
-			raise Exception("cette cellule n'est aps présente dasn ce terrain/graphe")
-			
+			raise Exception("cette cellule n'est pas présente dasn ce terrain/graphe")
+		
 		return [ lien.getOtherCellule( cellule ) for numero,lien in self.getLiens().items() if lien.celluleAppartientAuLien(cellule) ]
 			
 

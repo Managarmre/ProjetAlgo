@@ -60,7 +60,7 @@ class Robot:
     
     # arrête le match en cours 
     def end_of_game(self):
-        self.joue = False
+        self.partie_en_cours = False
         logging.info("==== arret du match")
     
     
@@ -75,8 +75,8 @@ class Robot:
         logging.info( "==== gameover du joueur {id_joueur}".format(id_joueur=id_joueur) )
         
         if( self.getMaCouleur() == id_joueur ):
-            logging.info( "==== gameover : je ne joue plus" )
-            self.joue = False
+            logging.info( "==== gameover : j'ai perdu, je boude !" )
+            self.a_perdu = True
         
         self.nbJoueurs -= 1
         
@@ -153,8 +153,10 @@ class Robot:
 
             lien = Lien( self.terrain.getCellule(numero_u) , self.terrain.getCellule(numero_v) , distance )
             self.terrain.ajouterLien( lien )
+               
                   
-        self.joue = True
+        self.a_perdu = False
+        self.partie_en_cours = True
         
         pass
 
@@ -303,6 +305,13 @@ class Robot:
     def getNbJoueurInitial(self):
         return self.nbJoueursInitial
 
+
+
+
     # retourne vrai si une partie est en cours, faux sinon
     def partieEnCours(self):
-        return self.joue
+        return self.partie_en_cours
+        
+    # retourne vrai si le robot a perdu
+    def aPerdu(self):
+        return self.a_perdu

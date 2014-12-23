@@ -91,6 +91,10 @@ def play_pooo():
     if( not cheshire ):
         raise Exception("vous devez exécuter les fonctions register_pooo() et init_pooo() avant !")
     
+    if( not cheshire.partieEnCours() ):
+        raise Exception("vous devez exécuter la fonction init_pooo() pour initialiser un match avant !")
+    
+    
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
     
@@ -101,15 +105,15 @@ def play_pooo():
     cheshire.updateTerrain( init_state )
     """
     
-    while True:
-        
+    while ( cheshire.partieEnCours() ):
+         
         logging.info( "==> demande de l'état du jeu" )
         state = state_on_update()   # bloquant
         
         logging.info( "==> analyse de la réponse serveur" )
         cheshire.analyseMessage(state)
         
-        if( cheshire.partieEnCours() ):
+        if( not cheshire.aPerdu() ):
         
             logging.info( "==> prise de décision" )
             decisions = cheshire.getDecisions()
@@ -120,8 +124,10 @@ def play_pooo():
                 time.sleep(0.2)
                 
         else:
-            logging.info( "==> partie fini" )
-            break
+            logging.info( "==== j'ai déja perdu, je ne peux plus participer...." )
+            
+    logging.info( "==> partie fini" )
+            
             
     pass
     
@@ -142,15 +148,18 @@ state_1_err = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]
 init = "INITc7f08867-3c21-46e9-94bb-d2c1e94fdb90TO2[0];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF2,0@4800OF1,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
 state = "STATEc7f08867-3c21-46e9-94bb-d2c1e94fdb90IS1;7CELLS:0[1]1'0,1[-1]6'0,2[1]1'8,3[1]1'8,4[1]15'8,5[-1]6'0,6[1]25'8;2MOVES:0<6[1]@3937675638'2,2<4[1]@3937675285'3"
 
-
 init = "INIT920cd190-a714-452b-89e1-eccdddd861ccTO2[1];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF1,0@4800OF2,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
 state = "STATE920cd190-a714-452b-89e1-eccdddd861ccIS2;7CELLS:0[0]1'8,1[0]2'8,2[1]2'1,3[1]2'3,4[1]1'8,5[-1]6'0,6[1]4'8;7MOVES:0>9[0]@3938751928'>11[0]@3938753580'<4[0]@3938752563'<5[0]@3938753369'1,2<4[1]@3938752815'3,3<4[1]@3938752565'<4[1]@3938752718'4"
+
+
+init = "INIT97068b57-6d72-489a-9f2b-9ba415dd861dTO2[1];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF1,0@4800OF2,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
+state = "STATEc2544a1a-76ee-4d00-941d-9fe14ea145f5IS2;7CELLS:0[0]0'8,1[0]0'2,2[0]1'8,3[1]2'3,4[1]1'8,5[1]0'2,6[1]0'8;6MOVES:0>4[0]@4027069315'2,0<4[0]@4027069566'1,2<4[1]@4027068817'3,3<4[1]@4027068567'4,4<4[1]@4027069317'6,5>4[1]@4027069567'6"
 
 
 register_pooo(uid)
 init_pooo( init )
 
-cheshire.updateTerrain(state)
+cheshire.analyseMessage(state)
 
 print( cheshire.getDecisions() )
 """

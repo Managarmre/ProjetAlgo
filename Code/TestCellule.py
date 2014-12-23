@@ -89,12 +89,12 @@ class TestCellule(unittest.TestCase):
 
     # entrée d'une valeur non entière
     # exception attendue
-    def test_setDefense_pasEntier(self):
+    def test_setCouleurJoueur_pasEntier(self):
         self.assertRaises( Exception, self.cellule.setCouleurJoueur, "pas une couleur" )
     
     # entrée d'une valeur négative
     # exception attendue
-    def test_setDefense_negatif(self):
+    def test_setCouleurJoueur_negatif(self):
         self.assertRaises( Exception, self.cellule.setCouleurJoueur, -9 )
 
 
