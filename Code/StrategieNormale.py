@@ -1,6 +1,7 @@
 
 from Strategie import *
 from Mouvement import *
+from Lien import *
 
 import logging
 
@@ -100,7 +101,7 @@ class StrategieNormale( Strategie ):
                 for ennemi in cellule.getVoisinsEnnemis() :
                     # tablea_p[ ennemi.getNumero() ] = self.indiceP(ennemi)
                     #tablea_p[ self.indiceP(ennemi) ] = ennemi.getNumero()
-                    tableau_p.setdefault( self.indiceP(ennemi), [] ).append( ennemi.getNumero() )
+                    tableau_p.setdefault( self.indiceP(cellule,ennemi), [] ).append( ennemi.getNumero() )
                     
 
                 # on prend l'indice p minimale
@@ -123,7 +124,11 @@ class StrategieNormale( Strategie ):
     #
     # ===> a terminer
     #
-    def indiceP( self, cellule ):
+    
+    # calcul l'indice p d'une cellule par rapport à la cellule d'origine voulant envoyer ses unitées
+    # Cellule origine :
+    # Cellule cellule : la cellule dont on veut calculer l'indice p
+    def indiceP( self, origine, cellule ):
         
         cout = cellule.getCout()
         
@@ -131,10 +136,14 @@ class StrategieNormale( Strategie ):
         
         nbVoisins = len( cellule.getVoisins() )
         
+        distance = self.getRobot().getTerrain().getLien( Lien.hachage(origine,cellule) ).getDistance()
+        
+        return production / ( cout * nbVoisins * distance )
+        
+        """
         
         maCouleur = self.getRobot().getMaCouleur()
         
-        """
         for lien in cellule.getLiens():
             
             # les unités vers cette cellules
@@ -161,7 +170,7 @@ class StrategieNormale( Strategie ):
                 pass
         """
         
-        return cout
+        
     
 
     ###### pour l'affichage
