@@ -49,41 +49,40 @@ class StrategieNormale( Strategie ):
             StrategieNormale.afficherCellulesLogging( "cellules full-productrices" , full_productrices )
             StrategieNormale.afficherCellulesLogging( "cellules attaquantes en dangées" , attaquantes_en_danger )
             StrategieNormale.afficherCellulesLogging( "cellules attaquantes en suretées" , attaquantes_en_surete )
-            # 
-            #   ====> appel de dijkstra quelque part....
-            #
+
             
+            # on envoie les cellules des productrices si on a au moins une cellule attaquante
+            if( attaquantes ):
             
-            
-            
-            
-            for cellule in productrices :
-                
-                # utilisation du tableau de dijsktra ici
-                vers = None
-                #
-                #
-                #
-                #
-                vers = cellule.getLiens()[0].getOtherCellule( cellule )
-                
-                # si c'est une productrice
-                # on envoi tout
-                if( cellule in full_productrices ):
-                    pourcentage = 1
+                for cellule in productrices :
                     
-                # sinon, on n'envoi qu'un certain pourcentage
-                else:
-                    pourcentage = 80 / 100
+                    # si on a au moins 10% de la capacitee d'attaque de la cellule, on envoi
+                    if( cellule.getPourcentageAttaque() > 0.10 ):
                     
-                
-                nbUnites = math.ceil( cellule.getAttaque() * pourcentage )
-                
-                # si on a au moins 10% de la capacitee d'attaque de la cellule, on envoi
-                if( cellule.getPourcentageAttaque() > 0.10 ):
-                    mouvements.append( Mouvement( cellule, vers, nbUnites, cellule.getCouleurJoueur(), 0 ) )
-                else:
-                    pass
+                        # utilisation du tableau de dijsktra ici
+                        if( attaquantes_en_danger ):
+                            numero_vers = composante.getCheminVersCellulePlusProche( cellule , attaquantes_en_danger )[1]
+                        else:
+                            numero_vers = composante.getCheminVersCellulePlusProche( cellule , attaquantes )[1]
+                            
+                        vers = composante.getCellule( numero_vers )
+                        
+                        # si c'est une productrice
+                        # on envoi tout
+                        if( cellule in full_productrices ):
+                            pourcentage = 1
+                            
+                        # sinon, on n'envoi qu'un certain pourcentage
+                        else:
+                            pourcentage = 80 / 100
+                            
+                        
+                        nbUnites = math.ceil( cellule.getAttaque() * pourcentage )
+                    
+                        mouvements.append( Mouvement( cellule, vers, nbUnites, cellule.getCouleurJoueur(), 0 ) )
+                        
+                    else:
+                        pass
             
             #
             #   pour l'instant, pas de distinction entre les attaquants
@@ -91,30 +90,29 @@ class StrategieNormale( Strategie ):
             #
             for cellule in attaquantes:
                 
-                excedent = cellule.getExcedent()
-                if( excedent > 0 ):
-                    # il faut au moins envoyer 'excedent' unités
-                    pass
-                
-                
-                tableau_p = {}
-                for ennemi in cellule.getVoisinsEnnemis() :
-                    # tablea_p[ ennemi.getNumero() ] = self.indiceP(ennemi)
-                    #tablea_p[ self.indiceP(ennemi) ] = ennemi.getNumero()
-                    tableau_p.setdefault( self.indiceP(cellule,ennemi), [] ).append( ennemi.getNumero() )
-                    
-
-                # on prend l'indice p minimale
-                indice_p_min = min( tableau_p.keys() )
-                
-                # on récupère les cellules prossibles ayant cet indice p
-                cellules_possibles = tableau_p[ indice_p_min ]
-                
-                # on en choisie une aléatoirement dans celles possibles
-                cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
-                vers = terrain.getCellule(cellule_choisie) #cellule.getLiens()[0].getOtherCellule( cellule )
-                
                 if( cellule.getPourcentageAttaque() > 0.10 ):
+                
+                    excedent = cellule.getExcedent()
+                    if( excedent > 0 ):
+                        # il faut au moins envoyer 'excedent' unités
+                        pass
+                    
+                    
+                    tableau_p = {}
+                    for ennemi in cellule.getVoisinsEnnemis() :
+                        tableau_p.setdefault( self.indiceP(cellule,ennemi), [] ).append( ennemi.getNumero() )
+                        # tablea_p[ self.indiceP(ennemi) ] = ennemi.getNumero()
+                        
+                    # on prend l'indice p minimale
+                    indice_p_max = max( tableau_p.keys() )
+                    
+                    # on récupère les cellules prossibles ayant cet indice p
+                    cellules_possibles = tableau_p[ indice_p_max ]
+                    
+                    # on en choisie une aléatoirement dans celles possibles
+                    cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
+                    vers = terrain.getCellule(cellule_choisie)
+                    
                     mouvements.append( Mouvement( cellule, vers, cellule.getAttaque(), cellule.getCouleurJoueur(), 0 ) )
             
         return mouvements
@@ -247,7 +245,7 @@ class StrategieNormale( Strategie ):
                 
                  
                 autre_cellule = lien.getOtherCellule( cellule )
-                if( autre_cellule.getAttaque() > cellule.getCout() and autre_cellule.getCouleurJoueur() != maCouleur ):
+                if( autre_cellule.getAttaque() > cellule.getCout() and autre_cellule.getCouleurJoueur() != maCouleur and autre_cellule.getCouleurJoueur() != -1 ):
                     en_danger.add( cellule )
                 
             

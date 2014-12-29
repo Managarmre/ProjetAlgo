@@ -125,7 +125,7 @@ class Cellule:
 	
 	
 	def getExcedent( self ):
-		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() ] )
+		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() and lien.getDistance() - mouvement.getTrajet() < 1000 ] )
 		excedent = somme - self.getAttaqueMax() if somme > self.getAttaqueMax() else 0
 		return excedent
 	

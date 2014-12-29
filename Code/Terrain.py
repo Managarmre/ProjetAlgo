@@ -110,9 +110,84 @@ class Terrain:
 		return terrain
 
 
-	# dijkstra ici
 
 
+	# retourne le plus court chemin entre deux cellules/sommets
+	# Cellule depart : la cellule de départ
+	# Cellule arivee : la cellule d'arrivée
+	# retourne ..................... <======
+	def dijkstra( self, depart, arrivee ):
+
+		infinity = float("inf")
+
+
+		# initialisation des tableaux 
+		parcouru = { numero: infinity for numero,cellule in self.getCellules().items() }
+		precedent = { numero: -1 for numero,cellule in self.getCellules().items() }
+
+
+		parcouru[ depart.getNumero() ] = 0
+		pasEncoreVu = list( self.getCellules().keys() ) 	# liste des numéro des cellules par encore vues
+
+
+		# même chose que : pasEncoreVu != []
+		while( pasEncoreVu ):
+
+			# on recherche la cellule la plus proche
+			# le_plus_proche est un NUMERO de cellule (ce n'est pas une cellule)
+			le_plus_proche = min( pasEncoreVu , key=parcouru.get )
+			cellule_la_plus_proche = self.getCellule( le_plus_proche )
+			# on recherche le numéro dans pasEncoreVu
+			# ayant la plus petite valeur de parcouru.get( cle )
+
+			pasEncoreVu.remove( le_plus_proche )
+
+
+			# voisin est une CELLULE
+			for voisin in self.getVoisinsCellule( cellule_la_plus_proche ) :
+
+				numero_voisin = voisin.getNumero()
+
+				distance = self.getLiens().get( li.Lien.hachage(cellule_la_plus_proche,voisin) ).getDistance()
+
+				if( parcouru[ numero_voisin ] > parcouru[ le_plus_proche ] + distance ):
+
+					parcouru[ numero_voisin ] = parcouru[ le_plus_proche ] + distance 
+					precedent[ numero_voisin ] = le_plus_proche
+
+
+		# on récupère le chemin en parcourant le tableau depuis l'arrivée
+		chemin = [] 
+		n = arrivee.getNumero() 
+
+		while( n != depart.getNumero() ):
+
+			chemin.append( n )
+			n = precedent[ n ]
+
+		chemin.append( depart.getNumero() )
+
+		chemin.reverse()
+
+		return ( chemin , parcouru[ arrivee.getNumero() ] )
+
+
+	# retourne le chemin depuis une cellule vers la cellule la plus proche selectionnée dans un ensemble
+	def getCheminVersCellulePlusProche( self, depart, arrivees ):
+		
+		infinity = float("inf")
+		distance_min = infinity
+		chemin_min = []
+		
+		for arrivee in arrivees :
+			
+			chemin, distance = self.dijkstra( depart, arrivee )
+			
+			if( distance < distance_min ):
+				distance_min = distance
+				chemin_min = chemin
+		
+		return chemin
 
 
 

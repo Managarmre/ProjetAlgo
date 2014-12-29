@@ -117,7 +117,7 @@ function lancer_4_bot(){
 
 # on attent 3 secondes avant de lancer les bots
 echo "lancement des bots dans 3 secondes"
-( sleep 3 ; lancer_4_bot )&
+( sleep 5 ; lancer_4_bot )&
 
 
 # lancement du serveur
@@ -126,7 +126,7 @@ echo "lancement du serveur"
 
 # on attent 3 seconde, pour que les bots se connectent au serveur
 # puis on initialise un match
-sleep 3
+sleep 8
 echo "init" >&${pp[1]}
 
 echo "initialisation d'un match"
