@@ -90,30 +90,45 @@ class StrategieNormale( Strategie ):
             #
             for cellule in attaquantes:
                 
-                if( cellule.getPourcentageAttaque() > 0.10 ):
                 
-                    excedent = cellule.getExcedent()
-                    if( excedent > 0 ):
-                        # il faut au moins envoyer 'excedent' unités
-                        pass
+                #
+                #  => recherche si pupute applicable ici
+                # sinon
+                
+                
+                # calcul de mon excédent
+                excedent = cellule.getExcedent()
+
+                # recherche de la cible    
+                tableau_p = {}
+                for ennemi in cellule.getVoisinsEnnemis() :
+                    tableau_p.setdefault( self.indiceP(cellule,ennemi), [] ).append( ennemi.getNumero() )
+                    # tablea_p[ self.indiceP(ennemi) ] = ennemi.getNumero()
+                
+                indice_p_max = max( tableau_p.keys() )
+                
+                cellules_possibles = tableau_p[ indice_p_max ]
+                
+                cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
+                vers = terrain.getCellule(cellule_choisie)
+                
+                # si je peux la prendre, je l'attaque
+                # ===> !!!!!! ne prend pas encore en compte les mouvements sur les liens !!!!
+                if( cellule.getAttaque() > vers.getCout() ):
                     
+                    a_envoyer = excedent if vers.getCout() < excedent else vers.getCout()
+                    logging.info( "j'attaque {cible} en envoyant {cell} !".format(cible=cellule_choisie,cell=a_envoyer) )
                     
-                    tableau_p = {}
-                    for ennemi in cellule.getVoisinsEnnemis() :
-                        tableau_p.setdefault( self.indiceP(cellule,ennemi), [] ).append( ennemi.getNumero() )
-                        # tablea_p[ self.indiceP(ennemi) ] = ennemi.getNumero()
-                        
-                    # on prend l'indice p minimale
-                    indice_p_max = max( tableau_p.keys() )
-                    
-                    # on récupère les cellules prossibles ayant cet indice p
-                    cellules_possibles = tableau_p[ indice_p_max ]
-                    
-                    # on en choisie une aléatoirement dans celles possibles
-                    cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
-                    vers = terrain.getCellule(cellule_choisie)
-                    
-                    mouvements.append( Mouvement( cellule, vers, cellule.getAttaque(), cellule.getCouleurJoueur(), 0 ) )
+                    mon_mouvement = Mouvement( cellule, vers, cellule.getAttaque(), cellule.getCouleurJoueur(), 0 )
+                    mouvements.append( mon_mouvement )
+                    terrain.getLien( Lien.hachage(vers,cellule) ).ajouterMouvementVersCellule( vers , mon_mouvement )
+
+                else:
+                    logging.info( "j'attend d'être assez grand pour l'attaquer" )
+                    # on attend 
+                    pass
+                
+                
             
         return mouvements
         
