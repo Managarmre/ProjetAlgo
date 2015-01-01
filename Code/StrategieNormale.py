@@ -1,7 +1,7 @@
 
-from Strategie import *
-from Mouvement import *
-from Lien import *
+import Strategie as st
+import Mouvement as mv
+import Lien as li
 
 import logging
 
@@ -11,10 +11,10 @@ import functools
 import operator 
 
 
-class StrategieNormale( Strategie ):
+class StrategieNormale( st.Strategie ):
     
     def __init__( self, robot ):
-        Strategie.__init__( self, robot )
+        st.Strategie.__init__( self, robot )
         
         
     
@@ -27,8 +27,6 @@ class StrategieNormale( Strategie ):
         
         for composante in terrain.getSousGraphe( self.getMesCellules() ).getComposantesConnexes() :
             
-            # self.getMesCellules() 
-            # revient au même, car on prend le sous graphe ne contenant que mes cellules (au dessus)
             mesCellules = composante.getCellules().values()
             
             productrices = self.getCellulesProductrices( mesCellules )
@@ -40,7 +38,6 @@ class StrategieNormale( Strategie ):
             attaquantes_en_danger = self.getAttaquantesEnDanger( attaquantes )
             attaquantes_en_surete = self.getAttaquantesEnSurete( attaquantes , attaquantes_en_danger )
             
-
 
             StrategieNormale.afficherCellulesLogging( "mes cellules" , mesCellules )
             StrategieNormale.afficherCellulesLogging( "cellules attaquantes" , attaquantes )
@@ -54,22 +51,22 @@ class StrategieNormale( Strategie ):
             # on envoie les cellules des productrices si on a au moins une cellule attaquante
             if( attaquantes ):
             
-                for cellule in productrices :
+                for productrice in productrices :
                     
                     # si on a au moins 10% de la capacitee d'attaque de la cellule, on envoi
-                    if( cellule.getPourcentageAttaque() > 0.10 ):
+                    if( productrice.getPourcentageAttaque() > 0.10 ):
                     
                         # utilisation du tableau de dijsktra ici
                         if( attaquantes_en_danger ):
-                            numero_vers = composante.getCheminVersCellulePlusProche( cellule , attaquantes_en_danger )[1]
+                            numero_vers = composante.getCheminVersCellulePlusProche( productrice , attaquantes_en_danger )[1]
                         else:
-                            numero_vers = composante.getCheminVersCellulePlusProche( cellule , attaquantes )[1]
+                            numero_vers = composante.getCheminVersCellulePlusProche( productrice , attaquantes )[1]
                             
                         vers = composante.getCellule( numero_vers )
                         
                         # si c'est une productrice
                         # on envoi tout
-                        if( cellule in full_productrices ):
+                        if( productrice in full_productrices ):
                             pourcentage = 1
                             
                         # sinon, on n'envoi qu'un certain pourcentage
@@ -77,9 +74,11 @@ class StrategieNormale( Strategie ):
                             pourcentage = 80 / 100
                             
                         
-                        nbUnites = math.ceil( cellule.getAttaque() * pourcentage )
+                        nbUnites = math.ceil( productrice.getAttaque() * pourcentage )
                     
-                        mouvements.append( Mouvement( cellule, vers, nbUnites, cellule.getCouleurJoueur(), 0 ) )
+                        lien = composante.getLien( li.Lien.hachage( productrice, vers ) )
+                        mouvement = mv.Mouvement( productrice, vers, nbUnites, productrice.getCouleurJoueur(), lien.getDistance() )
+                        mouvements.append( mouvement )
                         
                     else:
                         pass
@@ -88,7 +87,7 @@ class StrategieNormale( Strategie ):
             #   pour l'instant, pas de distinction entre les attaquants
             # 
             #
-            for cellule in attaquantes:
+            for attaquante in attaquantes:
                 
                 
                 #
@@ -97,13 +96,13 @@ class StrategieNormale( Strategie ):
                 
                 
                 # calcul de mon excédent
-                excedent = cellule.getExcedent()
+                excedent = attaquante.getExcedent()
 
                 # recherche de la cible    
                 tableau_p = {}
-                for ennemi in cellule.getVoisinsEnnemis() :
-                    tableau_p.setdefault( self.indiceP(cellule,ennemi), [] ).append( ennemi.getNumero() )
-                    # tablea_p[ self.indiceP(ennemi) ] = ennemi.getNumero()
+                for ennemi in attaquante.getVoisinsEnnemis() :
+                    tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi.getNumero() )
+                    # tablea_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
                 
                 indice_p_max = max( tableau_p.keys() )
                 
@@ -114,14 +113,20 @@ class StrategieNormale( Strategie ):
                 
                 # si je peux la prendre, je l'attaque
                 # ===> !!!!!! ne prend pas encore en compte les mouvements sur les liens !!!!
-                if( cellule.getAttaque() > vers.getCout() ):
+                if( attaquante.getAttaque() > vers.getCout() ):
                     
                     a_envoyer = excedent if vers.getCout() < excedent else vers.getCout()
-                    logging.info( "j'attaque {cible} en envoyant {cell} !".format(cible=cellule_choisie,cell=a_envoyer) )
                     
-                    mon_mouvement = Mouvement( cellule, vers, cellule.getAttaque(), cellule.getCouleurJoueur(), 0 )
+                    
+                    lien = terrain.getLien( li.Lien.hachage(vers,attaquante) )
+                    
+                    mon_mouvement = mv.Mouvement( attaquante, vers, attaquante.getAttaque(), attaquante.getCouleurJoueur(), lien.getDistance() )
                     mouvements.append( mon_mouvement )
-                    terrain.getLien( Lien.hachage(vers,cellule) ).ajouterMouvementVersCellule( vers , mon_mouvement )
+                    
+                    lien.ajouterMouvementVersCellule( vers , mon_mouvement )
+                    attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
+                    
+                    logging.info( "j'attaque {cible} en envoyant {cell} !".format(cible=cellule_choisie,cell=a_envoyer) )
 
                 else:
                     logging.info( "j'attend d'être assez grand pour l'attaquer" )
@@ -149,7 +154,7 @@ class StrategieNormale( Strategie ):
         
         nbVoisins = len( cellule.getVoisins() )
         
-        distance = self.getRobot().getTerrain().getLien( Lien.hachage(origine,cellule) ).getDistance()
+        distance = self.getRobot().getTerrain().getLien( li.Lien.hachage(origine,cellule) ).getDistance()
         
         return production / ( cout * nbVoisins * distance )
         
@@ -213,9 +218,6 @@ class StrategieNormale( Strategie ):
     def getCellulesProductrices( self, mesCellules ):
         
         maCouleur = self.getRobot().getMaCouleur()
-        
-        # funtools.reduce() correspond à un sum, fold left (on replie la liste sur elle même)
-        # return [ cellule for cellule in mesCellules if functools.reduce( operator.and_, [ voisin.getCouleurJoueur() == maCouleur for voisin in cellule.getVoisins() ]  ) ]
         return [ cellule for cellule in mesCellules if all( [ voisin.getCouleurJoueur() == maCouleur for voisin in cellule.getVoisins() ] ) ]
     
     
@@ -227,8 +229,6 @@ class StrategieNormale( Strategie ):
     def getCellulesAttaquantes( self, mesCellules, productrices ):
         # correspond à : mesCellules - productrices
         return list( set(mesCellules) - set(productrices) )
-        #return [ cellule for cellule in mesCellules if functools.reduce( operator.or_, [ voisin.getCouleurJoueur() != maCouleur for voisin in cellule.getVoisins() ]  ) ]
-        
         
         
     # retourne la liste de mes cellules semi-productrices

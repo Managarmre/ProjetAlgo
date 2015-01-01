@@ -14,10 +14,11 @@ __version__='0.1'
  
 
 ## chargement de l'interface de communication avec le serveur
-from poooc import order, state, state_on_update, etime
+import poooc
 
 # mieux que des print partout
 import logging
+
 # pour faire de l'introspection
 import inspect
 
@@ -40,7 +41,7 @@ cheshire = None
 def register_pooo(uid):
     global cheshire
     logging.info( "-- Initialisation du robot --" )
-    #logging.info( "==== chaine uid reçu : {chaine}".format(chaine=uid)  )
+    
     cheshire = Robot( uid )
     
     
@@ -100,17 +101,17 @@ def play_pooo():
     
     logging.info( "==> demande de l'état du jeu initial" )
     
-    """
-    init_state = state_on_update()#state()        # bloquant
-    cheshire.updateTerrain( init_state )
-    """
     
     while ( cheshire.partieEnCours() ):
          
         logging.info( "==> demande de l'état du jeu" )
-        state = state_on_update()   # bloquant
+        state = poooc.state_on_update()   # bloquant
+        temps = poooc.etime()
         
+        logging.info( "==> temps du jeu: {t}".format(t=temps) )
         logging.info( "==> analyse de la réponse serveur" )
+        
+        cheshire.setTemps( temps )
         cheshire.analyseMessage(state)
         
         if( not cheshire.aPerdu() ):
@@ -120,7 +121,7 @@ def play_pooo():
         
             logging.info( "==> envoie des décisions au serveur" )
             for decision in decisions:
-                order( decision )
+                poooc.order( decision )
                 time.sleep(0.2)
                 
         else:
@@ -134,7 +135,7 @@ def play_pooo():
 
 
 # test 
-
+"""
 uid = "0947e717-02a1-4d83-9470-a941b6e8ed07"
 
 init = "INITc71db0bc-9863-4d51-bd6f-459de3fafdb7TO2[1];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF1,0@4800OF2,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
@@ -162,4 +163,4 @@ init_pooo( init )
 cheshire.analyseMessage(state)
 
 print( cheshire.getDecisions() )
-
+"""

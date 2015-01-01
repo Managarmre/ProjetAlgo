@@ -92,7 +92,6 @@ class Cellule:
 	def getDefenseMax(self):
 		return self.defenseMax 
 
-
 	def getLiens(self):
 		return self.liens
 
@@ -114,10 +113,9 @@ class Cellule:
 	#
 	#
 	#
-	#
+	# retourne le coût de la cellule, c'est à dire le nombre d'unités nécéssaire pour la capturer
 	def getCout(self):
 		return self.getAttaque() + self.getDefense() + 1
-	
 	
 	
 	def getPourcentageAttaque( self ):
@@ -125,7 +123,7 @@ class Cellule:
 	
 	
 	def getExcedent( self ):
-		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() and lien.getDistance() - mouvement.getTrajet() < 1000 ] )
+		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() and mouvement.getTempsRestant() < 1000 ] )
 		excedent = somme - self.getAttaqueMax() if somme > self.getAttaqueMax() else 0
 		return excedent
 	
@@ -143,8 +141,7 @@ class Cellule:
 			raise Exception("la valeur entrée doit être supérieure ou égale à zéro")
 			
 		self.attaque = attaque
-
-
+		
 
 	def setDefense(self, defense):
 		
@@ -158,8 +155,7 @@ class Cellule:
 			raise Exception("la valeur entrée doit être suppérieure ou égale à 0")
 			
 		self.defense = defense 
-
-
+		
 
 	def setCouleurJoueur(self, couleurJoueur):
 		
@@ -170,10 +166,6 @@ class Cellule:
 			raise Exception("la couleur d'un joueur doit être suppérieure ou égale à -1")
 			
 		self.couleurJoueur = couleurJoueur
-
-
-
-
 
 
 
@@ -188,6 +180,7 @@ class Cellule:
 			raise Exception( "cette cellule n'est pas dans ce lien (ajouterLien)" )
 			
 		self.liens.append(lien)
+
 
 
 	def toString(self):

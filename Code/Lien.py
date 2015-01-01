@@ -178,7 +178,7 @@ class Lien:
 		if( not ( isinstance( cellule1 , ce.Cellule ) and isinstance( cellule2 , ce.Cellule ) ) ):
 			raise Exception("les deux paramètres doivent être des instances de l'objet Cellule")
 		
-		n1, n2 = cellule1.getNumero(), cellule2.getNumero()
-		if( n1 > n2 ):
-			n1, n2 = n2, n1
-		return int(  str(n1) + str(n2) )
+		nunero_1, numero_2 = cellule1.getNumero(), cellule2.getNumero()
+		if( nunero_1 > numero_2 ):
+			nunero_1, numero_2 = numero_2, nunero_1
+		return int(  str(nunero_1) + str(numero_2) )

@@ -12,18 +12,17 @@ class Terrain:
 
 	def __init__( self ):
 
-		# la liste des cellules du terrain (représentent des sommets)
-		# comme un numéro de cellule n'identifie qu'une seule cellule, on l'utilise pour retrouver la cellule
-		self.cellules = {}
+		# les cellules représentent des sommets
+		# les liens représentent des arêtes
 
-		# la liste des liens du terrain (représentation des arêtes)
+		self.cellules = {}
 		self.liens = {}
 
-		# on utilise ici des dictionnaires (équivalent des hashmap en python)
+		# on utilise ici des dictionnaires (équivalent des hashmaps en python)
 
 
 
-	# ajoute une cellule dans le graphe
+	# ajoute une cellule dans le terrain / graphe
 	# Cellule cellule : la cellule à ajouter
 	def ajouterCellule(self, cellule):
 		
@@ -37,18 +36,17 @@ class Terrain:
 	# ajoute un lien entre deux cellules dans le terrain
 	# Lien lien : le lien à ajouter
 	def ajouterLien(self, lien):
+		
 		if( not isinstance(lien, li.Lien ) ):
 			raise Exception("le parametre lien n'est pas une instance de l'objet Lien ")
 		if( lien.getU() not in self.getCellules().values() or lien.getV() not in self.getCellules().values() ):
 			raise Exception("l'une des cellules (ou les deux) n'est pas présente dans le graphe")
+			
 		self.liens[ lien.hash() ] = lien
 
 
-
 	
-	
-	
-	# retourne la liste des composantes du graphe, attention, cette liste est une liste de terrain.
+	# retourne la liste des composantes connexes du graphe
 	# return : List<Terrain>
 	def getComposantesConnexes(self):
 
@@ -59,7 +57,6 @@ class Terrain:
 		# on parcourt tous les sommets
 		for numero,cellule in self.getCellules().items():
 
-			# on récupère les voisins de la cellule courante
 			cesVoisins = self.getVoisinsCellule( cellule )
 			
 			# on change son numéro de composante connexe
@@ -80,12 +77,12 @@ class Terrain:
 			composantes.setdefault( value, [] ).append( self.getCellule(key) )
 
 		# on retourne la liste des sous graphes ayant ces sommets
-		# une composante est un sous graphe du graphe actuel
 		return [ self.getSousGraphe(sommets_composante) for sommets_composante in composantes.values()  ]
 
 
 	# retourne le sous graphe contenant les cellules données en paramètre
 	# List<Cellule> listeCellules : la liste des cellules contenu dans le sous graphe
+	# return : Terrain
 	def getSousGraphe(self, listeCellules):
 		
 		# on crée un nouveau terrain
@@ -115,7 +112,7 @@ class Terrain:
 	# retourne le plus court chemin entre deux cellules/sommets
 	# Cellule depart : la cellule de départ
 	# Cellule arivee : la cellule d'arrivée
-	# retourne ..................... <======
+	# retourne : le plus court chemin sous forme d'une liste de sommet et la distance totale à parcourir
 	def dijkstra( self, depart, arrivee ):
 
 		infinity = float("inf")
@@ -173,6 +170,8 @@ class Terrain:
 
 
 	# retourne le chemin depuis une cellule vers la cellule la plus proche selectionnée dans un ensemble
+	# Cellule depart
+	# List<Cellule> arrivees
 	def getCheminVersCellulePlusProche( self, depart, arrivees ):
 		
 		infinity = float("inf")
@@ -190,7 +189,6 @@ class Terrain:
 		return chemin
 
 
-
 	# retourne la cellule du graphe ayant le numéro associé
 	# si la cellule correspondant à ce numéro n'est pas dans le terrain, une exception est lancée.
 	# Int numero : le numéro de la cellule recherchée
@@ -203,12 +201,8 @@ class Terrain:
 
 	# retourne la liste des cellules appartenant au joueur ayant la couleur donnée (un entier)
 	def getCellulesJoueur(self, couleurJoueur):
-		liste = []
-		for numero,cellule in self.getCellules().items() :
-			if( cellule.getCouleurJoueur() == couleurJoueur ):
-				liste.append( cellule )
-		return liste
-
+		return [ cellule for numero, cellule in self.getCellules().items() if cellule.getCouleurJoueur() == couleurJoueur  ]
+		
 
 	# retourne la liste des cellules du terrain (sous forme d'un dictionnaire)
 	def getCellules(self):
@@ -228,10 +222,6 @@ class Terrain:
 		return [ lien.getOtherCellule( cellule ) for numero,lien in self.getLiens().items() if lien.celluleAppartientAuLien(cellule) ]
 			
 
-
-
-
-
 	# retourne le lien du graohe ayant le numéro associé
 	# ce numéro peut être calculer en utilisant la méthode Lien.hashage(cellule1,cellule2) 
 	# Int numeroLien : le numéro unique identifiant le lien
@@ -247,11 +237,6 @@ class Terrain:
 		return self.liens
 
 
-
-
-
-
-
 	# retourne le nombre de cellules présentes dans le graphe
 	def getNbCellules(self):
 		return len(self.cellules)
@@ -259,9 +244,6 @@ class Terrain:
 	# retourne le nombre de liens présents dans le graphe
 	def getNbLiens(self):
 		return len(self.liens)
-
-
-
 
 
 	def toString(self):
@@ -279,7 +261,4 @@ class Terrain:
 
 		return chaine + "\n}"
 		
-		
-	def toString2(self):
-		
-		return [ numero for numero,cellule in self.getCellules().items() ]
+

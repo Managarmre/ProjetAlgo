@@ -10,8 +10,8 @@ class Mouvement:
     # Cellule vers
     # Integer nbUnites
     # Integer couleurJoueur
-    # Integer trajet
-    def __init__(self, depuis, vers, nbUnites, couleurJoueur, trajet ):
+    # Float temps_restant :  le temps restant avant l'arrivé des unités à destination
+    def __init__(self, depuis, vers, nbUnites, couleurJoueur, temps_restant ):
         
         if( not ( isinstance( depuis, ce.Cellule ) and isinstance( vers, ce.Cellule ) ) ):
             raise Exception("les paramètres 'de' et 'vers' sont des cellules")
@@ -22,8 +22,8 @@ class Mouvement:
         if( not isinstance( couleurJoueur , int ) or couleurJoueur < 0 ):
             raise Exception("le paramètre 'couleurJoueur' doit être un entier supérieur à 0")
             
-        if( not isinstance( trajet , int ) or trajet < 0 ):
-            raise Exception("le paramètre 'trajet' ne peut pas être inférieur à 0")
+        if( temps_restant < 0 ):
+            raise Exception("le paramètre 'temps_restant' ne peut pas être inférieur à 0")
             
             
         self.depuis = depuis
@@ -31,7 +31,7 @@ class Mouvement:
         
         self.nbUnites = nbUnites 
         self.couleurJoueur = couleurJoueur 
-        self.trajet = trajet 
+        self.temps_restant = temps_restant 
         
         
     # retourne la cellule vers laquelle le mouvement se dirige
@@ -48,14 +48,16 @@ class Mouvement:
     def getCouleurJoueur(self):
         return self.couleurJoueur
     
-    # retourne la distance déja effectuée par le mouvement
-    def getTrajet(self):
-        return self.trajet
-        
-    
-    
+    # retourne le temps de trajet restant avant l'arrivée des unités à destination
+    def getTempsRestant(self):
+        return self.temps_restant
     
     # retourne dans la forme du protocole du serveur, l'ordre correspondant au mouvement associé
     def toOrder( self, uid ):
         pourcentage = math.ceil( self.getNbUnites() * 100 / self.fromCellule().getAttaque() )
-        return "[" + uid + "]" + "MOV" + str( pourcentage ) + "FROM" + str( self.fromCellule().getNumero() ) + "TO" + str( self.toCellule().getNumero() )
+        
+        return "[{uid}]MOV{pourcentage}FROM{origine}TO{destination}".format(    uid = uid,
+                                                                                pourcentage = pourcentage ,
+                                                                                origine = self.fromCellule().getNumero() ,
+                                                                                destination = self.toCellule().getNumero() )
+                                                                                
