@@ -64,17 +64,7 @@ class StrategieNormale( st.Strategie ):
                             
                         vers = composante.getCellule( numero_vers )
                         
-                        # si c'est une productrice
-                        # on envoi tout
-                        if( productrice in full_productrices ):
-                            pourcentage = 1
-                            
-                        # sinon, on n'envoi qu'un certain pourcentage
-                        else:
-                            pourcentage = 80 / 100
-                            
-                        
-                        nbUnites = math.ceil( productrice.getAttaque() * pourcentage )
+                        nbUnites = productrice.getAttaque() 
                     
                         lien = composante.getLien( li.Lien.hachage( productrice, vers ) )
                         mouvement = mv.Mouvement( productrice, vers, nbUnites, productrice.getCouleurJoueur(), lien.getDistance() )
@@ -95,60 +85,109 @@ class StrategieNormale( st.Strategie ):
                 # sinon
                 
                 
-                # calcul de mon excédent
-                excedent = attaquante.getExcedent()
-
                 # recherche de la cible    
                 tableau_p = {}
                 for ennemi in attaquante.getVoisinsEnnemis() :
                     tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi.getNumero() )
-                    # tablea_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
+                    # tableau_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
                 
                 indice_p_max = max( tableau_p.keys() )
-                
                 cellules_possibles = tableau_p[ indice_p_max ]
                 
-                cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
-                vers = terrain.getCellule(cellule_choisie)
+                num_cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
+                cellule_cible = terrain.getCellule(num_cellule_choisie)
                 
+                #
+                # => si qu'un seul voisin ennemie, j'envoi tout sur lui ?
+                #
+                # sinon 
+                
+                cout_cellule = self.getCoutCellule( cellule_cible )
+                excedent = attaquante.getExcedent()
+                
+                if( cout_cellule <= 0 ):
+                    
+                    if( excedent > 0 ):
+                        a_envoyer = excedent
+                    else:
+                        continue
+                
+                else:
+                    
+                    if( cout_cellule < excedent ):
+                        a_envoyer = excedent
+                    
+                    elif( attaquante.getAttaque() < cout_cellule ):
+                        
+                        if( excedent > 0 ):
+                            a_envoyer = excedent
+                        else:
+                            logging.info( "j'attend d'être assez grand pour l'attaquer" )
+                            continue
+                        
+                    else:
+                        a_envoyer = cout_cellule
+                    
+                logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
+                logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
+                    
+                lien = terrain.getLien( li.Lien.hachage(cellule_cible,attaquante) )
+                
+                mon_mouvement = mv.Mouvement( attaquante, cellule_cible, a_envoyer, attaquante.getCouleurJoueur(), lien.getDistance() )
+                mouvements.append( mon_mouvement )
+                
+                lien.ajouterMouvementVersCellule( cellule_cible , mon_mouvement )
+                attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
+                
+                
+                """
                 # si je peux la prendre, je l'attaque
-                # ===> !!!!!! ne prend pas encore en compte les mouvements sur les liens !!!!
-                if( attaquante.getAttaque() > vers.getCout() ):
+                cout_cellule = self.getCoutCellule(vers)
+                if( attaquante.getAttaque() > cout_cellule ):
                     
-                    a_envoyer = excedent if vers.getCout() < excedent else vers.getCout()
+                    # la cellule est déja en train d'être conquise/prise
+                    if( cout_cellule <= 0 ):
+                        
+                        # si j'ai quand même de l'excédent, j'envoie quand même
+                        if( excedent > 0 ):
+                            a_envoyer = excedent
+                        else:
+                            continue
                     
+                    # la cellule n'est pas en train d'être conquise    
+                    else:
+                        a_envoyer = cout_cellule if cout_cellule > excedent else excedent
+                        
+                    logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) )
+                    logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
                     
                     lien = terrain.getLien( li.Lien.hachage(vers,attaquante) )
                     
-                    mon_mouvement = mv.Mouvement( attaquante, vers, attaquante.getAttaque(), attaquante.getCouleurJoueur(), lien.getDistance() )
+                    mon_mouvement = mv.Mouvement( attaquante, vers, a_envoyer, attaquante.getCouleurJoueur(), lien.getDistance() )
                     mouvements.append( mon_mouvement )
                     
                     lien.ajouterMouvementVersCellule( vers , mon_mouvement )
                     attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
                     
-                    logging.info( "j'attaque {cible} en envoyant {cell} !".format(cible=cellule_choisie,cell=a_envoyer) )
+                    
 
                 else:
                     logging.info( "j'attend d'être assez grand pour l'attaquer" )
                     # on attend 
                     pass
                 
-                
+                """
             
         return mouvements
         
-        
-        
-    #
-    # ===> a terminer
-    #
-    
+
     # calcul l'indice p d'une cellule par rapport à la cellule d'origine voulant envoyer ses unitées
     # Cellule origine :
     # Cellule cellule : la cellule dont on veut calculer l'indice p
     def indiceP( self, origine, cellule ):
         
-        cout = cellule.getCout()
+        cout = self.getCoutCellule( cellule )
+        cout = -1 if cout == 0 else cout        # pour éviter une division par 0
         
         production = cellule.getProduction()
         
@@ -157,39 +196,48 @@ class StrategieNormale( st.Strategie ):
         distance = self.getRobot().getTerrain().getLien( li.Lien.hachage(origine,cellule) ).getDistance()
         
         return production / ( cout * nbVoisins * distance )
-        
-        """
+    
+    
+    # calcul le nombre d'unités que l'on doit envoyer sur une cellule ennemie afin de la capturer
+    # retourne un entier
+    def getCoutCellule( self, cellule ):
         
         maCouleur = self.getRobot().getMaCouleur()
+        couleurCellule = cellule.getCouleurJoueur()
+        
+        coutTotal = cellule.getCout()
         
         for lien in cellule.getLiens():
             
-            # les unités vers cette cellules
+            cellule_adjacente = lien.getOtherCellule(cellule)
+            
             for mouvement in lien.getMouvementVersCellule( cellule ):
                 
-                couleurMouvement = mouvement.getCouleurJoueur() 
+                couleurMouvement = mouvement.getCouleurJoueur()
                 
-                # mes unités
-                if( couleurMouvement == maCouleur ):
-                    cout -= mouvement.getNbUnites()
-                
-                # ses unités
-                elif( couleurMouvement == cellule.getCouleurJoueur() ):
-                    cout += mouvement.getNbUnites()
-                
-                # des unités d'un autre joueur
+                if( mouvement.aPourCouleur(couleurCellule) ):
+                    coutTotal += mouvement.getNbUnites()
+                    
+                elif( mouvement.aPourCouleur(maCouleur) ):
+                    coutTotal -= mouvement.getNbUnites()
+                    
+                # cas ou plus de deux joueur, incertain !!
                 else:
-                    cout += mouvement.getNbUnites()
-                
+                    coutTotal -= mouvement.getNbUnites()
             
-            # les unitées depuis cette cellule
-            for mouvement in lien.getMouvementVersCellule( lien.getOtherCellule( cellule ) ):
-                
-                pass
-        """
+            # si c'est une de mes cellules
+            if( cellule_adjacente.aPourCouleur(maCouleur) ):
+            
+                for mouvement in lien.getMouvementVersCellule( cellule_adjacente ):
+                    
+                    # si ce n'est pas l'un de mes mouvement, cela augmente le coût
+                    if( not mouvement.aPourCouleur(maCouleur) ):
+                        coutTotal += mouvement.getNbUnites()
         
-        
-    
+        return coutTotal + 5
+
+
+
 
     ###### pour l'affichage
     def afficherCellulesLogging( message , cellules ):
@@ -260,7 +308,7 @@ class StrategieNormale( st.Strategie ):
                 
                  
                 autre_cellule = lien.getOtherCellule( cellule )
-                if( autre_cellule.getAttaque() > cellule.getCout() and autre_cellule.getCouleurJoueur() != maCouleur and autre_cellule.getCouleurJoueur() != -1 ):
+                if( autre_cellule.getAttaque() > cellule.getCout() and not autre_cellule.aPourCouleur(maCouleur) and not autre_cellule.aPourCouleur(-1) ):
                     en_danger.add( cellule )
                 
             

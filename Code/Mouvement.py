@@ -52,9 +52,13 @@ class Mouvement:
     def getTempsRestant(self):
         return self.temps_restant
     
+    # retourne vrai si le mouvement a la couleur donnée (appartient au joueur ayant cette couleur)
+    def aPourCouleur( self, couleurJoueur ):
+        return self.couleurJoueur == couleurJoueur
+    
     # retourne dans la forme du protocole du serveur, l'ordre correspondant au mouvement associé
     def toOrder( self, uid ):
-        pourcentage = math.ceil( self.getNbUnites() * 100 / self.fromCellule().getAttaque() )
+        pourcentage = math.ceil( self.getNbUnites() * 100 / ( self.fromCellule().getAttaque() + self.getNbUnites() ) )
         
         return "[{uid}]MOV{pourcentage}FROM{origine}TO{destination}".format(    uid = uid,
                                                                                 pourcentage = pourcentage ,

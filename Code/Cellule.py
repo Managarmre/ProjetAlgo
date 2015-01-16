@@ -115,17 +115,33 @@ class Cellule:
 	#
 	# retourne le coût de la cellule, c'est à dire le nombre d'unités nécéssaire pour la capturer
 	def getCout(self):
-		return self.getAttaque() + self.getDefense() + 1
+		return self.getAttaque() + self.getDefense() 
 	
 	
 	def getPourcentageAttaque( self ):
 		return self.getAttaque() / self.getAttaqueMax()
 	
 	
+	#
+	# ==> a voir avec la production !!!
+	#
 	def getExcedent( self ):
 		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() and mouvement.getTempsRestant() < 1000 ] )
-		excedent = somme - self.getAttaqueMax() if somme > self.getAttaqueMax() else 0
-		return excedent
+		
+		cellules_produites = self.getProduction()	
+		
+		if( somme + self.getAttaque() + cellules_produites > self.getAttaqueMax() ):
+			
+			excedent = somme + self.getAttaque() + cellules_produites - self.getAttaqueMax()
+			
+			if( excedent > self.getAttaque() ):
+				return self.getAttaque()
+			else:
+				return excedent
+			
+		else:
+			return 0
+		
 	
 	
 
@@ -181,6 +197,10 @@ class Cellule:
 			
 		self.liens.append(lien)
 
+	
+	# retourne vrai si la cellule a pour couleur celle donnée ( appartient au joueur ayant cette couleur)
+	def aPourCouleur( self, couleurJoueur ):
+		return self.couleurJoueur == couleurJoueur
 
 
 	def toString(self):

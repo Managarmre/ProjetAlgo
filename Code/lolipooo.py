@@ -121,6 +121,7 @@ def play_pooo():
         
             logging.info( "==> envoie des décisions au serveur" )
             for decision in decisions:
+                logging.info( decision )
                 poooc.order( decision )
                 time.sleep(0.2)
                 
