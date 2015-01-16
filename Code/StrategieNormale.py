@@ -65,11 +65,9 @@ class StrategieNormale( st.Strategie ):
                         vers = composante.getCellule( numero_vers )
                         
                         nbUnites = productrice.getAttaque() 
-                    
-                        lien = composante.getLien( li.Lien.hachage( productrice, vers ) )
-                        mouvement = mv.Mouvement( productrice, vers, nbUnites, productrice.getCouleurJoueur(), lien.getDistance() )
+
+                        mouvement = self.envoyerUnites( productrice, vers, nbUnites )
                         mouvements.append( mouvement )
-                        
                     else:
                         pass
             
@@ -123,7 +121,7 @@ class StrategieNormale( st.Strategie ):
                         cellule=ennemi
                 # Si on a trouvé un planète dans ce cas là
                 if not (dist_mini==False):
-                    logging.info( "\o/ _o/ \o_ \o/" )
+                    logging.info( "\o/ _o/ _o_ \o_ \o/" )
                     # on récupère les liens de la cellule
                     for lien in cellule.getLiens():
                         # on regarde le temps (temps_impact) avant que la planète soit prise 
@@ -218,9 +216,14 @@ class StrategieNormale( st.Strategie ):
                     mon_mouvement = mv.Mouvement( attaquante, cellule_cible, a_envoyer, attaquante.getCouleurJoueur(), lien.getDistance() )
                     mouvements.append( mon_mouvement )
                     
+<<<<<<< HEAD
                     lien.ajouterMouvementVersCellule( cellule_cible , mon_mouvement )
                     attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
+=======
+                mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
+>>>>>>> f4cac3974d616a181289d237a90aae001f6e721b
                 
+                mouvements.append( mouvement )
                 
                 """
                 # si je peux la prendre, je l'attaque

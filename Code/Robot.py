@@ -76,8 +76,14 @@ class Robot:
         logging.info( "==== gameover du joueur {id_joueur}".format(id_joueur=id_joueur) )
         
         if( self.getMaCouleur() == id_joueur ):
-            logging.info( "==== gameover : j'ai perdu, je boude !" )
-            self.a_perdu = True
+            
+            if( self.getNbJoueurs() == 1 ):
+                logging.info( "==== gameover : j'ai gagné !!!" )
+            
+            else:
+                logging.info( "==== gameover : j'ai perdu, je boude !" )
+            
+            self.peut_jouer = False
         
         self.nbJoueurs -= 1
         
@@ -152,7 +158,7 @@ class Robot:
             self.terrain.ajouterLien( lien )
                
                   
-        self.a_perdu = False
+        self.peut_jouer = True
         self.partie_en_cours = True
         
         pass
@@ -208,9 +214,12 @@ class Robot:
                 
                 ifs_lien = regex_unLien.match ( chaine_lien )
                 
+                numero_cellule_1 = int( ifs_lien.group( 'id_cellule_u' ) )
+                numero_cellule_2 = int( ifs_lien.group( 'id_cellule_v' ) )
+                
                 # on récupère les identifiants des cellules du lien
-                cellule1 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_u' ) ) )
-                cellule2 = self.getTerrain().getCellule( int( ifs_lien.group( 'id_cellule_v' ) ) )
+                cellule1 = self.getTerrain().getCellule( numero_cellule_1 )
+                cellule2 = self.getTerrain().getCellule( numero_cellule_2 )
                 
                 lien = self.getTerrain().getLien( li.Lien.hachage(cellule1,cellule2) )
                 
@@ -242,7 +251,11 @@ class Robot:
                     distance = lien.getDistance() 
                     vitesse = self.getVitesse()
                     
+                    
                     temps_restant = ( distance - ( tempsSysteme_maintenant - tempsSysteme_topDepart ) ) / vitesse
+                    
+                    logging.info( "{cell} {cellule}".format( cell=numero_cellule_1, cellule=numero_cellule_2 ) )
+                    logging.info( "{un} {deux} {trois} {quatre}".format(un=tempsSysteme_maintenant, deux=tempsSysteme_topDepart, trois=distance, quatre=temps_restant) )
                     
                     mouvement = mv.Mouvement( depuis, vers, nbUnites, couleurJoueur, temps_restant )
                     lien.ajouterMouvementVersCellule( vers, mouvement )
@@ -300,6 +313,6 @@ class Robot:
     def partieEnCours(self):
         return self.partie_en_cours
         
-    # retourne vrai si le robot a perdu
-    def aPerdu(self):
-        return self.a_perdu
+    # retourne vrai si le robot peut jouer (donc s'il n'a pas perdu)
+    def peutJouer(self):
+        return self.peut_jouer

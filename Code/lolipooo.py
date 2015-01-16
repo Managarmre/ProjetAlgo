@@ -114,7 +114,7 @@ def play_pooo():
         cheshire.setTemps( temps )
         cheshire.analyseMessage(state)
         
-        if( not cheshire.aPerdu() ):
+        if( cheshire.peutJouer() ):
         
             logging.info( "==> prise de décision" )
             decisions = cheshire.getDecisions()
@@ -157,10 +157,17 @@ state = "STATE920cd190-a714-452b-89e1-eccdddd861ccIS2;7CELLS:0[0]1'8,1[0]2'8,2[1
 init = "INIT97068b57-6d72-489a-9f2b-9ba415dd861dTO2[1];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF1,0@4800OF2,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
 state = "STATEc2544a1a-76ee-4d00-941d-9fe14ea145f5IS2;7CELLS:0[0]0'8,1[0]0'2,2[0]1'8,3[1]2'3,4[1]1'8,5[1]0'2,6[1]0'8;6MOVES:0>4[0]@4027069315'2,0<4[0]@4027069566'1,2<4[1]@4027068817'3,3<4[1]@4027068567'4,4<4[1]@4027069317'6,5>4[1]@4027069567'6"
 
+init = "INIT97068b57-6d72-489a-9f2b-9ba415dd861dTO2[1];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF1,0@4800OF2,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
+state = "STATE34fae468-a98a-41cb-a47c-d597dfa1d952IS2;7CELLS:0[0]17'8,1[0]12'8,2[0]20'8,3[0]30'8,4[0]26'8,5[1]2'8,6[1]29'8;4MOVES:4<1[1]@518103561'<1[1]@518105455'<1[1]@518105617'6,5>2[1]@518105255'6"
 
 register_pooo(uid)
 init_pooo( init )
 
+terrain = cheshire.getTerrain()
+
+
+
+cheshire.setTemps( 518109648 )
 cheshire.analyseMessage(state)
 
 print( cheshire.getDecisions() )
