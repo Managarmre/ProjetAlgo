@@ -49,8 +49,7 @@ class Robot:
             
         elif( gameover.match( state ) ) :
             self.game_over( state )
-            
-            
+                   
         elif( state_of_game.match( state ) ):
             self.updateTerrain( state )
             
@@ -65,7 +64,7 @@ class Robot:
         logging.info("==== arret du match")
     
     
-    
+    # arêt du match pour ce robot
     def game_over( self, state_game_over ):
         
         regex_GameOver = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\](?P<id_match>.+)\Z" )
@@ -94,12 +93,11 @@ class Robot:
     # init_string : (String) chaine regroupant les informations envoyé par le serveur pour l'initialisation d'un nouveau match
     def initialiserMatch( self, init_string ):
         
-        logging.info( "==== chaine d'initialisation reçu : {chaine}".format(chaine=init_string)  )
+        logging.info( "==== initialisation"  )
         
         regex_verifier = re.compile( r"\AINIT.{8}-.{4}-.{4}-.{4}-.{12}TO[0-9]*\[[0-9]*\];[0-9]*;[0-9]*CELLS:([0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+,?)*;[0-9]*LINES:([0-9]+@[0-9]+OF[0-9]+,?)*\Z" )
         if( not regex_verifier.match(init_string) ):
             raise Exception("la chaine entrée est invalide (ne correspond pas à la regex)")
-            
             
         # on récupère autant d'informations que possible sur la chaine d'origine 
         regex_init = re.compile( r"INIT(?P<id_match>.+)TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>.*)" )
@@ -140,7 +138,6 @@ class Robot:
             cellule = ce.Cellule( numero, attaque, defense, attaqueMax, defenseMax, production, couleurJoueur, x, y, rayon )
             self.terrain.ajouterCellule( cellule )
 
-
         nbLines = informations.group("nbLines")
         
         # on fait de même pour les liens entres les cellules
@@ -156,7 +153,6 @@ class Robot:
 
             lien = li.Lien( self.terrain.getCellule(numero_u) , self.terrain.getCellule(numero_v) , distance )
             self.terrain.ajouterLien( lien )
-               
                   
         self.peut_jouer = True
         self.partie_en_cours = True
@@ -165,7 +161,6 @@ class Robot:
 
 
     
-
     # met à jour les informations sur le terrain en fonction de la chaine state passé en paramètre
     # la chaine state est récupérée avec la méthode poooc.state_on_update()
     #
@@ -174,7 +169,7 @@ class Robot:
     # state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
     def updateTerrain(self, state):
         
-        logging.info( "==> maj du terrain" )
+        logging.info( "==== mise à jour du terrain"  )
         
         # on supprime tous les déplacements
         for numero,lien in self.getTerrain().getLiens().items():
@@ -251,11 +246,11 @@ class Robot:
                     distance = lien.getDistance() 
                     vitesse = self.getVitesse()
                     
-                    
                     temps_restant = ( distance - ( tempsSysteme_maintenant - tempsSysteme_topDepart ) ) / vitesse
                     
-                    logging.info( "{cell} {cellule}".format( cell=numero_cellule_1, cellule=numero_cellule_2 ) )
-                    logging.info( "{un} {deux} {trois} {quatre}".format(un=tempsSysteme_maintenant, deux=tempsSysteme_topDepart, trois=distance, quatre=temps_restant) )
+                    if( temps_restant <= 0 ):
+                        logging.info( "{cell} {cellule}".format( cell=numero_cellule_1, cellule=numero_cellule_2 ) )
+                        logging.info( "{un} {deux} {trois} {quatre}".format(un=tempsSysteme_maintenant, deux=tempsSysteme_topDepart, trois=distance, quatre=temps_restant) )
                     
                     mouvement = mv.Mouvement( depuis, vers, nbUnites, couleurJoueur, temps_restant )
                     lien.ajouterMouvementVersCellule( vers, mouvement )
@@ -267,6 +262,9 @@ class Robot:
     def getDecisions(self):
         return [ mouv.toOrder( self.getUID() ) for mouv in self.getStrategie().decider() ]
     
+
+
+
     # retourne l'uid du robot (string)
     def getUID(self):
         return self.uid
@@ -307,7 +305,6 @@ class Robot:
 
     def setTemps( self , temps ):
         self.temps = temps 
-        
         
     # retourne vrai si une partie est en cours, faux sinon
     def partieEnCours(self):

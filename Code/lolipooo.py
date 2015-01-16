@@ -105,8 +105,8 @@ def play_pooo():
     while ( cheshire.partieEnCours() ):
          
         logging.info( "==> demande de l'état du jeu" )
-        state = poooc.state_on_update()   # bloquant
         temps = poooc.etime()
+        state = poooc.state_on_update()   # bloquant
         
         logging.info( "==> temps du jeu: {t}".format(t=temps) )
         logging.info( "==> analyse de la réponse serveur" )
@@ -120,13 +120,14 @@ def play_pooo():
             decisions = cheshire.getDecisions()
         
             logging.info( "==> envoie des décisions au serveur" )
+            logging.info( decisions )
+            
             for decision in decisions:
-                logging.info( decision )
                 poooc.order( decision )
                 time.sleep(0.2)
                 
         else:
-            logging.info( "==== j'ai déja perdu, je ne peux plus participer...." )
+            logging.info( "==== je n'ai plus le droit de jouer" )
             
     logging.info( "==> partie fini" )
             

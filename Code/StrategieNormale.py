@@ -18,7 +18,6 @@ class StrategieNormale( st.Strategie ):
         
         
     
-    
     def decider(self):
         
         terrain = self.getRobot().getTerrain()
@@ -27,152 +26,128 @@ class StrategieNormale( st.Strategie ):
         
         for composante in terrain.getSousGraphe( self.getMesCellules() ).getComposantesConnexes() :
             
-            mesCellules = composante.getCellules().values()
+            mesCellules = {}
+            mesCellules[ "cellules" ] = composante.getCellules().values()
+            mesCellules[ "productrices" ] = self.getCellulesProductrices( mesCellules[ "cellules" ] )
+            mesCellules[ "attaquantes" ] = self.getCellulesAttaquantes( mesCellules[ "cellules" ] )
+            mesCellules[ "attaquantesEnDanger" ] = self.getAttaquantesEnDanger( mesCellules[ "attaquantes" ] )
+            mesCellules[ "attaquantesEnSurete" ] = self.getAttaquantesEnSurete( mesCellules[ "attaquantes" ] , mesCellules[ "attaquantesEnDanger" ]  )      
             
-            productrices = self.getCellulesProductrices( mesCellules )
-            attaquantes = self.getCellulesAttaquantes( mesCellules, productrices )
-            
-            semi_productrices = self.getSemiProductrices( productrices, attaquantes )
-            full_productrices = self.getFullProductrices( productrices , semi_productrices )
-            
-            attaquantes_en_danger = self.getAttaquantesEnDanger( attaquantes )
-            attaquantes_en_surete = self.getAttaquantesEnSurete( attaquantes , attaquantes_en_danger )
-            
-
-            StrategieNormale.afficherCellulesLogging( "mes cellules" , mesCellules )
-            StrategieNormale.afficherCellulesLogging( "cellules attaquantes" , attaquantes )
-            StrategieNormale.afficherCellulesLogging( "cellules productrices" , productrices )
-            StrategieNormale.afficherCellulesLogging( "cellules semi-productrices" , semi_productrices )
-            StrategieNormale.afficherCellulesLogging( "cellules full-productrices" , full_productrices )
-            StrategieNormale.afficherCellulesLogging( "cellules attaquantes en dangées" , attaquantes_en_danger )
-            StrategieNormale.afficherCellulesLogging( "cellules attaquantes en suretées" , attaquantes_en_surete )
+            StrategieNormale.afficherCellulesLogging( "mes cellules" , mesCellules["cellules"] )
+            StrategieNormale.afficherCellulesLogging( "cellules attaquantes" , mesCellules["attaquantes"] )
+            StrategieNormale.afficherCellulesLogging( "cellules productrices" , mesCellules["productrices"] )
+            StrategieNormale.afficherCellulesLogging( "cellules attaquantes en dangées" , mesCellules["attaquantesEnDanger"] )
+            StrategieNormale.afficherCellulesLogging( "cellules attaquantes en suretées" , mesCellules["attaquantesEnSurete"] )
 
             
-            # on envoie les cellules des productrices si on a au moins une cellule attaquante
-            if( attaquantes ):
-            
-                for productrice in productrices :
+            # on envoie les unités des productrices si on a au moins une cellule attaquante
+            if( mesCellules[ "attaquantes" ] ):
+
+                mouvements += self.envoyerUnitesProductrices( composante, mesCellules )
+
+
+            mouvements += self.envoyerUnitesAttaquantes( terrain, composante, mesCellules )
+                                        
+        return mouvements
+        
+
+    def envoyerUnitesProductrices( self, composante, mesCellules ):
+
+        mouvements = []
+        productrices = mesCellules[ "productrices" ]
+
+        for productrice in productrices :
                     
-                    # si on a au moins 10% de la capacitee d'attaque de la cellule, on envoi
-                    if( productrice.getPourcentageAttaque() > 0.10 ):
+            # si on a au moins 10% de la capacitee d'attaque de la cellule, on envoi
+            if( productrice.getPourcentageAttaque() > 0.10 ):
+            
+                # utilisation du tableau de dijsktra ici                
+                destinations = mesCellules[ "attaquantesEnDanger"] if( mesCellules["attaquantesEnDanger"] ) else mesCellules["attaquantesEnSurete"]
+                numero_vers = composante.getCheminVersCellulePlusProche( productrice , destinations )[1]
                     
-                        # utilisation du tableau de dijsktra ici
-                        if( attaquantes_en_danger ):
-                            numero_vers = composante.getCheminVersCellulePlusProche( productrice , attaquantes_en_danger )[1]
-                        else:
-                            numero_vers = composante.getCheminVersCellulePlusProche( productrice , attaquantes )[1]
-                            
-                        vers = composante.getCellule( numero_vers )
-                        
-                        nbUnites = productrice.getAttaque() 
+                vers = composante.getCellule( numero_vers )
+                
+                nbUnites = productrice.getAttaque() 
 
-                        mouvement = self.envoyerUnites( productrice, vers, nbUnites )
-                        mouvements.append( mouvement )
-                    else:
-                        pass
+                mouvement = self.envoyerUnites( productrice, vers, nbUnites )
+                mouvements.append( mouvement )
+
+            else:
+                pass
+
+        return mouvements
+
+
+
+    def envoyerUnitesAttaquantes( self, terrain, composante, mesCellules ):
+
+        mouvements = [] 
+        attaquantes = mesCellules[ "attaquantes" ]
+        
+        #
+        #   pour l'instant, pas de distinction entre les attaquants
+        # 
+        #
+        for attaquante in attaquantes:
+            
             
             #
-            #   pour l'instant, pas de distinction entre les attaquants
-            # 
+            #  => recherche si pupute applicable ici
+            # sinon
+            
+            
+            # recherche de la cible    
+            tableau_p = {}
+            for ennemi in attaquante.getVoisinsEnnemis() :
+                tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi.getNumero() )
+                # tableau_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
+            
+            indice_p_max = max( tableau_p.keys() )
+            cellules_possibles = tableau_p[ indice_p_max ]
+            
+            num_cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
+            cellule_cible = terrain.getCellule(num_cellule_choisie)
+            
             #
-            for attaquante in attaquantes:
+            # => si qu'un seul voisin ennemie, j'envoi tout sur lui ?
+            #
+            # sinon 
+            
+            cout_cellule = self.getCoutCellule( cellule_cible )
+            excedent = attaquante.getExcedent()
+            
+            if( cout_cellule <= 0 ):
                 
+                if( excedent > 0 ):
+                    a_envoyer = excedent
+                else:
+                    continue
+            
+            else:
                 
-                #
-                #  => recherche si pupute applicable ici
-                # sinon
+                if( cout_cellule < excedent ):
+                    a_envoyer = excedent
                 
-                
-                # recherche de la cible    
-                tableau_p = {}
-                for ennemi in attaquante.getVoisinsEnnemis() :
-                    tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi.getNumero() )
-                    # tableau_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
-                
-                indice_p_max = max( tableau_p.keys() )
-                cellules_possibles = tableau_p[ indice_p_max ]
-                
-                num_cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
-                cellule_cible = terrain.getCellule(num_cellule_choisie)
-                
-                #
-                # => si qu'un seul voisin ennemie, j'envoi tout sur lui ?
-                #
-                # sinon 
-                
-                cout_cellule = self.getCoutCellule( cellule_cible )
-                excedent = attaquante.getExcedent()
-                
-                if( cout_cellule <= 0 ):
+                elif( attaquante.getAttaque() < cout_cellule ):
                     
                     if( excedent > 0 ):
                         a_envoyer = excedent
                     else:
+                        logging.info( "j'attend d'être assez grand pour l'attaquer" )
                         continue
-                
+                    
                 else:
-                    
-                    if( cout_cellule < excedent ):
-                        a_envoyer = excedent
-                    
-                    elif( attaquante.getAttaque() < cout_cellule ):
-                        
-                        if( excedent > 0 ):
-                            a_envoyer = excedent
-                        else:
-                            logging.info( "j'attend d'être assez grand pour l'attaquer" )
-                            continue
-                        
-                    else:
-                        a_envoyer = cout_cellule
-                    
-                logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
-                logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
-                    
-                mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
+                    a_envoyer = cout_cellule
                 
-                mouvements.append( mouvement )
+            logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
+            logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
                 
-                """
-                # si je peux la prendre, je l'attaque
-                cout_cellule = self.getCoutCellule(vers)
-                if( attaquante.getAttaque() > cout_cellule ):
-                    
-                    # la cellule est déja en train d'être conquise/prise
-                    if( cout_cellule <= 0 ):
-                        
-                        # si j'ai quand même de l'excédent, j'envoie quand même
-                        if( excedent > 0 ):
-                            a_envoyer = excedent
-                        else:
-                            continue
-                    
-                    # la cellule n'est pas en train d'être conquise    
-                    else:
-                        a_envoyer = cout_cellule if cout_cellule > excedent else excedent
-                        
-                    logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) )
-                    logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
-                    
-                    lien = terrain.getLien( li.Lien.hachage(vers,attaquante) )
-                    
-                    mon_mouvement = mv.Mouvement( attaquante, vers, a_envoyer, attaquante.getCouleurJoueur(), lien.getDistance() )
-                    mouvements.append( mon_mouvement )
-                    
-                    lien.ajouterMouvementVersCellule( vers , mon_mouvement )
-                    attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
-                    
-                    
-
-                else:
-                    logging.info( "j'attend d'être assez grand pour l'attaquer" )
-                    # on attend 
-                    pass
-                
-                """
+            mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
             
-        return mouvements
-        
+            mouvements.append( mouvement )
+
+        return mouvements 
+
 
     # calcul l'indice p d'une cellule par rapport à la cellule d'origine voulant envoyer ses unitées
     # Cellule origine :
@@ -267,9 +242,13 @@ class StrategieNormale( st.Strategie ):
     # une cellule est attaquante si elle est au moin relié à un ennemie
     # List<Cellule> mesCellules : la liste des cellules m'appartenant
     # List<Cellule> productrices : laliste de mes cellules productrices
-    def getCellulesAttaquantes( self, mesCellules, productrices ):
+    def getCellulesAttaquantes( self, mesCellules ):
         # correspond à : mesCellules - productrices
-        return list( set(mesCellules) - set(productrices) )
+        #return list( set(mesCellules) - set(productrices) )
+
+        maCouleur = self.getRobot().getMaCouleur()
+        return [ cellule for cellule in mesCellules if any( [ voisin.getCouleurJoueur() != maCouleur for voisin in cellule.getVoisins() ] ) ]
+    
         
         
     # retourne la liste de mes cellules semi-productrices
