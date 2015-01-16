@@ -120,7 +120,7 @@ class StrategieNormale( st.Strategie ):
                         couleur=ennemi.getCouleurJoueur()
                         cellule=ennemi
                 # Si on a trouvé un planète dans ce cas là
-                if not (dist_mini==False):
+                if not (dist_mini==False) and attaquante.getExcedent()>0:
                     logging.info( "\o/ _o/ _o_ \o_ \o/" )
                     # on récupère les liens de la cellule
                     for lien in cellule.getLiens():
@@ -210,20 +210,10 @@ class StrategieNormale( st.Strategie ):
                         
                     logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
                     logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
-                        
-                    lien = terrain.getLien( li.Lien.hachage(cellule_cible,attaquante) )
-                    
-                    mon_mouvement = mv.Mouvement( attaquante, cellule_cible, a_envoyer, attaquante.getCouleurJoueur(), lien.getDistance() )
+
+                    mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
                     mouvements.append( mon_mouvement )
-                    
-<<<<<<< HEAD
-                    lien.ajouterMouvementVersCellule( cellule_cible , mon_mouvement )
-                    attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
-=======
-                mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
->>>>>>> f4cac3974d616a181289d237a90aae001f6e721b
-                
-                mouvements.append( mouvement )
+
                 
                 """
                 # si je peux la prendre, je l'attaque
