@@ -65,11 +65,9 @@ class StrategieNormale( st.Strategie ):
                         vers = composante.getCellule( numero_vers )
                         
                         nbUnites = productrice.getAttaque() 
-                    
-                        lien = composante.getLien( li.Lien.hachage( productrice, vers ) )
-                        mouvement = mv.Mouvement( productrice, vers, nbUnites, productrice.getCouleurJoueur(), lien.getDistance() )
+
+                        mouvement = self.envoyerUnites( productrice, vers, nbUnites )
                         mouvements.append( mouvement )
-                        
                     else:
                         pass
             
@@ -131,14 +129,9 @@ class StrategieNormale( st.Strategie ):
                 logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
                 logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
                     
-                lien = terrain.getLien( li.Lien.hachage(cellule_cible,attaquante) )
+                mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
                 
-                mon_mouvement = mv.Mouvement( attaquante, cellule_cible, a_envoyer, attaquante.getCouleurJoueur(), lien.getDistance() )
-                mouvements.append( mon_mouvement )
-                
-                lien.ajouterMouvementVersCellule( cellule_cible , mon_mouvement )
-                attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
-                
+                mouvements.append( mouvement )
                 
                 """
                 # si je peux la prendre, je l'attaque

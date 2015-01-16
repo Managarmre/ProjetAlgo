@@ -232,6 +232,10 @@ class Terrain:
 			raise Exception("il n'y a aucun lien ayant ce numéro dans ce terrain")
 
 
+	def getLienEntreCellules(self, cellule_1, cellule_2 ):
+		numero = li.Lien.hachage( cellule_1, cellule_2 )
+		return self.getLien( numero )
+
 	# retourne la liste des liens du terrain (sous forme d'un dictionnaire)
 	def getLiens(self):
 		return self.liens
