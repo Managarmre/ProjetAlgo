@@ -38,23 +38,23 @@ class Robot:
 
     def analyseMessage( self, state ):
         
-        end_of_game = re.compile( r"ENDOFGAME.*" )
-        state_of_game = re.compile( r"STATE.*" )
-        gameover = re.compile( r"GAMEOVER.*" ) 
+        state_of_game = re.compile( r"\ASTATE(?P<id_match>.+)IS(?P<nbJoueurs>[0-9]+);(?P<nbCellules>[0-9]+)CELLS:?(?P<cellules>.*);(?P<nbMoves>[0-9]+)MOVES:?(?P<moves>.*)\Z"  )
+        gameover = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\]IN(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})\Z" ) 
+        end_of_game = re.compile( r"\AENDOFGAME(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})\Z" )
         
         logging.info( "==== chaine reçue : {chaine}".format(chaine=state) )
         
-        if( end_of_game.match( state ) ):
-            self.end_of_game()
+        if( state_of_game.match( state ) ):
+            self.updateTerrain( state )
             
         elif( gameover.match( state ) ) :
             self.game_over( state )
-                   
-        elif( state_of_game.match( state ) ):
-            self.updateTerrain( state )
+            
+        elif( end_of_game.match( state ) ):
+            self.end_of_game()
             
         else:
-            raise Exception("je ne comprend pas ce que c'est : {quezako} ".format( quezako=state ) )
+            raise Exception("je ne comprend pas ce que c'est, ne correspond pas au protocole : {quezako} ".format( quezako=state ) )
             
             
     
@@ -67,7 +67,7 @@ class Robot:
     # arêt du match pour ce robot
     def game_over( self, state_game_over ):
         
-        regex_GameOver = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\](?P<id_match>.+)\Z" )
+        regex_GameOver = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\]IN(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})\Z" ) 
         informations = regex_GameOver.match( state_game_over )
         
         id_joueur = int( informations.group("id_joueur") )
@@ -76,7 +76,7 @@ class Robot:
         
         if( self.getMaCouleur() == id_joueur ):
             
-            if( self.getNbJoueurs() == 1 ):
+            if( self.getTerrain().getCellulesJoueur( self.getMaCouleur() ) ):
                 logging.info( "==== gameover : j'ai gagné !!!" )
             
             else:
@@ -95,15 +95,12 @@ class Robot:
         
         logging.info( "==== initialisation"  )
         
-        regex_verifier = re.compile( r"\AINIT.{8}-.{4}-.{4}-.{4}-.{12}TO[0-9]*\[[0-9]*\];[0-9]*;[0-9]*CELLS:([0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+,?)*;[0-9]*LINES:([0-9]+@[0-9]+OF[0-9]+,?)*\Z" )
-        if( not regex_verifier.match(init_string) ):
-            raise Exception("la chaine entrée est invalide (ne correspond pas à la regex)")
-            
-        # on récupère autant d'informations que possible sur la chaine d'origine 
-        regex_init = re.compile( r"INIT(?P<id_match>.+)TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>.*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>.*)" )
+        regex_init = re.compile( r"INIT(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>([0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+,?)*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>([0-9]+@[0-9]+OF[0-9]+,?)*)" )
         informations = regex_init.match( init_string )
+        if( not informations ):
+            raise Exception("la chaine entrée est invalide (ne correspond pas à la regex)")
 
-
+        # on récupère autant d'informations que possible sur la chaine d'origine 
         self.vitesse = int( informations.group('vitesse') )
         self.id_match = informations.group('id_match')
         self.maCouleur = int( informations.group('maCouleur') )
@@ -125,18 +122,24 @@ class Robot:
 
             ifs = regex_uneCellule.match( chaine )
 
-            numero = int( ifs.group('id_cellule') )
-            attaque, defense, couleurJoueur = 0, 0, -1    # cellule neutre, n'a ni attaque, ni defense
-            attaqueMax = int( ifs.group('maxATT') )
-            defenseMax = int( ifs.group('maxDEF') )
-            production = len( ifs.group('production') )     # on compte le nombre de I
+            try:
 
-            x = int( ifs.group('x') )
-            y = int( ifs.group('y') )
-            rayon = int( ifs.group('rayon') )
+                numero = int( ifs.group('id_cellule') )
+                attaque, defense, couleurJoueur = 0, 0, -1    # cellule neutre, n'a ni attaque, ni defense
+                attaqueMax = int( ifs.group('maxATT') )
+                defenseMax = int( ifs.group('maxDEF') )
+                production = len( ifs.group('production') )     # on compte le nombre de I
+    
+                x = int( ifs.group('x') )
+                y = int( ifs.group('y') )
+                rayon = int( ifs.group('rayon') )
+    
+                cellule = ce.Cellule( numero, attaque, defense, attaqueMax, defenseMax, production, couleurJoueur, x, y, rayon )
+                self.terrain.ajouterCellule( cellule )
+            
+            except Exception as e:
+                logging.info( "======== /!\ IMPOSSIBLE DE CREER UNE CELLULE (initialiserMatch) : " + e )
 
-            cellule = ce.Cellule( numero, attaque, defense, attaqueMax, defenseMax, production, couleurJoueur, x, y, rayon )
-            self.terrain.ajouterCellule( cellule )
 
         nbLines = informations.group("nbLines")
         
@@ -145,15 +148,20 @@ class Robot:
         
         for chaine in re.split( "," , informations.group("lignes") ) :
             
-            ifs = regex_unLien.match( chaine )
-
-            numero_u = int( ifs.group('id_cellule_u') )
-            numero_v = int( ifs.group('id_cellule_v') )
-            distance = int( ifs.group('distance')     )
-
-            lien = li.Lien( self.terrain.getCellule(numero_u) , self.terrain.getCellule(numero_v) , distance )
-            self.terrain.ajouterLien( lien )
-                  
+            try:
+            
+                ifs = regex_unLien.match( chaine )
+    
+                numero_u = int( ifs.group('id_cellule_u') )
+                numero_v = int( ifs.group('id_cellule_v') )
+                distance = int( ifs.group('distance')     )
+    
+                lien = li.Lien( self.terrain.getCellule(numero_u) , self.terrain.getCellule(numero_v) , distance )
+                self.terrain.ajouterLien( lien )
+            
+            except Exception as e:
+                logging.info( "======== /!\ IMPOSSIBLE DE CREER LE LIEN : " + e )
+             
         self.peut_jouer = True
         self.partie_en_cours = True
         
