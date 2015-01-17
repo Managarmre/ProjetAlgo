@@ -21,7 +21,6 @@ import logging
 
 # pour faire de l'introspection
 import inspect
-
 import time
 
 # notre robot
@@ -105,30 +104,56 @@ def play_pooo():
     while ( cheshire.partieEnCours() ):
          
         logging.info( "==> demande de l'état du jeu" )
+        
+        
+        t1 = time.time()
+        
         temps = poooc.etime()
+        
+        t2 = time.time()
+        
         state = poooc.state_on_update()   # bloquant
+        
+        t3 = time.time()
         
         logging.info( "==> temps du jeu: {t}".format(t=temps) )
         logging.info( "==> analyse de la réponse serveur" )
         
+        t4 = time.time()
         cheshire.setTemps( temps )
-        cheshire.analyseMessage(state)
         
-        if( cheshire.peutJouer() ):
-        
-            logging.info( "==> prise de décision" )
-            decisions = cheshire.getDecisions()
-        
-            logging.info( "==> envoie des décisions au serveur" )
-            logging.info( decisions )
+        try: 
+            cheshire.analyseMessage(state)
             
-            for decision in decisions:
-                poooc.order( decision )
-                time.sleep(0.2)
+            t5 = time.time()
+            t6 = 0
+            
+            if( cheshire.peutJouer() ):
+            
+                logging.info( "==> prise de décision" )
+                decisions = cheshire.getDecisions()
                 
-        else:
-            logging.info( "==== je n'ai plus le droit de jouer" )
-            
+                t6 = time.time()
+                
+                logging.info( "==> envoie des décisions au serveur" )
+                logging.info( decisions )
+                
+                for decision in decisions:
+                    poooc.order( decision )
+                    time.sleep(0.2)
+                    
+            else:
+                logging.info( "==== je n'ai plus le droit de jouer" )
+        
+            logging.info( "etime() {t}".format( t=(t2-t1)*1000 ) )
+            logging.info( "state_on_update() {t}".format( t=(t3-t2)*1000 ) )
+            logging.info( "loggings() {t}".format( t=(t4-t3)*1000 ) )
+            logging.info( "analyseMessage() {t}".format( t=(t5-t4)*1000 ) )
+            logging.info( "getDecisions() {t}".format( t=(t6-t5)*1000 ) )
+        
+        except Exception as e:
+            logging.info( e )
+         
     logging.info( "==> partie fini" )
             
             

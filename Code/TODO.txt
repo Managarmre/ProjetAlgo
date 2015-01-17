@@ -1,0 +1,22 @@
+
+
+
+
+- meilleur gestion des erreurs ?
+- utiliser un autre mapping qu'une ligne droite (possible?)
+- stratégie prévision à faire
+- améliorer la vérification et l'utilisation des regex (ne pas les recréer à chaque fois)
+
+- créer le/les packages (tout bien ranger)
+
+- le faire avec du parallélisme et de la synchronisation (?)
+
+
+- doc (sphinx)
+- tests unitaires
+- test d'intégration (test avec une ia adverse)
+
+
+- compte rendu
+- diapo/présentation
+
