@@ -91,7 +91,7 @@ class StrategieNormale( st.Strategie ):
         for attaquante in attaquantes:
             
             
-             ########################################
+ ########################################
  ########################################
  #### PUPUTE DEBUT
  ########################################
@@ -104,7 +104,7 @@ class StrategieNormale( st.Strategie ):
                 # si c'est le cas on entre en stratégie "prise de planète"
                 
                 # initialisation de variables
-                dist_mini=False
+                dist_mini=-1
                 cout_mini=-1
                 couleur=-1
                 cellule=""
@@ -114,7 +114,7 @@ class StrategieNormale( st.Strategie ):
                     dist_cellule=self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()
                     # si c'est la première cellule que l'on regarde et qu'elle est sur le point de se faire prendre
                     # on récupère ses coordonnées et son coût (-cout_cellule => pour le remettre en positif)
-                    if (not dist_mini and cout_cellule<=0):
+                    if (dist_mini==-1 and cout_cellule<=0):
                         cout_mini=-cout_cellule
                         dist_mini=dist_cellule
                         couleur=ennemi.getCouleurJoueur()
@@ -133,8 +133,9 @@ class StrategieNormale( st.Strategie ):
                         cout_mini=-cout_cellule
                         couleur=ennemi.getCouleurJoueur()
                         cellule=ennemi
+                logging.info( "{exce} et dist mini {dist_mini} ".format(exce=attaquante.getAttaque(),dist_mini=dist_mini) ) 
                 # Si on a trouvé un planète dans ce cas là
-                if not (dist_mini==False) and attaquante.getExcedent()>0:
+                if not (dist_mini==-1) and attaquante.getAttaque()>cout_mini:
                     logging.info( "Stratégie Pupute" )
                     # on récupère les liens de la cellule
                     for lien in cellule.getLiens():
@@ -147,15 +148,15 @@ class StrategieNormale( st.Strategie ):
                                temps_impact=temps_mouvement
                         # on compare ce temps avec le temps que nos troupes vont mettre pour atteindre la planète cible (dist_mini)
                         # si dist_mini > Temps_impact
-                        if temps_impact<dist_mini:
+                        if temps_impact<dist_mini and attaquante.getAttaque()>cout_mini:
                             # on envoie nos troupes pour prendre la planète
                             # on envoie le nombre de troupes attaquantes + 10%
                             a_envoyer=int(cout_mini+(cout_mini*30//100))
                             if a_envoyer>attaquante.getAttaque():
                                 a_envoyer=attaquante.getAttaque()
                             elif a_envoyer==0:
-                                a_envoyer=int(attaquante.getAttaque()//3)
-                            
+                                a_envoyer=int(attaquante.getAttaque()//3)+1
+
                             logging.info( "{exce} {cout_cell} ".format(exce=a_envoyer,cout_cell=cout_mini) ) 
                             logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=cellule,cell=a_envoyer) )
                                 
@@ -167,16 +168,25 @@ class StrategieNormale( st.Strategie ):
                             lien.ajouterMouvementVersCellule( cellule , mon_mouvement )
                             attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
                             
+                            # on réinitialise les variables
+                            dist_mini=-1
+                            cout_mini=-1
+                            couleur=-1
+                            cellule=""
+                            
                         # sinon on passe
                         else:
-                            pass                 
-        
+                            pass 
+                        
+                elif not (dist_mini==-1) and attaquante.getAttaque()<cout_mini:
+                    pass
+                    
  ########################################
  ########################################
  #### PUPUTE FIN
  ########################################
  ########################################    
-                else:  
+                elif dist_mini==-1:  
                     logging.info( "Strategie Attaque" )
             
             
@@ -228,7 +238,6 @@ class StrategieNormale( st.Strategie ):
 
                     mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
                     mouvements.append( mon_mouvement )
-                    
         return mouvements 
 
 
