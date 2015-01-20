@@ -151,13 +151,13 @@ class StrategieNormale( st.Strategie ):
     def indiceP( self, origine, cellule ):
         
         cout = self.getCoutCellule( cellule )
-        cout = -1 if cout == 0 else cout        # pour éviter une division par 0
+        cout = 1 if cout == 0 else cout        # pour éviter une division par 0
         
         production = cellule.getProduction()
         
         nbVoisins = len( cellule.getVoisins() )
         
-        distance = self.getRobot().getTerrain().getLien( li.Lien.hachage(origine,cellule) ).getDistance()
+        distance = self.getRobot().getTerrain().getLienEntreCellules( origine, cellule ).getDistance()
         
         return production / ( cout * nbVoisins * distance )
     

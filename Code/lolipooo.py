@@ -161,7 +161,7 @@ def play_pooo():
         except Exception as e:
             logging.info( e )
          
-    logging.info( "==> partie fini" )
+    logging.info( "==> partie finie" )
     logging.info('>>> Exit play_pooo function')    
             
     pass
