@@ -14,6 +14,7 @@ import argparse
 import importlib
 import threading
 import logging
+import os, sys
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -26,13 +27,23 @@ parser.add_argument('player', help='name of the player')
 # args.server et args.player
 args = parser.parse_args()
 
-logging.info('Bot {} playing as {} onto {}'.format(args.bot, args.player, args.server))
+# cherche le bot dans un sous-répertoire et
+# ajoute le chemin pour la recherche de modules 
+bot_filename=args.bot+'.py'
+for root, dirs, files in os.walk('.'):
+    for f in files:
+        if f==bot_filename:
+            logging.info("Bot found: {}/{}".format(root, f))
+            sys.path.append(root)
+            break
 
 # charge le joueur-robot
 bot = importlib.import_module(args.bot)
 
 # récupère les informations de connexion
 HOST, PORT = args.server.strip().split(':')
+
+logging.info('Bot {} playing as {} onto {}'.format(args.bot, args.player, args.server))
 
 
 def main():
