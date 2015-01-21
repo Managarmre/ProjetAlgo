@@ -23,6 +23,8 @@ import logging
 import inspect
 import time
 
+import threading
+
 # notre robot
 from Robot import *
 
@@ -104,6 +106,22 @@ def play_pooo():
     
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
+
+    
+    
+    thread_updateTime = threading.Thread( target=updateTime, args=(cheshire,) )
+    thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
+    thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
+    
+    thread_updateTime.start()
+    thread_updateGame.start()
+    thread_sendDecisions.start()
+    
+    thread_updateTime.join()
+    thread_updateGame.join()
+    thread_sendDecisions.join()
+    
+    """
     
     logging.info( "==> demande de l'état du jeu initial" )
     
@@ -163,13 +181,68 @@ def play_pooo():
          
     logging.info( "==> partie finie" )
     logging.info('>>> Exit play_pooo function')    
-            
+           
+    """
+
     pass
     
 
 
+
+
+def updateTime( robot ):
+    
+    while( robot.partieEnCours() ):
+        
+        temps = poooc.etime()
+        
+        logging.info( "==> temps du jeu: {t}".format(t=temps) )
+
+        robot.setTemps( temps )
+        
+        
+        #
+        #
+        #
+        
+        time.sleep( 0.02 )
+        
+    pass
+
+
+def updateGame( robot ):
+    
+    while( robot.partieEnCours() ):
+
+        state = poooc.state_on_update()
+
+        robot.analyseMessage( state )
+
+        time.sleep( 0.02 )
+
+    pass
+        
+        
+def sendDecisions( robot ):
+
+    while( robot.peutJouer() ):
+
+        ordres = robot.getDecisions()
+
+        for ordre in ordres :
+
+            poooc.order( ordre )
+
+            time.sleep( 0.02 )
+
+
+        time.sleep( 0.2 )
+
+    pass    
+
+
 # test 
-"""
+
 uid = "0947e717-02a1-4d83-9470-a941b6e8ed07"
 
 init = "INITc71db0bc-9863-4d51-bd6f-459de3fafdb7TO2[1];2;7CELLS:0(0,0)'100'30'8'I,1(0,5)'100'30'8'I,2(5,0)'100'30'8'I,3(5,5)'200'30'8'II,4(5,10)'100'30'8'I,5(10,5)'100'30'8'I,6(10,10)'100'30'8'I;6LINES:0@4800OF1,0@4800OF2,2@4700OF3,3@4700OF4,4@4800OF6,5@4800OF6"
@@ -198,7 +271,7 @@ init_pooo( init )
 
 terrain = cheshire.getTerrain()
 
-
+"""
 
 cheshire.setTemps( 518109648 )
 cheshire.analyseMessage(state)

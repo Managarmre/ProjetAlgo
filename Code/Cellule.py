@@ -126,7 +126,7 @@ class Cellule:
 	# ==> a voir avec la production !!!
 	#
 	def getExcedent( self ):
-		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() and mouvement.getTempsRestant() < 1500 ] )
+		somme = sum( [ mouvement.getNbUnites() for lien in self.getLiens() for mouvement in lien.getMouvementVersCellule(self) if mouvement.getCouleurJoueur() == self.getCouleurJoueur() and mouvement.getTempsRestant() < 1000 ] )
 		
 		cellules_produites = self.getProduction()	
 		

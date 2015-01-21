@@ -8,10 +8,11 @@ class Mouvement:
     
     # Cellule depuis
     # Cellule vers
+    # 
     # Integer nbUnites
     # Integer couleurJoueur
     # Float temps_restant :  le temps restant avant l'arrivé des unités à destination
-    def __init__(self, depuis, vers, nbUnites, couleurJoueur, temps_restant ):
+    def __init__(self, depuis, vers, nbUnites, couleurJoueur, distance, vitesse, temps_depart, temps_actuel ):
         
         if( not ( isinstance( depuis, ce.Cellule ) and isinstance( vers, ce.Cellule ) ) ):
             raise Exception("les paramètres 'de' et 'vers' sont des cellules")
@@ -21,17 +22,24 @@ class Mouvement:
         
         if( not isinstance( couleurJoueur , int ) or couleurJoueur < 0 ):
             raise Exception("le paramètre 'couleurJoueur' doit être un entier supérieur à 0")
-            
+        
+        """ 
         if( temps_restant < 0 ):
             raise Exception("le paramètre 'temps_restant' ne peut pas être inférieur à 0")
-            
+        """ 
             
         self.depuis = depuis
         self.vers = vers 
         
         self.nbUnites = nbUnites 
         self.couleurJoueur = couleurJoueur 
-        self.temps_restant = temps_restant 
+
+        self.distance = distance
+        self.vitesse = vitesse
+        self.temps_depart = temps_depart
+        self.temps_actuel = temps_actuel
+
+        # self.temps_restant = temps_restant 
         
         
     # retourne la cellule vers laquelle le mouvement se dirige
@@ -48,9 +56,27 @@ class Mouvement:
     def getCouleurJoueur(self):
         return self.couleurJoueur
     
+
+
+
+
     # retourne le temps de trajet restant avant l'arrivée des unités à destination
     def getTempsRestant(self):
-        return self.temps_restant
+        
+        distance_parcourue = self.temps_actuel - self.temps_depart
+
+        temps_restant = ( self.distance - distance_parcourue ) / self.vitesse
+
+        return temps_restant if temps_restant > 0 else 0
+
+
+    def setTempsActuel( self, temps_actuel ):
+        self.temps_actuel = temps_actuel
+
+
+
+
+
     
     # retourne vrai si le mouvement a la couleur donnée (appartient au joueur ayant cette couleur)
     def aPourCouleur( self, couleurJoueur ):

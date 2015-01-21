@@ -3,6 +3,7 @@
 import re
 
 import logging
+import threading
 
 # permet de générer l'aléatoire
 import random
@@ -32,6 +33,8 @@ class Robot:
         self.strategie = strat.StrategieNormale( self )
         self.temps = 0
         self.joue = False
+
+        self.mutex = threading.Semaphore(1)
 
 
 
@@ -176,11 +179,15 @@ class Robot:
     # exemple de chaine state
     # state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
     def updateTerrain(self, state):
-        
+        self.mutex.acquire()
+
         logging.info( "==== mise à jour du terrain"  )
         
         # on supprime tous les déplacements
-        for numero,lien in self.getTerrain().getLiens().items():
+        terrain = self.getTerrain()
+
+        terrain.mouvements = []
+        for numero,lien in terrain.getLiens().items():
             lien.clearAllMouvements()
         
         regex_state = re.compile( r"STATE(?P<id_match>.+)IS(?P<nbJoueurs>[0-9]+);(?P<nbCellules>[0-9]+)CELLS:?(?P<cellules>.*);(?P<nbMoves>[0-9]+)MOVES:?(?P<moves>.*)" )
@@ -233,7 +240,7 @@ class Robot:
                     
                     couleurJoueur = int( ifs_deplacement.group("owner") )
                     nbUnites = int( ifs_deplacement.group("offunits") )
-                    tempsSysteme_topDepart = int( ifs_deplacement.group("timestamp") )
+                    temps_depart = int( ifs_deplacement.group("timestamp") )
                     direction = ifs_deplacement.group("direction") 
                     
                     # on ajoute le mouvement de cellule1 vers cellule2 (donc ajout VERS cellule2 )
@@ -250,27 +257,33 @@ class Robot:
                         raise Exception( "la direction n'est pas bonne... : {d}".format( d=direction)  )
                     
                     # on calcul le temps réel restant avant que le mouvement n'arrive à destination
-                    tempsSysteme_maintenant = self.getTemps()
+                    temps_actuel = self.getTemps()
                     distance = lien.getDistance() 
                     vitesse = self.getVitesse()
                     
+                    """
                     temps_restant = ( distance - ( tempsSysteme_maintenant - tempsSysteme_topDepart ) ) / vitesse
                     
                     if( temps_restant <= 0 ):
                         logging.info( "{cell} {cellule}".format( cell=numero_cellule_1, cellule=numero_cellule_2 ) )
                         logging.info( "{un} {deux} {trois} {quatre}".format(un=tempsSysteme_maintenant, deux=tempsSysteme_topDepart, trois=distance, quatre=temps_restant) )
-                    
-                    mouvement = mv.Mouvement( depuis, vers, nbUnites, couleurJoueur, temps_restant )
+                    """
+
+                    mouvement = mv.Mouvement( depuis, vers, nbUnites, couleurJoueur, distance, vitesse, temps_depart, temps_actuel )
                     lien.ajouterMouvementVersCellule( vers, mouvement )
-                
+                    terrain.mouvements.append( mouvement )
+        
+        self.mutex.release()    
         pass
+
 
 
     # retourne la liste des decisions, chacune conforme au protocole du serveur
     def getDecisions(self):
-        return [ mouv.toOrder( self.getUID() ) for mouv in self.getStrategie().decider() ]
-    
-
+        self.mutex.acquire()
+        ordres = [ mouv.toOrder( self.getUID() ) for mouv in self.getStrategie().decider() ]
+        self.mutex.release()
+        return ordres
 
 
     # retourne l'uid du robot (string)
@@ -312,12 +325,26 @@ class Robot:
 
 
     def setTemps( self , temps ):
+        self.mutex.acquire()
         self.temps = temps 
+
+        for mouvement in self.terrain.mouvements :
+            mouvement.setTempsActuel( temps )
+
+        self.mutex.release()
+
+
         
     # retourne vrai si une partie est en cours, faux sinon
     def partieEnCours(self):
-        return self.partie_en_cours
+        self.mutex.acquire()
+        en_cours = self.partie_en_cours
+        self.mutex.release()
+        return en_cours
         
     # retourne vrai si le robot peut jouer (donc s'il n'a pas perdu)
     def peutJouer(self):
-        return self.peut_jouer
+        self.mutex.acquire()
+        play = self.peut_jouer
+        self.mutex.release()
+        return play

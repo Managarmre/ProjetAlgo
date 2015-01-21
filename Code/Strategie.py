@@ -23,13 +23,20 @@ class Strategie:
                         
         couleurJoueur =  depuis_cellule.getCouleurJoueur()
         
-        terrain = self.getRobot().getTerrain()
+        robot = self.getRobot()
+        terrain = robot.getTerrain()
         lien = terrain.getLienEntreCellules( depuis_cellule, vers_cellules ) 
         
-        mouvement = mv.Mouvement( depuis_cellule, vers_cellules, nb_unites, couleurJoueur, lien.getDistance() )
+        distance = lien.getDistance()
+        vitesse = robot.getVitesse()
+        temps_actuel = 0 #robot.getTemps()
+        temps_depart = 0 #temps_actuel
+
+        mouvement = mv.Mouvement( depuis_cellule, vers_cellules, nb_unites, couleurJoueur, distance, vitesse, temps_depart, temps_actuel )
         
         lien.ajouterMouvementVersCellule( depuis_cellule, mouvement )
         depuis_cellule.setAttaque( depuis_cellule.getAttaque() - nb_unites )
-        
+        terrain.mouvements.append( mouvement )
+
         return mouvement
         

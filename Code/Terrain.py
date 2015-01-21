@@ -17,6 +17,7 @@ class Terrain:
 
 		self.cellules = {}
 		self.liens = {}
+		self.mouvements = []
 
 		# on utilise ici des dictionnaires (équivalent des hashmaps en python)
 
