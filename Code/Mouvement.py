@@ -70,6 +70,9 @@ class Mouvement:
         return temps_restant if temps_restant > 0 else 0
 
 
+    def getDistance(self):
+        return self.distance
+
     def setTempsActuel( self, temps_actuel ):
         self.temps_actuel = temps_actuel
 
