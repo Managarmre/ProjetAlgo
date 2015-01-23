@@ -17,7 +17,7 @@ import Mouvement as mv
 # on import les différentes stratégies utilisées
 from StrategieRandom import *
 import StrategieNormale as strat
-
+import StrategiePrevision as stratprev
 
 
 class Robot:
@@ -30,7 +30,7 @@ class Robot:
         logging.info( "==== uid du robot : {chaine}".format(chaine=uid)  )
         
         self.uid = uid
-        self.strategie = strat.StrategieNormale( self )
+        self.strategie = stratprev.StrategiePrevision( self )
         self.temps = 0
         self.joue = False
 

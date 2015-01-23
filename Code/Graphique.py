@@ -1,7 +1,7 @@
 
 import tkinter as tk
-import logging
-import math
+import logging as logging
+import math as math
 
 import Lien as li
 

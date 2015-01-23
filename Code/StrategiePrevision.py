@@ -1,3 +1,11 @@
+import Strategie as st
+import Mouvement as mv
+import Lien as li
+import logging
+import random
+import math
+import functools 
+import operator 
 
 import StrategieNormale as stn
 
@@ -7,15 +15,13 @@ class StrategiePrevision( stn.StrategieNormale ):
     
     def __init__( self, robot ):
         stn.StrategieNormale.__init__( self, robot )
-        
-        
-        
-    
-    
+
 
     def envoyerUnitesAttaquantes( self, terrain, composante, mesCellules ):
 
         mouvements = [] 
+        a_envoyer=0
+        maCouleur = self.getRobot().getMaCouleur()
         attaquantes = mesCellules[ "attaquantes" ]
         
         #
@@ -23,16 +29,7 @@ class StrategiePrevision( stn.StrategieNormale ):
         # 
         #
         for attaquante in attaquantes:
-            
-            
-            ########################################
-            ########################################
-            #### PUPUTE DEBUT
-            ########################################
-            ########################################
     
-            #
-            #  => recherche si pupute applicable ici
             # stratégie applicable pour les planètes attaquantes safe
             # ici on regarde si une planète voisine est sur le point de se faire prendre
             # si c'est le cas on entre en stratégie "prise de planète"
@@ -41,87 +38,57 @@ class StrategiePrevision( stn.StrategieNormale ):
             dist_mini=-1
             cout_mini=-1
             couleur=-1
-            cellule=""
             # pour chaque voisin on récupère le cout de la cellule et sa distance
             for ennemi in attaquante.getVoisinsEnnemis():
-                cout_cellule=self.getCoutCellule(ennemi)
-                dist_cellule=self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()
-                # si c'est la première cellule que l'on regarde et qu'elle est sur le point de se faire prendre
-                # on récupère ses coordonnées et son coût (-cout_cellule => pour le remettre en positif)
-                if (dist_mini==-1 and cout_cellule<=0):
-                    cout_mini=-cout_cellule
-                    dist_mini=dist_cellule
+                
+                # si la planète est sur le point de se faire prendre et que les vars sont encore initialisées
+                if self.getPriseCellule(ennemi) and dist_mini==-1:
+                    # on récupère ses coordonnées et son coût (-cout_cellule => pour le remettre en positif)
+                    cout_mini=-self.getCoutCellule(ennemi)
+                    dist_mini=self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()
                     couleur=ennemi.getCouleurJoueur()
-                    cellule=ennemi
+                    cellule_cible=ennemi
                 # sinon on compare les distances
                 # si la distance de la cellule est plus petite alors on récupère ses coordonnées et son coût
                 # on privilégie la distance
-                elif (dist_cellule<dist_mini and cout_cellule<=0):
-                    dist_mini=dist_cellule
-                    cout_mini=-cout_cellule
+                elif (self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()<dist_mini and self.getPriseCellule(ennemi) ):
+                    dist_mini=self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()
+                    cout_mini=-self.getCoutCellule(ennemi)
                     couleur=ennemi.getCouleurJoueur()
-                    cellule=ennemi
+                    cellule_ciblee=ennemi
                 # si deux planètes qui vont se faire prendre sont à la même distance, on compare leur cout
                 # on récupère le cout de la cellule la moins couteuse (pas besoin pour la distance car inchangée)
-                elif (dist_cellule==dist_mini and (-cout_cellule)<cout_mini and cout_cellule<=0):
-                    cout_mini=-cout_cellule
+                elif (self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()==dist_mini and (-self.getCoutCellule(ennemi))<cout_mini and self.getPriseCellule(ennemi) ):
+                    cout_mini=-self.getCoutCellule(ennemi)
                     couleur=ennemi.getCouleurJoueur()
-                    cellule=ennemi
+                    cellule_cible=ennemi
             logging.info( "{exce} et dist mini {dist_mini} ".format(exce=attaquante.getAttaque(),dist_mini=dist_mini) ) 
             # Si on a trouvé un planète dans ce cas là
-            if not (dist_mini==-1) and attaquante.getAttaque()>cout_mini:
-                logging.info( "Stratégie Pupute" )
+            if dist_mini!=-1 and attaquante.getAttaque()>cout_mini:
+                logging.info( "Stratégie Prévision" )
                 # on récupère les liens de la cellule
-                for lien in cellule.getLiens():
+                for lien in cellule_cible.getLiens():
                     # on regarde le temps (temps_impact) avant que la planète soit prise 
                     # on récupère le temps le plus grand
                     temps_impact=-1
-                    for mouvement in lien.getMouvementVersCellule(cellule):
-                        temps_mouvement=mouvement.temps_restant
+                    for mouvement in lien.getMouvementVersCellule(cellule_cible):
+                        temps_mouvement=mouvement.getTempsRestant()
                         if not (mouvement.aPourCouleur(couleur) and mouvement.aPourCouleur(maCouleur)) and temps_impact<temps_mouvement:
                            temps_impact=temps_mouvement
                     # on compare ce temps avec le temps que nos troupes vont mettre pour atteindre la planète cible (dist_mini)
                     # si dist_mini > Temps_impact
                     if temps_impact<dist_mini and attaquante.getAttaque()>cout_mini:
                         # on envoie nos troupes pour prendre la planète
+                        
+                        #j'envoie tout
+                        a_envoyer=attaquante.getAttaque()
+                        
                         # on envoie le nombre de troupes attaquantes + 10%
-                        a_envoyer=int(cout_mini+(cout_mini*30//100))
-                        if a_envoyer>attaquante.getAttaque():
-                            a_envoyer=attaquante.getAttaque()
-                        elif a_envoyer==0:
-                            a_envoyer=int(attaquante.getAttaque()//3)+1
-    
-                        logging.info( "{exce} {cout_cell} ".format(exce=a_envoyer,cout_cell=cout_mini) ) 
-                        logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=cellule,cell=a_envoyer) )
+                        #a_envoyer=cout_mini+(cout_mini*10//100)
+                        #if a_envoyer>attaquante.getAttaque() or a_envoyer==0:
+                        #    a_envoyer=attaquante.getAttaque()
                             
-                        lien = terrain.getLien( li.Lien.hachage(cellule,attaquante) )
-                        
-                        mon_mouvement = mv.Mouvement( attaquante, cellule, a_envoyer, attaquante.getCouleurJoueur(), lien.getDistance() )
-                        mouvements.append( mon_mouvement )
-                        
-                        lien.ajouterMouvementVersCellule( cellule , mon_mouvement )
-                        attaquante.setAttaque( attaquante.getAttaque() - a_envoyer )
-                        
-                        # on réinitialise les variables
-                        dist_mini=-1
-                        cout_mini=-1
-                        couleur=-1
-                        cellule=""
-                        
-                    # sinon on passe
-                    else:
-                        pass 
-                    
-            elif not (dist_mini==-1) and attaquante.getAttaque()<cout_mini:
-                pass
-                
-            ########################################
-            ########################################
-            #### PUPUTE FIN
-            ########################################
-            ########################################    
-            
-            
+
             elif dist_mini==-1:  
                 logging.info( "Strategie Attaque" )
         
@@ -168,10 +135,33 @@ class StrategiePrevision( stn.StrategieNormale ):
                         
                     else:
                         a_envoyer = cout_cellule
-                    
-                logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
-                logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
+                
+        if a_envoyer!=0:
+            logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=cellule_cible.getNumero(),cell=a_envoyer) )
     
-                mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
-                mouvements.append( mon_mouvement )
+            mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
+            mouvements.append( mon_mouvement )   
         return mouvements 
+
+
+    # regarde si une planète est sur le point de se faire capturer par l'adversaire ou non
+    # retourne un booleen
+    def getPriseCellule( self, cellule ):
+        
+        maCouleur = self.getRobot().getMaCouleur()
+        couleurCellule = cellule.getCouleurJoueur()
+        
+        coutTotal = cellule.getCout()
+        
+        for lien in cellule.getLiens():
+            
+            for mouvement in lien.getMouvementVersCellule( cellule ):
+                # on ajoute le soutien
+                if( mouvement.aPourCouleur(couleurCellule) ):
+                    coutTotal += mouvement.getNbUnites()
+                    
+                # on soustrait les mouvements adverses
+                else:
+                    coutTotal -= mouvement.getNbUnites()
+
+        return (coutTotal<=0)

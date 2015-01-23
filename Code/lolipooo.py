@@ -29,7 +29,7 @@ import threading
 from Robot import *
 from Graphique import *
 
-import tkinter as tk
+#import tkinter as tk
 
 cheshire = None
 
@@ -110,7 +110,6 @@ def play_pooo():
     
     
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
-
 
     graphique = Graphique( cheshire )
     graphique.dessinerCellules()
@@ -200,6 +199,7 @@ def sendDecisions( robot ):
         event.wait( 0.02 )
 
     pass    
+
 
 
 def updateGraphique( graphique ):
