@@ -29,7 +29,7 @@ import threading
 from Robot import *
 from Graphique import *
 
-import tkinter as tk
+#import tkinter as tk
 
 cheshire = None
 
@@ -110,21 +110,21 @@ def play_pooo():
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
 
-    graphique = Graphique( cheshire )
+    """graphique = Graphique( cheshire )
     graphique.dessinerLiens()
     graphique.dessinerCellules()
-    
+    """
     thread_updateTime = threading.Thread( target=updateTime, args=(cheshire,) )
     thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
     thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
-    thread_graphique = threading.Thread( target=creerGraphique, args=(graphique,) )
+    #thread_graphique = threading.Thread( target=creerGraphique, args=(graphique,) )
 
     thread_updateTime.start()
     thread_updateGame.start()
     thread_sendDecisions.start()
-    thread_graphique.start()
+    #thread_graphique.start()
 
-    graphique.fenetre.mainloop()
+    #graphique.fenetre.mainloop()
 
     thread_updateTime.join()
     thread_updateGame.join()
@@ -259,7 +259,7 @@ def sendDecisions( robot ):
     pass    
 
 
-def creerGraphique( graphique ):
+"""def creerGraphique( graphique ):
 
     while( graphique.robot.partieEnCours() ):
 
@@ -269,7 +269,7 @@ def creerGraphique( graphique ):
         time.sleep( 0.1 )
 
     graphique.fenetre.quit()
-
+"""
 
     
 

@@ -1,4 +1,4 @@
-
+"""
 import tkinter as tk
 import logging
 import math
@@ -157,5 +157,5 @@ class Graphique:
 	def getTrueCoordonneeCellule( self, cellule ):
 		return ( cellule.x*60 + 100 , cellule.y*60 + 100 )
 
-
+"""
 
