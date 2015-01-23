@@ -33,12 +33,14 @@ class StrategieNormale( st.Strategie ):
             mesCellules[ "attaquantesEnDanger" ] = self.getAttaquantesEnDanger( mesCellules[ "attaquantes" ] )
             mesCellules[ "attaquantesEnSurete" ] = self.getAttaquantesEnSurete( mesCellules[ "attaquantes" ] , mesCellules[ "attaquantesEnDanger" ]  )      
             
-            StrategieNormale.afficherCellulesLogging( "mes cellules" , mesCellules["cellules"] )
             StrategieNormale.afficherCellulesLogging( "cellules attaquantes" , mesCellules["attaquantes"] )
+            """
+            StrategieNormale.afficherCellulesLogging( "mes cellules" , mesCellules["cellules"] )
             StrategieNormale.afficherCellulesLogging( "cellules productrices" , mesCellules["productrices"] )
             StrategieNormale.afficherCellulesLogging( "cellules attaquantes en dangées" , mesCellules["attaquantesEnDanger"] )
             StrategieNormale.afficherCellulesLogging( "cellules attaquantes en suretées" , mesCellules["attaquantesEnSurete"] )
-
+            """
+            
             
             # on envoie les unités des productrices si on a au moins une cellule attaquante
             if( mesCellules[ "attaquantes" ] ):

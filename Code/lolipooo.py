@@ -34,6 +34,8 @@ import tkinter as tk
 cheshire = None
 
 
+
+
 def register_pooo(uid):
     """Inscrit un joueur et initialise le robot pour la compétition
 
@@ -50,6 +52,7 @@ def register_pooo(uid):
     logging.info( "-- Initialisation du robot --" )
     
     cheshire = Robot( uid )
+    #cheshire.setStrategie( .... )
     
     
  
@@ -97,7 +100,6 @@ def play_pooo():
     
     """
     
-    
     global cheshire
     
     if( not cheshire ):
@@ -111,90 +113,26 @@ def play_pooo():
 
 
     graphique = Graphique( cheshire )
-    graphique.dessinerLiens()
     graphique.dessinerCellules()
+    graphique.dessinerLiens()
     
     thread_updateTime = threading.Thread( target=updateTime, args=(cheshire,) )
     thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
     thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
-    thread_graphique = threading.Thread( target=creerGraphique, args=(graphique,) )
+    thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
 
     thread_updateTime.start()
     thread_updateGame.start()
     thread_sendDecisions.start()
     thread_graphique.start()
 
-    graphique.fenetre.mainloop()
+    graphique.fenetre.mainloop()    # bloquant
 
+    
     thread_updateTime.join()
     thread_updateGame.join()
     thread_sendDecisions.join()
-
-
     
-    
-    """
-    
-    logging.info( "==> demande de l'état du jeu initial" )
-    
-    
-    while ( cheshire.partieEnCours() ):
-         
-        logging.info( "==> demande de l'état du jeu" )
-        
-        
-        t1 = time.time()
-        
-        temps = poooc.etime()
-        
-        t2 = time.time()
-        
-        state = poooc.state_on_update()   # bloquant
-        
-        t3 = time.time()
-        
-        logging.info( "==> temps du jeu: {t}".format(t=temps) )
-        logging.info( "==> analyse de la réponse serveur" )
-        
-        t4 = time.time()
-        cheshire.setTemps( temps )
-        
-        try: 
-            cheshire.analyseMessage(state)
-            
-            t5 = time.time()
-            t6 = 0
-            
-            if( cheshire.peutJouer() ):
-            
-                logging.info( "==> prise de décision" )
-                decisions = cheshire.getDecisions()
-                
-                t6 = time.time()
-                
-                logging.info( "==> envoie des décisions au serveur" )
-                logging.info( decisions )
-                
-                for decision in decisions:
-                    poooc.order( decision )
-                    time.sleep(0.2)
-                    
-            else:
-                logging.info( "==== je n'ai plus le droit de jouer" )
-        
-            logging.info( "etime() {t}".format( t=(t2-t1)*1000 ) )
-            logging.info( "state_on_update() {t}".format( t=(t3-t2)*1000 ) )
-            logging.info( "loggings() {t}".format( t=(t4-t3)*1000 ) )
-            logging.info( "analyseMessage() {t}".format( t=(t5-t4)*1000 ) )
-            logging.info( "getDecisions() {t}".format( t=(t6-t5)*1000 ) )
-        
-        except Exception as e:
-            logging.info( e )
-         
-    logging.info( "==> partie finie" )
-    logging.info('>>> Exit play_pooo function')    
-           
-    """
 
     pass
     
@@ -202,8 +140,11 @@ def play_pooo():
 
 
 
+
 def updateTime( robot ):
-    
+
+    event = threading.Event()
+
     while( robot.partieEnCours() ):
         
         temps = poooc.etime()
@@ -213,32 +154,37 @@ def updateTime( robot ):
         try:
             robot.setTemps( temps )
         
-        except Exception as e:
+        except Exception as e : 
             logging.info( e )
                 
-        time.sleep( 0.05 )
-        
+        #time.sleep( 0.02 )
+        event.wait( 0.02 )
+
     pass
 
 
 def updateGame( robot ):
-    
+
+    event = threading.Event()
+
     while( robot.partieEnCours() ):
 
-        state = poooc.state_on_update()
+        state = poooc.state_on_update()     # bloquant
 
         try:
             robot.analyseMessage( state )
 
-        except Exception as e:
+        except Exception as e :
             logging.info( e )
 
-        time.sleep( 0.05 )
-
+        #time.sleep( 0.05 )
+        event.wait( 0.05 )
     pass
         
         
 def sendDecisions( robot ):
+
+    event = threading.Event()
 
     while( robot.peutJouer() ):
 
@@ -249,27 +195,39 @@ def sendDecisions( robot ):
 
                 poooc.order( ordre )
 
-                time.sleep( 0.02 )
+                #time.sleep( 0.02 )
 
-        except Exception as e:
+        except Exception as e :
             logging.info( e )
 
-        time.sleep( 0.2 )
+        #time.sleep( 0.02 )
+        event.wait( 0.02 )
 
     pass    
 
 
-def creerGraphique( graphique ):
+def updateGraphique( graphique ):
+
+    event = threading.Event()
 
     while( graphique.robot.partieEnCours() ):
 
         graphique.redessinerCellules()
         graphique.dessinerMouvements() 
 
-        time.sleep( 0.1 )
+        #time.sleep( 0.05 )
+        event.wait( 0.05 )
+        #condition.wait( 0.05 )
 
-    graphique.fenetre.quit()
+    graphique.fenetre.quit()    # ferme la fenetre
 
-
+    # normalement, renvoie une exception car on n'est pas dasn le thread principale
+    # alors que l'on essaie de tuer la fenetre principale (on n'en tient pas compte)
+    """
+    try:
+        graphique.fenetre.destroy()
+    except Exception:
+        pass
+    """
     
 

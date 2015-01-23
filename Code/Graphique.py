@@ -3,6 +3,8 @@ import tkinter as tk
 import logging
 import math
 
+import Lien as li
+
 class Graphique:
 
 	
@@ -20,11 +22,16 @@ class Graphique:
 							}
 
 		self.cellules_graphique = {}
+		self.liens_graphique = {}
 		self.mouvements_graphique = []
+
 
 		self.fenetre = tk.Tk()
 		self.canvas = tk.Canvas( self.fenetre, width=800, height=800, borderwidth=0, highlightthickness=0, bg="white" )
 		self.canvas.pack()
+
+		texte = "ma couleur : {c}".format( c = self.listeCouleur[ robot.getMaCouleur() ] )
+		self.canvas.create_text( 100, 10, text=texte )
 
 		self.text_size = 20
 
@@ -84,13 +91,50 @@ class Graphique:
 		u = lien.getU()
 		v = lien.getV()
 
-		ux, uy = self.getTrueCoordonneeCellule( u )
-		vx, vy = self.getTrueCoordonneeCellule( v )
+		depart = self.XXXXX( u, v )
+		arrivee = self.XXXXX( v, u )
 
-		self.canvas.create_line( ux , uy , vx , vy, fill="black" )
-	        
+		hachage = li.Lien.hachage(u,v)
+		self.liens_graphique[ hachage ] = { u.getNumero() : (depart.x, depart.y),
+											v.getNumero() : (arrivee.x, arrivee.y) }
+
+		self.canvas.create_line( depart.x , depart.y , arrivee.x , arrivee.y, fill="black" )
+	    
 		pass
 
+
+	def XXXXX( self,  u, v ):
+
+		# 
+		# AB.AC = ||AB|| x ||AC|| x cos( BAC )
+		# 		= ( xb - xa )( yb - ya ) + ( xc - xa )( yb - ya )
+		#
+		# 
+		xa, ya = self.getTrueCoordonneeCellule( u )
+		xc, yc = self.getTrueCoordonneeCellule( v )
+
+		rayon_u = u.rayon / 1.5
+
+		a = Point( xa, ya )
+		b = Point( xa + 0 , ya + rayon_u )
+		c = Point( xc, yc )
+
+		ab = Vecteur( a, b )
+		ac = Vecteur( a, c )
+
+		scalaire_BAC = produitScalaireBAC( ab, ac ) 
+		normes = ab.norme() * ac.norme()
+		cos_angle_bac = scalaire_BAC / normes
+
+		angle_bac = math.acos( cos_angle_bac )
+
+		# selon si l'on tourne en sens trigo ou horaire
+		angle_bac = -angle_bac if ac.x > 0 else angle_bac
+
+		ab.rotation( angle_bac )
+		depart = ab.placerSur( a )
+
+		return depart
 
 
 
@@ -106,21 +150,22 @@ class Graphique:
 
 	def dessinerMouvement( self, mouvement ):
 
+		u = mouvement.toCellule()
+		v = mouvement.fromCellule() 
+		hachage = li.Lien.hachage(u,v)
+		xa, ya = self.liens_graphique[ hachage ][ u.getNumero() ]
+		xb, yb = self.liens_graphique[ hachage ][ v.getNumero() ]
 
 		couleur = self.listeCouleur[ mouvement.getCouleurJoueur() ]
 
-		
-
-		xa, ya = self.getTrueCoordonneeCellule( mouvement.toCellule() )
-		xb, yb = self.getTrueCoordonneeCellule( mouvement.fromCellule() )
-
 		coeff = mouvement.getTempsRestant() / mouvement.getDistance()
 
+		# vecteur directeur AB
 		dist_x = xb - xa
 		dist_y = yb - ya
 
-		xm = xa + dist_x * coeff
-		ym = ya + dist_y * coeff
+		xm = xa + dist_x * coeff 
+		ym = ya + dist_y * coeff 
 
 		chaine = "{units}".format( units=mouvement.getNbUnites() )
 
@@ -158,4 +203,56 @@ class Graphique:
 		return ( cellule.x*60 + 100 , cellule.y*60 + 100 )
 
 
+
+
+
+
+
+class Point:
+	def __init__(self, x, y):
+		self.x = x
+		self.y = y
+
+
+class Vecteur:
+
+	#         ->
+	# vecteur AB
+	def __init__( self, a, b ):
+		self.x = b.x - a.x
+		self.y = b.y - a.y 
+
+	def norme( self ):
+		return math.sqrt( self.x * self.x + self.y * self.y )
+
+
+	def rotation( self, angle ):
+
+		cos = math.cos( angle )
+		sin = math.sin( angle )
+
+		x = self.x
+		y = self.y
+
+		self.x = x * cos - y * sin 
+		self.y = x * sin + y * cos 
+
+
+	def placerSur( self, point ):
+		return Point( self.x + point.x , self.y + point.y )
+
+
+
+
+
+
+def produitScalaireBAC( ab, ac ):
+	return ab.x*ac.x + ab.y*ac.y 
+
+def rotationTeta( point, angle ):
+	cos = math.cos( angle )
+	sin = math.sin( angle )
+	x = point.x * cos - point.y * sin 
+	y = point.x * sin + point.y * cos 
+	return Point(x,y)
 

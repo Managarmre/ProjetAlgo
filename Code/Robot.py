@@ -261,14 +261,6 @@ class Robot:
                     distance = lien.getDistance() 
                     vitesse = self.getVitesse()
                     
-                    """
-                    temps_restant = ( distance - ( tempsSysteme_maintenant - tempsSysteme_topDepart ) ) / vitesse
-                    
-                    if( temps_restant <= 0 ):
-                        logging.info( "{cell} {cellule}".format( cell=numero_cellule_1, cellule=numero_cellule_2 ) )
-                        logging.info( "{un} {deux} {trois} {quatre}".format(un=tempsSysteme_maintenant, deux=tempsSysteme_topDepart, trois=distance, quatre=temps_restant) )
-                    """
-
                     mouvement = mv.Mouvement( depuis, vers, nbUnites, couleurJoueur, distance, vitesse, temps_depart, temps_actuel )
                     lien.ajouterMouvementVersCellule( vers, mouvement )
                     terrain.mouvements.append( mouvement )
@@ -333,6 +325,9 @@ class Robot:
 
         self.mutex.release()
 
+
+    def setStrategie( self, strategie ):
+        self.strategie = strategie
 
         
     # retourne vrai si une partie est en cours, faux sinon
