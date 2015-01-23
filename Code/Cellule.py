@@ -185,6 +185,8 @@ class Cellule:
 
 
 
+
+
 	# ajoute un lien reliant cette cellule à une autre
 	# Lien lien : le lien à ajouté
 	def ajouterLien(self, lien):
@@ -201,6 +203,36 @@ class Cellule:
 	# retourne vrai si la cellule a pour couleur celle donnée ( appartient au joueur ayant cette couleur)
 	def aPourCouleur( self, couleurJoueur ):
 		return self.couleurJoueur == couleurJoueur
+
+
+	def getMouvementsVersCellule( self ):
+		liste = []
+		for lien in self.getLiens() :
+			liste.append( lien.getMouvementsVersCellule(self) )
+		return liste
+
+
+	def _getCoutTotal( self ):
+
+		couleurCellule = self.getCouleurJoueur()
+        
+		coutTotal = self.getCout()
+
+		for mouvement in self.getMouvementsVersCellule() :
+
+			couleurMouvement = mouvement.getCouleurJoueur()
+
+			if( mouvement.aPourCouleur(couleurCellule) ):
+				coutTotal += mouvement.getNbUnites()
+
+			else:
+				coutTotal -= mouvement.getNbUnites()
+
+		return coutTotal
+
+
+	def vaEtrePrise( self ):
+		return self._getCoutTotal() < 0
 
 
 	def toString(self):

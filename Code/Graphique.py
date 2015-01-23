@@ -7,8 +7,6 @@ import Lien as li
 
 class Graphique:
 
-	
-
 	def __init__( self, robot ):
 		
 		self.robot = robot
@@ -30,13 +28,12 @@ class Graphique:
 		self.canvas = tk.Canvas( self.fenetre, width=800, height=800, borderwidth=0, highlightthickness=0, bg="white" )
 		self.canvas.pack()
 
-		texte = "ma couleur : {c}".format( c = self.listeCouleur[ robot.getMaCouleur() ] )
-		self.canvas.create_text( 100, 10, text=texte )
+		couleur = self.listeCouleur[ robot.getMaCouleur() ] 
+		texte = "ma couleur : {c}".format( c =couleur )
+
+		self.canvas.create_text( 100, 10, text=texte, fill=couleur )
 
 		self.text_size = 20
-
-
-
 
 
 	def create_circle( self, x, y, r, **kwargs):
@@ -68,7 +65,6 @@ class Graphique:
 		attaque_graphique = self.canvas.create_text( x, y-20, 	fill="white", text=chaineAttaque )
 		defense_graphique = self.canvas.create_text( x, y, 		fill="white", text=chaineDefense )
 		production_graphique = self.canvas.create_text( x, y+20, 	fill="white", text=chaineProduction )
-
 
 		self.cellules_graphique[ cellule.getNumero() ] = { 	"cercle" : cercle_graphique,
 													"attaque": attaque_graphique,
@@ -122,7 +118,7 @@ class Graphique:
 		ab = Vecteur( a, b )
 		ac = Vecteur( a, c )
 
-		scalaire_BAC = produitScalaireBAC( ab, ac ) 
+		scalaire_BAC = Vecteur.produitScalaireBAC( ab, ac ) 
 		normes = ab.norme() * ac.norme()
 		cos_angle_bac = scalaire_BAC / normes
 
@@ -205,9 +201,6 @@ class Graphique:
 
 
 
-
-
-
 class Point:
 	def __init__(self, x, y):
 		self.x = x
@@ -242,17 +235,7 @@ class Vecteur:
 		return Point( self.x + point.x , self.y + point.y )
 
 
+	def produitScalaireBAC( ab, ac ):
+		return ab.x*ac.x + ab.y*ac.y 
 
-
-
-
-def produitScalaireBAC( ab, ac ):
-	return ab.x*ac.x + ab.y*ac.y 
-
-def rotationTeta( point, angle ):
-	cos = math.cos( angle )
-	sin = math.sin( angle )
-	x = point.x * cos - point.y * sin 
-	y = point.x * sin + point.y * cos 
-	return Point(x,y)
 

@@ -41,12 +41,10 @@ class StrategieNormale( st.Strategie ):
             StrategieNormale.afficherCellulesLogging( "cellules attaquantes en suretées" , mesCellules["attaquantesEnSurete"] )
             """
             
-            
             # on envoie les unités des productrices si on a au moins une cellule attaquante
             if( mesCellules[ "attaquantes" ] ):
 
                 mouvements += self.envoyerUnitesProductrices( composante, mesCellules )
-
 
             mouvements += self.envoyerUnitesAttaquantes( terrain, composante, mesCellules )
                                         
@@ -190,6 +188,7 @@ class StrategieNormale( st.Strategie ):
                 # cas ou plus de deux joueurs, incertain !!
                 else:
                     coutTotal -= mouvement.getNbUnites()
+                    coutTotal *= -1 if coutTotal < 0 else 1
             
             # si c'est une de mes cellules
             if( cellule_adjacente.aPourCouleur(maCouleur) ):

@@ -128,16 +128,12 @@ def play_pooo():
 
     graphique.fenetre.mainloop()    # bloquant
 
-    
     thread_updateTime.join()
     thread_updateGame.join()
-    thread_sendDecisions.join()
-    
+    thread_sendDecisions.join()    
 
     pass
     
-
-
 
 
 
@@ -178,7 +174,7 @@ def updateGame( robot ):
             logging.info( e )
 
         #time.sleep( 0.05 )
-        event.wait( 0.05 )
+        event.wait( 0.02 )
     pass
         
         
@@ -223,11 +219,12 @@ def updateGraphique( graphique ):
 
     # normalement, renvoie une exception car on n'est pas dasn le thread principale
     # alors que l'on essaie de tuer la fenetre principale (on n'en tient pas compte)
-    """
+    
     try:
         graphique.fenetre.destroy()
-    except Exception:
+    except Exception as e :
+        logging.info( e )
         pass
-    """
+    
     
 
