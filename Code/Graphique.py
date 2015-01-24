@@ -1,4 +1,4 @@
-
+"""
 import tkinter as tk
 import logging as logging
 import math as math
@@ -237,5 +237,5 @@ class Vecteur:
 
 	def produitScalaireBAC( ab, ac ):
 		return ab.x*ac.x + ab.y*ac.y 
-
+"""
 

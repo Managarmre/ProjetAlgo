@@ -137,7 +137,7 @@ class StrategiePrevision( stn.StrategieNormale ):
                         a_envoyer = cout_cellule
                 
         if a_envoyer!=0:
-            logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=cellule_cible.getNumero(),cell=a_envoyer) )
+            logging.info( "{origin} attaque {cible} en envoyant {cell} et sur la planète il y a {total}!".format(origin=attaquante.getNumero(),cible=cellule_cible.getNumero(),cell=a_envoyer,total=attaquante.getAttaque()) )
     
             mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
             mouvements.append( mon_mouvement )   
