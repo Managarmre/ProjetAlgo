@@ -30,7 +30,10 @@ class Robot:
         logging.info( "==== uid du robot : {chaine}".format(chaine=uid)  )
         
         self.uid = uid
+        
         self.strategie = stratprev.StrategiePrevision( self )
+        #self.strategie = strat.StrategieNormale( self )
+
         self.temps = 0
         self.joue = False
 

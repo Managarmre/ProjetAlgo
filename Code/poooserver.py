@@ -20,6 +20,7 @@ parser.add_argument('-P','--port', type=int, default=9876, help='port number of 
 parser.add_argument('-B','--bufsize', type=int, choices=[1024, 2048, 4096], default=2048, help='size of the socket buffer (Default: 2048)')
 parser.add_argument('-s','--speed', type=int, choices=[1, 2, 4], default=1, help='speed of the game (Default: 1)')
 parser.add_argument('-r','--roomsize', type=int, default=4, help='size of the room (Default: 4, accepted values: 2+)')
+parser.add_argument('-g','--gui', help='address (IP:Port) of the GUI if any')
 #parser.add_argument('-M','--matchsize', type=int, default=2, help='number of bots in a match (Default: 2, accepted values: 2)')
 
 # args.server et args.player
@@ -30,7 +31,8 @@ ROOM_SIZE=args.roomsize
 SPEED=args.speed
 HOST, PORT = "localhost", args.port
 
-from pooogame import Room, Contest, Player
+
+from pooogame import Room, Contest, Player, PoooSocket
 
 #LOG_FILENAME=
 #LEVELS = { 'debug':logging.DEBUG,
@@ -66,9 +68,6 @@ class PoooServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     @property
     def load(self):
         return len(self.contests)
-                
-    def join(self, player):
-        room.join(player)
 
 
 def fucking_failing_main():
@@ -96,11 +95,12 @@ class Server:
     
     @property
     def load(self):
-        return len(self.contests)    
+        return len(self.contests)   
         
 
 def main(): # version avec socket bloquante, mais au moins ça fonctionne !
     server=Server()
+    
     room = Room(server, ROOM_SIZE, SPEED)
     room.start()
 
@@ -112,8 +112,7 @@ def main(): # version avec socket bloquante, mais au moins ça fonctionne !
             sock, addr = ssock.accept()            
             with server.lock:
                 # register new player
-                sock.set_inheritable(True)  # tricks pour la version python 3.4
-                p=Player(sock, addr, server.engage)
+                p=Player(PoooSocket(sock=sock), server.engage)
                 p.start()
                 room.join(p)        
                 
