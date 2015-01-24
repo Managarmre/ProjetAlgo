@@ -24,6 +24,7 @@ import inspect
 import time
 
 import threading
+import functools
 
 # notre robot
 from Robot import *
@@ -91,9 +92,7 @@ def init_pooo(init_string):
     else:
         raise Exception("cheshire doit être initialisé avant d'initialiser un match !")
     
-    
-    
-    
+
 
 def play_pooo():
     """Active le robot-joueur
@@ -101,7 +100,7 @@ def play_pooo():
     """
     
     global cheshire
-    
+
     if( not cheshire ):
         raise Exception("vous devez exécuter les fonctions register_pooo() et init_pooo() avant !")
     
@@ -119,20 +118,47 @@ def play_pooo():
     thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
     thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
     thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
-
+    
     thread_updateTime.start()
     thread_updateGame.start()
     thread_sendDecisions.start()
     thread_graphique.start()
 
-    graphique.fenetre.mainloop()    # bloquant
+    #graphique.canvas.after( 10, updateGraphique, args=(graphique,) )
+    #graphique.canvas.after( 10, functools.partial(updateGraphique, graphique) )
+    graphique.fenetre.mainloop()    # start application main loop, bloquant
 
     thread_updateTime.join()
     thread_updateGame.join()
-    thread_sendDecisions.join()    
+    thread_sendDecisions.join()  
+    #thread_graphique.join()         # probleme ici
 
     pass
     
+
+
+def updateGraphique( graphique ):
+
+    event = threading.Event()
+
+    while( graphique.robot.partie_en_cours ):
+
+        graphique.redessinerCellules()
+        graphique.dessinerMouvements() 
+
+        #time.sleep( 0.05 )
+        event.wait( 0.05 )
+        
+    #graphique.fenetre.quit()
+    graphique.canvas.after( 10, graphique.fenetre.destroy )
+    
+    #graphique.fenetre.destroy()     # probleme ici
+    # détruit la fenêtre
+    
+    logging.info( "fenetre détruite dans update graphique" )
+
+    #graphique.fenetre.quit()    # ferme la fenetre
+
 
 
 
@@ -145,13 +171,15 @@ def updateTime( robot ):
         temps = poooc.etime()
         
         # logging.info( "==> temps du jeu: {t}".format(t=temps) )
-
+        robot.setTemps( temps )
+        """
         try:
             robot.setTemps( temps )
         
         except Exception as e : 
             logging.info( e )
-                
+        """   
+
         #time.sleep( 0.02 )
         event.wait( 0.02 )
 
@@ -166,11 +194,14 @@ def updateGame( robot ):
 
         state = poooc.state_on_update()     # bloquant
 
+        robot.analyseMessage( state )
+        """
         try:
             robot.analyseMessage( state )
 
         except Exception as e :
             logging.info( e )
+        """
 
         #time.sleep( 0.05 )
         event.wait( 0.02 )
@@ -183,48 +214,20 @@ def sendDecisions( robot ):
 
     while( robot.peutJouer() ):
 
-        try: 
-            ordres = robot.getDecisions()
+        #try: 
+        ordres = robot.getDecisions()
 
-            for ordre in ordres :
-
-                poooc.order( ordre )
+        for ordre in ordres :
+            poooc.order( ordre )
 
                 #time.sleep( 0.02 )
 
-        except Exception as e :
-            logging.info( e )
+        #except Exception as e :
+        #    logging.info( e )
 
         #time.sleep( 0.02 )
         event.wait( 0.02 )
 
     pass    
 
-
-
-def updateGraphique( graphique ):
-
-    event = threading.Event()
-
-    while( graphique.robot.partieEnCours() ):
-
-        graphique.redessinerCellules()
-        graphique.dessinerMouvements() 
-
-        #time.sleep( 0.05 )
-        event.wait( 0.05 )
-        #condition.wait( 0.05 )
-
-    graphique.fenetre.quit()    # ferme la fenetre
-
-    # normalement, renvoie une exception car on n'est pas dasn le thread principale
-    # alors que l'on essaie de tuer la fenetre principale (on n'en tient pas compte)
-    
-    try:
-        graphique.fenetre.destroy()
-    except Exception as e :
-        logging.info( e )
-        pass
-    
-    
 

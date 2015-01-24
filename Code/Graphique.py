@@ -40,7 +40,6 @@ class Graphique:
 	    return self.canvas.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 
 
-
 	def dessinerCellules( self ):
 		for cellule in self.terrain.getCellules().values():
 			self.dessinerCellule( cellule )
@@ -50,7 +49,7 @@ class Graphique:
 
 		x, y = self.getTrueCoordonneeCellule( cellule )
 
-		r = cellule.rayon / 1.5
+		r = self.getTrueRayonCellule( cellule )
 
 		couleur = self.listeCouleur[ cellule.getCouleurJoueur() ]
 
@@ -109,7 +108,7 @@ class Graphique:
 		xa, ya = self.getTrueCoordonneeCellule( u )
 		xc, yc = self.getTrueCoordonneeCellule( v )
 
-		rayon_u = u.rayon / 1.5
+		rayon_u = self.getTrueRayonCellule( u ) 
 
 		a = Point( xa, ya )
 		b = Point( xa + 0 , ya + rayon_u )
@@ -173,6 +172,7 @@ class Graphique:
 
 
 	def redessinerCellules( self ):
+		
 		for cellule in self.terrain.getCellules().values():
 			self.redessinerCellule( cellule ) 
 
@@ -196,8 +196,11 @@ class Graphique:
 
 
 	def getTrueCoordonneeCellule( self, cellule ):
-		return ( cellule.x*60 + 100 , cellule.y*60 + 100 )
+		# x*60+100
+		return ( cellule.x/15 + 100 , cellule.y/15 + 100 )
 
+	def getTrueRayonCellule( self, cellule ):
+		return cellule.rayon / 2.5
 
 
 
