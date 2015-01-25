@@ -109,32 +109,30 @@ def play_pooo():
     
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
-    """ le graphique bug lors du 3ème match avec des salle à 4 joueurs
+    
     graphique = Graphique( cheshire )
     graphique.dessinerCellules()
     graphique.dessinerLiens()
-    """
+    
 
     thread_updateTime = threading.Thread( target=updateTime, args=(cheshire,) )
     thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
     thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
-    #thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
+    thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
     
     thread_updateTime.start()
     thread_updateGame.start()
     thread_sendDecisions.start()
-    #thread_graphique.start()
+    thread_graphique.start()
 
-    """
     #graphique.canvas.after( 10, updateGraphique, args=(graphique,) )
     #graphique.canvas.after( 10, functools.partial(updateGraphique, graphique) )
     graphique.fenetre.mainloop()    # start application main loop, bloquant
-    """
-    
+
     thread_updateTime.join()
     thread_updateGame.join()
     thread_sendDecisions.join()  
-    #thread_graphique.join()         # probleme ici
+    thread_graphique.join()         # probleme ici
 
     pass
     
