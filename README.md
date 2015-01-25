@@ -1,230 +1,114 @@
-**Projet Algo 3√®me ann√©e**
-=====================
+==============================================================================================================================================================
+========================================================================= Projet Cheshire ====================================================================
+==============================================================================================================================================================
 
-## **Introduction**
+## Sommaire
+	Introduction
+	1 - RËgles du jeu
+	2 - Lexique
+	3 - Faire fonctionner le jeu
+	4 - Ce que contient le dossier
 
-Ce projet a pour but la programmation d'une IA pour du jeu Little Wars For Little Stars 2.
+## Introduction
+Ce projet a ÈtÈ rÈalisÈ par CARON Cyril, HOULGATTE Pauline et PINEAU Maxime. Il a pour but de programmer un client capable de communiquer avec un client fourni ainsi que de dÈvelopper une IA pour le jeu Little Wars For Litte Stars 2.
 
+1 - RËgles du jeu
+Jeu de stratÈgie temps rÈel multi_joueurs.
 
-## **Les r√®gles du jeu**
-
-jeu de strat√©gie temps r√©el multi-joueurs
-
-1. Le terrain est g√©n√©r√© par le syst√®me, avec une position de d√©part (une cellule unique) attribu√©e √† chaque joueur/robot engag√©   
-
-2. Chaque cellule occup√©e produit des unit√©s offensives et d√©fensives √† concurrence de sa capacit√© et √† une cadence d√©finie par le syst√®me
-
-3. Chaque cellule neutre poss√®de au d√©part un nombre d‚Äôunit√©s d√©fini par le syst√®me et ne produit aucune nouvelle unit√©
-
-4. Une proportion quelconque de l‚Äôeffectif offensif d‚Äôune cellule peut se d√©placer vers une cellule adjacente, √† une vitesse d√©finie par le syst√®me 
-
-5. Si l‚Äôeffectif d‚Äôune cellule (off+def) est inf√©rieur strictement √† l‚Äôeffectif entrant, la cellule est conquise 
-
-6. Dans tous les cas, l‚Äôeffectif de la cellule diminue de l‚Äôeffectif courant (off+def) moins l‚Äôeffectif arrivant (min=0)
-
-7. Les unit√©s consomm√©es en priorit√© sont les unit√©s offensives
-
-8. Lorsqu'une cellule n'a plus aucune unit√©, elle redevient neutre.
-
-9. En transfert, les conflits entre unit√©s ennemies qui se croisent sont r√©solus imm√©diatement
+	
+1. Le terrain est gÈnÈrÈ par le systËme, avec une position de dÈpart (une cellule unique) attribuÈe ‡ chaque joueur/robot engagÈ   
 
 
-
-## **Petit lexique**
-
-- Terrain: graphe g√©om√©trique planaire dont les n≈ìuds sont les cellules du jeu
-
-- Cellule:  n≈ìud du graphe, avec ses propri√©t√©s : 
+	2. Chaque cellule occupÈe produit des unitÈs offensives et dÈfensives ‡ concurrence de sa capacitÈ et ‡ une cadence dÈfinie par le systËme
 
 
-1. capacit√©s offensive et d√©fensive
+	3. Chaque cellule neutre possËde au dÈpart un nombre díunitÈs dÈfini par le systËme et ne produit aucune nouvelle unitÈ
 
-2. effectifs offensif et d√©fensif
 
-3. cadences de production offensive et d√©fensive
+	4. Une proportion quelconque de líeffectif offensif díune cellule peut se dÈplacer vers une cellule adjacente, ‡ une vitesse dÈfinie par le systËme 
+
+
+	5. Si líeffectif díune cellule (off+def) est infÈrieur strictement ‡ líeffectif entrant, la cellule est conquise 
+
+
+	6. Dans tous les cas, líeffectif de la cellule diminue de líeffectif courant (off+def) moins líeffectif arrivant (min=0)
+
+
+	7. Les unitÈs consommÈes en prioritÈ sont les unitÈs offensives
+
+
+	8. Lorsqu'une cellule n'a plus aucune unitÈ, elle redevient neutre.
+	
+
+9. En transfert, les conflits entre unitÈs ennemies qui se croisent sont rÈsolus immÈdiatement
+
+2 - Lexique
+- Terrain: graphe gÈomÈtrique planaire dont les noeuds sont les cellules du jeu
+- Cellule:  noeud du graphe, avec ses propriÈtÈs ; 
+
+
+
+	1. capacitÈs offensive et dÈfensive
+
+
+	2. effectifs offensif et dÈfensif
+
+
+	3. cadences de production offensive et dÈfensive
   
 
-- Cellule occup√©e: cellule appartenant √† un joueur
+
+- Cellule occupÈe: cellule appartenant ‡ un joueur
+
 
 - Cellule neutre: cellule libre de toute occupation
 
-- Conqu√™te: prise d'une cellule par un joueur
 
-- Unit√© offensive: unit√© mobile, pour la conqu√™te
-
-- Unit√© d√©fensive: unit√© fixe, propre √† une cellule et utilis√©e en cas de prise
-
--  Capacit√©: nombre max. d'unit√©s que peut accueillir une cellule
-
-- Cadence de production: vitesse √† laquelle sont cr√©√©es les unit√©s dans une cellule
+- ConquÍte: prise d'une cellule par un joueur
 
 
-
-## **Le Protocole**
-
-
-* **Cha√Æne d'enregistrement du joueur :**
-
-REG< uid >
-
-> "REG0947e717-02a1-4d83-9470-a941b6e8ed07"
-  
-
-* **Cha√Æne d'initialisation :**
-
-INIT< matchid >TO<#players>[< me >];< speed >;\
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#cells>CELLS:
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >(< x >,< y >)'< radius >'< offsize >'< defsize >'< prod >,...;\
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#lines>LINES:
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >@< dist >OF< cellid >,...
+- UnitÈ offensive: unitÈ mobile, pour la conquÍte
 
 
-> "INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)'2'30'8'I,2(41,55)'1'30'8'II,3(23,103)'1'20'5'I;2LINES:1@3433OF2,1@6502OF3"  
+- UnitÈ dÈfensive: unitÈ fixe, propre ‡ une cellule et utilisÈe en cas de prise
 
-< me > et < owner > d√©signent des num√©ros de 'couleur' attribu√©s aux joueurs.
 
-< dist > est la distance qui s√©pare 2 cellules, exprim√©e en... millisecondes !
+- CapacitÈ: nombre max. d'unitÈs que peut accueillir une cellule
 
--- La couleur -1 est le neutre.
 
--- Le neutre n'est pas compt√© dans l'effectif de joueurs (<#players>).
+- Cadence de production: vitesse ‡ laquelle sont crÈÈes les unitÈs dans une cellule
 
--- '...' signifie que l'on r√©p√®te la s√©quence pr√©c√©dente autant de fois qu'il y a de cellules (ou d'ar√™tes).
+3 - Faire fonctionner le jeu
+Pour lancer le jeu, il est nÈcessaire de dÈmarrer le serveur :
+	$ ./poooserver.py [-h] [-P PORT] [-B {1024,2048,4096}] [-s {1,2,4}]
 
--- 0CELLS ou 0LINES sont des cas particuliers sans suffixe.
-
-/!\ attention: un match √† vitesse x2 r√©duit de moiti√© le temps 'effectif' de trajet d'une cellule √† l'autre par rapport √† l'indication < dist >. De mani√®re g√©n√©rale temps_de_trajet=< dist >/vitesse (division enti√®re)
-   
-  
-
-* **Cha√Æne d'√©tat du jeu :**
-
-STATE< matchid >IS<#players>;
-
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#cells>CELLS:
+	Options : 
+	-h, --help visualiser le message d'aide et quitter 
+	-P PORT, --port PORT  port du serveur (Defaut: 9876)
  
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >[< owner >]< offunits >'< defunits >,...;\
-
- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<#moves>MOVES:
- 
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< direction ><#units>[< owner >]@< timestamp >'...
-
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;< cellid >, ...
-
-
-> "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"  
-
-< timestamp > en millisecondes, donn√©e √† vitesse 1 : top d√©part des unit√©s de la cellule source.
-
-< direction > d√©signe le caract√®re '>' ou '<' et indique le sens des unit√©s en mouvement en suivant la pointe de fl√®che.
+	-s {1,2,4}, --speed {1,2,4}
+   vitesse du jeu (Defaut: 1)
   
-  
+	-r ROOMSIZE, --roomsize ROOMSIZE
+   nombre de robots (Default: 4, accepted values: 2+)
 
-* **Ordre de mouvement (MOVe FROM TO)  :**
+Exemple: $ python poooserver.py -s 2 -r 4
+Lancer ensuite les robots (avec les fichier pooobot.py et lolipooo.py dans le mÍme rÈpertoire) :
+	a) avec rÈcupÈration des logs : ./pooobot.py -s 127.0.0.1:9876 -b lolipooo c1 &> c1.log.txt
+	b) sans rÈcupÈration des logs : ./pooobot.py -s 127.0.0.1:9876 -b lolipooo c1
+Choississez ensuite le numÈro de la carte de jeu (entre 0 et 8), puis "EntrÈe".
 
-[< userid >]MOV<%offunits>FROM< cellid >TO< cellid >   
+Il est Ègalement possible de lancer une interface graphique avec le robot.
+Pour cela, il suffit d'utiliser le fichier lolipooo par graphique_lolipooo :
+	- ./pooobot.py -s 127.0.0.1:9876 -b graphique_lolipooo c1
+Il faut noter que cette interface n'est qu'en version bÈta, et que des problËmes existent, notamment :
+	- si la salle du serveur est plus grande que pour 2 joueurs, l'interface ne veut pas afficher le 3eme match
+	- si la vitesse du jeu n'est pas ‡ 1, les unitÈs sur les liens ont tendances ‡ 'se tÈlÈporter' sur le lien plutÙt que se dÈplacer.
 
-> "[0947e717-02a1-4d83-9470-a941b6e8ed07]MOV33FROM1TO4"
-
--- le pourcentage des unit√©s offensives utilise la division enti√®re. 
-
-Par exemple : 25% de 50=50*25/100=12.   
-
--- un ordre dont l'effectif d'unit√©s off est nul (par ex., 33% de 2 unit√©s) est ignor√©.    
-   
-     
-
-* **Fin de jeu pour le joueur (√©limin√© ou vainqueur) :**
-
-GAMEOVER[ < color > ]IN< matchid >  
- 
->"GAMEOVER[ 2 ]IN20ac18ab-6d18-450e-94af-bee53fdc8fca"
-  
-  
-
-
-* **Fin du jeu :**
-
-ENDOFGAME< matchid >
-
-> "ENDOFGAME20ac18ab-6d18-450e-94af-bee53fdc8fca"
-
-
-## **Vos Droits**
-
-Les fonctions disponibles pour obtenir/transmettre de l'information du/au serveur
-sont expos√©es par le module poooc. Ces fonctions sont au nombre de 4 :
-
-* **Ordonne un mouvement**
-
-order(msg)
-
--- param msg: type cha√Æne de caract√®res (utf-8 string), conforme au protocole "Ordre de mouvement"
-
-
-* **Demande l'√©tat courant du jeu**
-
-state()
-
--- retourne un message sous la forme d'une "Cha√Æne d‚Äô√©tat du jeu" selon le protocole 
-
-* **Demande l'√©tat du jeu modifi√©**
-
-state_on_update()
-
--- La valeur de retour est identique √† celle de la fonction state().
--- La principale diff√©rence provient du fait que le processus est mis en attente d'une mise √† jour de l'√©tat du jeu.
-
--- L'appel de state_on_update() est bloquant.
-  
-
-* **Obtenir le temps √©coul√© (elapsed time) depuis le d√©but du match**
-
-etime()
-
--- retourne temps √©coul√© (elapsed time) en millisecondes (un entier).
-/!\ le temps indiqu√© n'est qu'une approximation (la plus pr√©cise possible)
-
-
-
-## **Vos Devoirs**
-
-- Les fonctions que vous devez impl√©menter, comme points d'entr√©e du robot-joueur pour qu'il puisse dialoguer avec le serveur de jeu, sont les suivantes :
-
-1. register_pooo(uid) : inscrit le joueur et initialise le robot pour la comp√©tition
-
-2. init\_pooo(init_string) : initialise le robot pour un match
-
-3. play_pooo() : active le robot-joueur
-
-- Ces fonctions sont document√©es dans le mod√®le de fichier disponible.
-- Ces fonctions sont √† incorporer dans un seul module (un fichier .py) dont le nom vous est propre et qui sera charg√© au moment de lancer le programme client. 
-- Tout le reste (vos structures de donn√©es, vos fonctions, etc.) est √† d√©finir et √† organiser par vos soins.
-
-
-## **Task List**
-
-- [x] Pr√©paration/Pr√©ambule
-  - [x] Compr√©hension du protocole
-  - [x] Compr√©hension des objectifs
-  - [x] Mise en place de l'environnement de d√©veloppement
-- [x] Structuration des donn√©es
-  - [x] Mod√©lisation UML : diagrammes de classes
-  - [x] Impl√©mentation du mod√®le en python
-- [x] R√©alisation des 3 fonctions demand√©s 
-  - [x] fonction register
-  - [x] fonction init
-  - [x] fonction play
-- [ ] Les strat√©gies
-  - [ ] R√©glexion sur les strat√©gies
-  - [ ] Impl√©mentations des strat√©gies
-- [ ] Tests unitaires
-- [ ] Tests d'int√©grations
-- [ ] G√©n√©ration de la documentation
-
+4 - Ce que contient le rendu
+Le dossier contient :
+	- le compte rendu du projet
+	- le code source du projet
+	- un readme
+	- la documentation liÈe au projet
+	- le code source de l'interface graphique

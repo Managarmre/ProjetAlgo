@@ -1,0 +1,2594 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Bienvenue sur cette documentation ! &mdash; Projet algo 1.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/nature.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Projet algo 1.0 documentation" href="#" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">Projet algo 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bienvenue-sur-cette-documentation">
+<h1>Bienvenue sur cette documentation !<a class="headerlink" href="#bienvenue-sur-cette-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Voici la documentation des classes pour la réalisation du mini projet</p>
+<div class="toctree-wrapper compound">
+<ul class="simple">
+</ul>
+</div>
+<div class="section" id="module-Cellule">
+<span id="cellule"></span><h2>Cellule<a class="headerlink" href="#module-Cellule" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Cellule.Cellule">
+<em class="property">class </em><tt class="descclassname">Cellule.</tt><tt class="descname">Cellule</tt><big>(</big><em>numero</em>, <em>attaque</em>, <em>defense</em>, <em>attaqueMax</em>, <em>defenseMax</em>, <em>production</em>, <em>couleur</em>, <em>x</em>, <em>y</em>, <em>rayon</em><big>)</big><a class="headerlink" href="#Cellule.Cellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Une cellule du jeu. Elle peut être représentée par un sommet dans un graphe.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>numero</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le numéro identifiant la cellule (unique pour chaque cellule)</li>
+<li><strong>attaque</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le nombre d&#8217;unités attaquantes sur la cellule actuellement</li>
+<li><strong>defense</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le nombre d&#8217;unités defensives sur la cellule actuellement</li>
+<li><strong>attaqueMax</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le nombre d&#8217;unités attaquantes maximal sur la cellule</li>
+<li><strong>defenseMax</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le nombre d&#8217;unités defensives maximal sur la cellule</li>
+<li><strong>production</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; vitesse de production des unités de la cellule</li>
+<li><strong>couleurJoueur</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; couleur du joueur à qui appartient la cellule (-1 si neutre)</li>
+<li><strong>x</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la coordonnée x de la cellule sur le terrain (graphique)</li>
+<li><strong>y</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la coordonnée y de la cellule sur le terrain (graphique)</li>
+<li><strong>rayon</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le rayon de la cellule (graphique)</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><ul class="first last simple">
+<li><strong>CelluleException</strong> &#8211; si l&#8217;attaque est inférieure à 0 ou supérieure à l&#8217;attaque maximale</li>
+<li><strong>CelluleException</strong> &#8211; si la défense est inférieure à 0 ou supérieure à la défense maximale</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Cellule.Cellule.aPourCouleur">
+<tt class="descname">aPourCouleur</tt><big>(</big><em>couleur</em><big>)</big><a class="headerlink" href="#Cellule.Cellule.aPourCouleur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne vrai si la cellule possède la couleur passée en paramètre, et faux sinon.
+Autrement dit, elle retourne vrai si la cellule appartient au joueur ayant la couleur passée en paramètre.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>couleur</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la couleur à vérifier</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">retourne vrai si la cellule a bien pour couleur la couleur donnée en paramètre, faux sinon.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.ajouterLien">
+<tt class="descname">ajouterLien</tt><big>(</big><em>lien</em><big>)</big><a class="headerlink" href="#Cellule.Cellule.ajouterLien" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ajoute un lien reliant cette cellule à une autre.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lien</strong> (<a class="reference internal" href="#module-Lien" title="Lien"><em>Lien</em></a>) &#8211; le lien à ajouter</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises CelluleException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si cette cellule n&#8217;est pas l&#8217;une des cellules aux extrémités du lien.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getAttaque">
+<tt class="descname">getAttaque</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getAttaque" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne l&#8217;attaque actuelle de la cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">l&#8217;attaque de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getAttaqueMax">
+<tt class="descname">getAttaqueMax</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getAttaqueMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la quantité maximale d&#8217;unités offensives que la cellule peut contenir</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">l&#8217;attaque maximale de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getCouleur">
+<tt class="descname">getCouleur</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getCouleur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la couleur de la cellule. Cette couleur correspond à un numéro de joueur supérieur ou égale à -1 (-1 étant la couleur du neutre).
+Cette couleur permet de définir à quel joueur appartient la cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la couleur de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getCout">
+<tt class="descname">getCout</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getCout" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le coût de base de la cellule pour être conquise, c&#8217;est à dire le nombre d&#8217;unités nécéssaire pour la capturer ( attaque + défense ).
+On ne prend pas en compte les unités présentes sur les liens.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le coût de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getDefense">
+<tt class="descname">getDefense</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getDefense" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la défense actuelle de la cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la défense de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getDefenseMax">
+<tt class="descname">getDefenseMax</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getDefenseMax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la quantité maximale d&#8217;unités défensives que la cellule peut contenir</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la défense maximale de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getExcedent">
+<tt class="descname">getExcedent</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getExcedent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne l&#8217;excédent de la cellule. 
+L&#8217;excédent correspond au trop plein d&#8217;unités que la cellule va produire ou recevoir, et perdre (car elle aura déjà atteint son attaque maximale).
+Seules les unités des mouvements arrivant vers cette cellule avec un temps restant inférieur à 1000 sont prises en comptes.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le nombre d&#8217;unités excédent</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getLiens">
+<tt class="descname">getLiens</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getLiens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne les liens dont cette cellule est l&#8217;une des extrémités.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des liens</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Lien&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getMouvementsVersCellule">
+<tt class="descname">getMouvementsVersCellule</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getMouvementsVersCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Méthode qui retourne la liste de tous les mouvements allant vers cette cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste de tous les mouvements allant vers cette cellule.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Mouvement&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getNumero">
+<tt class="descname">getNumero</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getNumero" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le numéro unique identifiant la cellule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le numéro de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getPourcentageAttaque">
+<tt class="descname">getPourcentageAttaque</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getPourcentageAttaque" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne à combien de pourcentage la cellule est pleine.
+1 si l&#8217;attaque de la cellule est égale à l&#8217;attaque maximale.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le pourcentage de l&#8217;attaque de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getProduction">
+<tt class="descname">getProduction</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getProduction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la valeur de la cadence de production de la cellule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la cadence de production de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getVoisins">
+<tt class="descname">getVoisins</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getVoisins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des cellules voisines à celle-ci.</p>
+<p>ATTENTION, peut renvoyer un résultat différent de la méthode Terrain.getVoisinsCellule( cellule )
+car on ne modifiera jamais la liste des liens de la cellule, 
+contrairement au terrain, ou l&#8217;on pourra ne considérer qu&#8217;une partie du terrain (un sous graphe), et donc qu&#8217;une partie des liens.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des cellules voisines</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getVoisinsAllies">
+<tt class="descname">getVoisinsAllies</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getVoisinsAllies" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des cellules alliées de cette cellule, c&#8217;est à dire celles qui ont la même couleur que celle de cette cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des cellules alliées de cette cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.getVoisinsEnnemis">
+<tt class="descname">getVoisinsEnnemis</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.getVoisinsEnnemis" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des cellules ennemies de cette cellule, c&#8217;est à dire celles qui n&#8217;ont pas la même couleur que celle de cette cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des cellules ennemies de cette cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.setAttaque">
+<tt class="descname">setAttaque</tt><big>(</big><em>attaque</em><big>)</big><a class="headerlink" href="#Cellule.Cellule.setAttaque" title="Permalink to this definition">¶</a></dt>
+<dd><p>Affecte la valeur de la variable attaque actuelle.
+La nouvelle valeur de l&#8217;attaque ne peut pas être inférieure à 0, ni excéder l&#8217;attaque maximale de la cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attaque</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la nouvelle valeur de l&#8217;attaque actuelle de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises CelluleException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si l&#8217;attaque entrée en paramètre est inférieure à 0 ou supérieure à l&#8217;attaque maximale</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.setCouleur">
+<tt class="descname">setCouleur</tt><big>(</big><em>couleur</em><big>)</big><a class="headerlink" href="#Cellule.Cellule.setCouleur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Affecte la valeur de la variable couleur (la cellule change de propriétaire). 
+Cette couleur doit être supérieure ou égale à -1, -1 étant la couleur du joueur neutre.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>couleur</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la nouvelle couleur de la cellule.</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises CelluleException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si la couleur n&#8217;est pas supérieure ou égale à -1.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.setDefense">
+<tt class="descname">setDefense</tt><big>(</big><em>defense</em><big>)</big><a class="headerlink" href="#Cellule.Cellule.setDefense" title="Permalink to this definition">¶</a></dt>
+<dd><p>Affecte la valeur de la variable defense actuelle.
+La nouvelle valeur de la défense ne peut pas être inférieure à 0, ni excéder la défense maximale de la cellule.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>defense</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la nouvelle valeur de la défense actuelle de la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises CelluleException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si la défense entrée en paramètre est inférieure à 0 ou supérieure à la défense maximale</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.toString">
+<tt class="descname">toString</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.toString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Représente l&#8217;objet sous forme de chaine</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">retourne une chaine de caractère représentant la cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Cellule.Cellule.vaEtrePrise">
+<tt class="descname">vaEtrePrise</tt><big>(</big><big>)</big><a class="headerlink" href="#Cellule.Cellule.vaEtrePrise" title="Permalink to this definition">¶</a></dt>
+<dd><p>vérifie si la cellule va être conquise par un autre joueur (elle va changer de propriétaire).
+Si c&#8217;est le cas, elle retourne True, False sinon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">retourne vrai si cette cellule va être conquise par un autre joueur, faux sinon</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">boolean</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Lien">
+<span id="lien"></span><h2>Lien<a class="headerlink" href="#module-Lien" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Lien.Lien">
+<em class="property">class </em><tt class="descclassname">Lien.</tt><tt class="descname">Lien</tt><big>(</big><em>u</em>, <em>v</em>, <em>distance</em><big>)</big><a class="headerlink" href="#Lien.Lien" title="Permalink to this definition">¶</a></dt>
+<dd><p>Les liens reliant les cellules du terrain (représentent les arêtes du graphe).</p>
+<p>On mettra toujours la cellule ayant le plus petit numéro dans l&#8217;attribut u.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>u</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; Une cellule de l&#8217;une des extrémités du lien</li>
+<li><strong>v</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; L&#8217;autre cellule de l&#8217;une des extrémités du lien</li>
+<li><strong>distance</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la distance séparant les cellules u et v</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises LienException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">si la distance est inférieure ou égale à 0</p>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Lien.Lien.ajouterMouvementVersCellule">
+<tt class="descname">ajouterMouvementVersCellule</tt><big>(</big><em>cellule</em>, <em>mouvement</em><big>)</big><a class="headerlink" href="#Lien.Lien.ajouterMouvementVersCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ajoute le mouvement passé en paramètre vers la cellule passée en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule à laquelle on ajoute le mouvement</li>
+<li><strong>mouvement</strong> (<a class="reference internal" href="#module-Mouvement" title="Mouvement"><em>Mouvement</em></a>) &#8211; Le mouvement à ajouter</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises LienException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">si la cellule n&#8217;appartient pas au lien</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.ajouterMouvementVersU">
+<tt class="descname">ajouterMouvementVersU</tt><big>(</big><em>mouvement</em><big>)</big><a class="headerlink" href="#Lien.Lien.ajouterMouvementVersU" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ajoute un mouvement vers la cellule enregistrée sous U</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mouvement</strong> (<a class="reference internal" href="#module-Mouvement" title="Mouvement"><em>Mouvement</em></a>) &#8211; Le mouvement à ajouter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.ajouterMouvementVersV">
+<tt class="descname">ajouterMouvementVersV</tt><big>(</big><em>mouvement</em><big>)</big><a class="headerlink" href="#Lien.Lien.ajouterMouvementVersV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ajoute un mouvement vers la cellule enregistrée sous V</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mouvement</strong> (<a class="reference internal" href="#module-Mouvement" title="Mouvement"><em>Mouvement</em></a>) &#8211; Le mouvement à ajouter.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.celluleAppartientAuLien">
+<tt class="descname">celluleAppartientAuLien</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Lien.Lien.celluleAppartientAuLien" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne vrai si la cellule passée en paramètre appartient au lien, faux sinon.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; Cellule dont on veut savoir si elle appartient au lien</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">booleen</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.clearAllMouvements">
+<tt class="descname">clearAllMouvements</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.clearAllMouvements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Supprime tous les mouvements présents sur le lien.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.getDistance">
+<tt class="descname">getDistance</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.getDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la longueur du lien, c&#8217;est à dire la distance séparant les deux cellules aux extrémités du lien.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la longueur du lien</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.getMouvementsVersCellule">
+<tt class="descname">getMouvementsVersCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Lien.Lien.getMouvementsVersCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements allant vers la cellule passée en paramètre.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule dont on veut récupérer les mouvements entrants</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">la liste des mouvements allant vers cette cellule</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Mouvement&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises LienException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si la cellule n&#8217;appartient pas au lien</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.getMouvementsVersU">
+<tt class="descname">getMouvementsVersU</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.getMouvementsVersU" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements allant vers U</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des mouvements allant vers U</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Mouvement&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.getMouvementsVersV">
+<tt class="descname">getMouvementsVersV</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.getMouvementsVersV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements allant vers V</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des mouvements allant vers V</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Mouvement&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.getOtherCellule">
+<tt class="descname">getOtherCellule</tt><big>(</big><em>cellule_inconnue</em><big>)</big><a class="headerlink" href="#Lien.Lien.getOtherCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Selon la cellule donnée en paramètre, retourne l&#8217;autre cellule du lien (retourne U si on donne V et vice versa).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises LienException:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">si la cellule inconnue n&#8217;appartient pas au lien</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">l&#8217;autre cellule du lien</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Cellule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.getU">
+<tt class="descname">getU</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.getU" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la cellule enregistrée sous l&#8217;attribut U</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la cellule enregistrée dans U</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Cellule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.getV">
+<tt class="descname">getV</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.getV" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la cellule enregistrée sous l&#8217;attribut V</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la cellule enregistrée dans V</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Cellule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.hachage">
+<tt class="descname">hachage</tt><big>(</big><em>cellule1</em>, <em>cellule2</em><big>)</big><a class="headerlink" href="#Lien.Lien.hachage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de calculer la valeur unique qui identifie un lien supposé entre deux cellules, 
+Retourne la valeur du hash d&#8217;un lien à partir de ces deux cellules.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cellule1</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la première cellule</li>
+<li><strong>cellule2</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la deuxième cellule</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l&#8217;identifiant du lien supposé entre les deux cellules</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.hash">
+<tt class="descname">hash</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.hash" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utilisée pour ranger les liens dans un dictionnaire
+Retourne la valeur unique qui identifie le lien</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la valeur unique identifiant le lien.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Lien.Lien.toString">
+<tt class="descname">toString</tt><big>(</big><big>)</big><a class="headerlink" href="#Lien.Lien.toString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne des informations textuelles sur le lien</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le lien sous forme d&#8217;une chaine de caractère</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Mouvement">
+<span id="mouvement"></span><h2>Mouvement<a class="headerlink" href="#module-Mouvement" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Mouvement.Mouvement">
+<em class="property">class </em><tt class="descclassname">Mouvement.</tt><tt class="descname">Mouvement</tt><big>(</big><em>depuis</em>, <em>vers</em>, <em>nbUnites</em>, <em>couleurJoueur</em>, <em>distance</em>, <em>vitesse</em>, <em>temps_depart</em>, <em>temps_actuel</em><big>)</big><a class="headerlink" href="#Mouvement.Mouvement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Un mouvement représente un déplacement d&#8217;unités sur un lien.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>depuis</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la cellule au départ du mouvement</li>
+<li><strong>vers</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la cellule à l&#8217;arrivée du mouvement</li>
+<li><strong>nbUnites</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le nombre d&#8217;unités qui sont sur le mouvement</li>
+<li><strong>couleurJoueur</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le numéro du joueur auquel appartiennent les unités offensives</li>
+<li><strong>distance</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la distance à parcourir sur le lien</li>
+<li><strong>temps_depart</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; temps du serveur  lors de l&#8217;envoi du mouvement</li>
+<li><strong>temps_actuel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; temps du serveur</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Mouvement.Mouvement.aPourCouleur">
+<tt class="descname">aPourCouleur</tt><big>(</big><em>couleurJoueur</em><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.aPourCouleur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne vrai si le mouvement possède la couleur passée en paramètre.
+(donc si le mouvement appartient au joueur ayant cette couleur)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>couleurJoueur</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la couleur du joueur</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">vrai si le mouvement possède cette couleur, faux sinon.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">booleen</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.fromCellule">
+<tt class="descname">fromCellule</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.fromCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la cellule depuis laquelle le mouvement est originaire</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la cellule depuis laquelle le mouvement est originaire</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Cellule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.getCouleur">
+<tt class="descname">getCouleur</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.getCouleur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la couleur du mouvement, c&#8217;est à dire le numéro du joueur qui envoie le mouvement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la couleur du mouvement</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.getDistance">
+<tt class="descname">getDistance</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.getDistance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la distance totale à parcourir par le mouvement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la distance totale à parcourir par le mouvement</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.getNbUnites">
+<tt class="descname">getNbUnites</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.getNbUnites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le nombre d&#8217;unités sur le mouvement</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le nombre d&#8217;unités</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.getTempsActuel">
+<tt class="descname">getTempsActuel</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.getTempsActuel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le temps actuel du serveur</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le temps actuel du serveur</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.getTempsDepart">
+<tt class="descname">getTempsDepart</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.getTempsDepart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le temps de départ du mouvement</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le temps de départ du mouvement</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.getTempsRestant">
+<tt class="descname">getTempsRestant</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.getTempsRestant" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le temps restant à parcourir avant l&#8217;arrivée du mouvement à destination.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le temps restant à parcourir</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.getVitesse">
+<tt class="descname">getVitesse</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.getVitesse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la vitesse du mouvement</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la vitesse du mouvement</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.setTempsActuel">
+<tt class="descname">setTempsActuel</tt><big>(</big><em>temps_actuel</em><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.setTempsActuel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Affecte la variable temps_actuel avec la valeur passée en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>temps_actuel</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; le temps du serveur</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.toCellule">
+<tt class="descname">toCellule</tt><big>(</big><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.toCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la cellule vers laquelle le mouvement se dirige</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la cellule vers laquelle le mouvement se dirige</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Cellule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Mouvement.Mouvement.toOrder">
+<tt class="descname">toOrder</tt><big>(</big><em>uid</em><big>)</big><a class="headerlink" href="#Mouvement.Mouvement.toOrder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne l&#8217;ordre correspondant au mouvement associé dans la forme du protocole du serveur</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">l&#8217;ordre correspondant au mouvement</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Robot">
+<span id="robot"></span><h2>Robot<a class="headerlink" href="#module-Robot" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Robot.Robot">
+<em class="property">class </em><tt class="descclassname">Robot.</tt><tt class="descname">Robot</tt><big>(</big><em>uid</em><big>)</big><a class="headerlink" href="#Robot.Robot" title="Permalink to this definition">¶</a></dt>
+<dd><p>La classe Robot. 
+Initialise le robot.
+A appeler dans la procédure &#8216;register_pooo(uid)&#8217;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uid</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; identifiant unique du robot que le serveur lui a attribué</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Robot.Robot.analyseMessage">
+<tt class="descname">analyseMessage</tt><big>(</big><em>state</em><big>)</big><a class="headerlink" href="#Robot.Robot.analyseMessage" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="docutils">
+<dt>Décompose la chaine state passée en paramètre et agit en conséquence, exécute soit :</dt>
+<dd><ul class="first last simple">
+<li>state of game</li>
+<li>game over</li>
+<li>end of game</li>
+</ul>
+</dd>
+</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; la chaine reçue, envoyée par le serveur, peut contenir un message STATE, GAMEOVER, ou ENDOFGAME</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.end_of_game">
+<tt class="descname">end_of_game</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.end_of_game" title="Permalink to this definition">¶</a></dt>
+<dd><p>Arrête le match en cours</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.game_over">
+<tt class="descname">game_over</tt><big>(</big><em>state_game_over</em><big>)</big><a class="headerlink" href="#Robot.Robot.game_over" title="Permalink to this definition">¶</a></dt>
+<dd><p>L&#8217;un des participants du match a perdu, on analyse plus en détail la chaine reçue pour savoir si c&#8217;est ce robot qui ne peut plus jouer.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state_game_over</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; chaine de caractère GAMEOVER envoyé par le serveur</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getDecisions">
+<tt class="descname">getDecisions</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getDecisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des décisions, chacune conforme au protocole du serveur. 
+Ces décisions sont prises selon la stratégie adoptée.</p>
+<p>exemple : [ &#8216;[0947e717-02a1-4d83-9470-a941b6e8ed07]100FROM0TO2&#8217;, &#8216;[0947e717-02a1-4d83-9470-a941b6e8ed07]56FROM6TO4&#8217; ]</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des décisions</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;str&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getIdMatch">
+<tt class="descname">getIdMatch</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getIdMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne l&#8217;identifiant du match</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">l&#8217;identifiant du match</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getMaCouleur">
+<tt class="descname">getMaCouleur</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getMaCouleur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la couleur du robot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la couleur du robot</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getNbJoueurInitial">
+<tt class="descname">getNbJoueurInitial</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getNbJoueurInitial" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le nombre de joueurs initial</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le nombre de joueurs initial</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getNbJoueurs">
+<tt class="descname">getNbJoueurs</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getNbJoueurs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le nombre de joueurs actuellement en train de jouer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le nombre de joueurs pouvant encore jouer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getStrategie">
+<tt class="descname">getStrategie</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getStrategie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la stratégie du robot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la stratégie du robot</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Strategie</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getTemps">
+<tt class="descname">getTemps</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getTemps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le temps actuel du jeu (fournie par le serveur)</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le temps actuel du jeu</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getTerrain">
+<tt class="descname">getTerrain</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getTerrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le terrain du match en cours</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le terrain du match en cours</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Terrain</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getUID">
+<tt class="descname">getUID</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getUID" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne l&#8217;identifiant du robot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">l&#8217;identifiant du robot</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.getVitesse">
+<tt class="descname">getVitesse</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.getVitesse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la vitesse du match en cours</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la vitesse du match en cours</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.initialiserMatch">
+<tt class="descname">initialiserMatch</tt><big>(</big><em>init_string</em><big>)</big><a class="headerlink" href="#Robot.Robot.initialiserMatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise le robot pour un match.
+A appeler dans la procédure &#8216;init_pooo(init_string)&#8217;</p>
+<p>exemple : &#8220;INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)&#8216;2&#8216;30&#8216;8&#8217;I,2(41,55)&#8216;1&#8216;30&#8216;8&#8217;II,3(23,103)&#8216;1&#8216;20&#8216;5&#8217;I;2LINES:<a class="reference external" href="mailto:1&#37;&#52;&#48;3433OF2">1<span>&#64;</span>3433OF2</a>,1&#64;6502OF3&#8221;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>init_string</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; chaîne regroupant les informations envoyées par le serveur pour l&#8217;initialisation d&#8217;un nouveau match, sous la forme INIT.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.partieEnCours">
+<tt class="descname">partieEnCours</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.partieEnCours" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne vrai si une partie est en cours, faux sinon</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">vrai si une partie est en cours, faux sinon</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">booleen</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.peutJouer">
+<tt class="descname">peutJouer</tt><big>(</big><big>)</big><a class="headerlink" href="#Robot.Robot.peutJouer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne vrai si le robot peut jouer, et si il ne peut plus jouer</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">vrai si le robot a le droit de jouer, faux sinon</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">booleen</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.setStrategie">
+<tt class="descname">setStrategie</tt><big>(</big><em>strategie</em><big>)</big><a class="headerlink" href="#Robot.Robot.setStrategie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifie la stratégie du robot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>strategie</strong> (<a class="reference internal" href="#module-Strategie" title="Strategie"><em>Strategie</em></a>) &#8211; la nouvelle stratégie du robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.setTemps">
+<tt class="descname">setTemps</tt><big>(</big><em>temps</em><big>)</big><a class="headerlink" href="#Robot.Robot.setTemps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Modifie le temps actuel du jeu, c&#8217;est à dire la variable temps du Robot, 
+mais également touts les attributs temps_actuel des mouvements (modifiant ainsi le temps restant).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>temps</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Le temps</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Robot.Robot.updateTerrain">
+<tt class="descname">updateTerrain</tt><big>(</big><em>state</em><big>)</big><a class="headerlink" href="#Robot.Robot.updateTerrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Met à jour les informations sur le terrain en fonction de la chaîne passée en paramètre</p>
+<p>exemple de chaine state
+state = &#8220;STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12&#8216;4,2[2]15&#8216;2,3[1]33&#8216;6;4MOVES:1&lt;5[2]&#64;232&#8217;&gt;6[2]&#64;488&#8217;&gt;3[1]&#64;4330&#8216;2,1&lt;10[1]&#64;2241&#8216;3&#8221;</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>state</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) &#8211; la chaîne envoyée par le serveur, de la forme STATE</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Terrain">
+<span id="terrain"></span><h2>Terrain<a class="headerlink" href="#module-Terrain" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Terrain.Terrain">
+<em class="property">class </em><tt class="descclassname">Terrain.</tt><tt class="descname">Terrain</tt><a class="headerlink" href="#Terrain.Terrain" title="Permalink to this definition">¶</a></dt>
+<dd><p>Le terrain du jeu représente un graphe</p>
+<dl class="method">
+<dt id="Terrain.Terrain.ajouterCellule">
+<tt class="descname">ajouterCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.ajouterCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ajoute la cellule passée en paramètre dans le terrain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la cellule à ajouter</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.ajouterLien">
+<tt class="descname">ajouterLien</tt><big>(</big><em>lien</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.ajouterLien" title="Permalink to this definition">¶</a></dt>
+<dd><p>Ajoute le lien passé en paramètre dans le terrain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lien</strong> (<a class="reference internal" href="#module-Lien" title="Lien"><em>Lien</em></a>) &#8211; Le lien à ajouter</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TerrainException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si au moins l&#8217;une des cellule du lien n&#8217;est pas présente dans le terrain</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.dijkstra">
+<tt class="descname">dijkstra</tt><big>(</big><em>depart</em>, <em>arrivee</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.dijkstra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le plus court chemin entre deux cellules passées en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>depart</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule de départ</li>
+<li><strong>arrivee</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule d&#8217;arrivée</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le plus court chemin entre les deux cellules (une liste de numéro de cellule), et la distance totale à parcourir</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">( List&lt;int&gt; , int )</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getCellule">
+<tt class="descname">getCellule</tt><big>(</big><em>numero</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.getCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la cellule du terrain ayant le numéro associé passé en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numero</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Le numéro de la cellule recherchée</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">la cellule associée au numéro</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">:Cellule</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TerrainException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si il n&#8217;y a aucune cellule dans le terrain possédant ce numéro</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getCellules">
+<tt class="descname">getCellules</tt><big>(</big><big>)</big><a class="headerlink" href="#Terrain.Terrain.getCellules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le dictionnaire contenant la liste de toutes les cellules du terrain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le dictionnaire contenant les cellules du terrain</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getCellulesJoueur">
+<tt class="descname">getCellulesJoueur</tt><big>(</big><em>couleurJoueur</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.getCellulesJoueur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des cellules appartenant au joueur ayant la couleur passée en paramètre (-1 pour le neutre).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>couleurJoueur</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; la couleur du joueur</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">la liste des cellules de ce joueur</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getCheminVersCellulePlusProche">
+<tt class="descname">getCheminVersCellulePlusProche</tt><big>(</big><em>depart</em>, <em>arrivees</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.getCheminVersCellulePlusProche" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le chemin depuis une cellule vers la cellule la plus proche selectionnée dans un ensemble</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>depart</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule de départ</li>
+<li><strong>arrivees</strong> (<em>List&lt;Cellules&gt;</em>) &#8211; L&#8217;ensemble des cellules d&#8217;arrivée</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le chemin le plus court entre la cellule de départ et la cellule d&#8217;arrivée la plus proche (correspond à la liste des numéro des cellules composant le chemin)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List&lt;int&gt;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getComposantesConnexes">
+<tt class="descname">getComposantesConnexes</tt><big>(</big><big>)</big><a class="headerlink" href="#Terrain.Terrain.getComposantesConnexes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des composantes connexes du graphe (le terrain se comporte comme un graphe).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">les composantes connexes du graphe.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Terrain&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getLien">
+<tt class="descname">getLien</tt><big>(</big><em>numeroLien</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.getLien" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le lien du terrain ayant le numéro associé passé en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>numeroLien</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Le numéro de le lien recherché</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">le lien associée au numéro</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Lien</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TerrainException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si il n&#8217;y a aucun Lien dans le terrain possédant ce numéro</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getLienEntreCellules">
+<tt class="descname">getLienEntreCellules</tt><big>(</big><em>cellule_1</em>, <em>cellule_2</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.getLienEntreCellules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le lien sur le terrain entre les 2 cellules passées en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>cellule_1</strong> &#8211; La première cellule</li>
+<li><strong>cellule_2</strong> &#8211; La deuxième cellule</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le lien entre les deux cellules</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first">Lien</p>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TerrainException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body"><p class="first last">si le lien n&#8217;est pas présent dans le terrain</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getLiens">
+<tt class="descname">getLiens</tt><big>(</big><big>)</big><a class="headerlink" href="#Terrain.Terrain.getLiens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le dictionnaire contenant la liste de touts les liens du terrain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le dictionnaire contenant les liens du terrain</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getNbCellules">
+<tt class="descname">getNbCellules</tt><big>(</big><big>)</big><a class="headerlink" href="#Terrain.Terrain.getNbCellules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le nombre de cellules présentes dans le terrain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le nombre de cellules sur le terrain</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getNbLiens">
+<tt class="descname">getNbLiens</tt><big>(</big><big>)</big><a class="headerlink" href="#Terrain.Terrain.getNbLiens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le nombre de liens présents dans le terrain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le nombre de liens sur le terrain</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getSousGraphe">
+<tt class="descname">getSousGraphe</tt><big>(</big><em>listeCellules</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.getSousGraphe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le sous graphe contenant les cellules données en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>listeCellules</strong> (<em>List&lt;Cellules&gt;</em>) &#8211; La liste des cellules</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">le sous graphe correspondant</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Terrain</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.getVoisinsCellule">
+<tt class="descname">getVoisinsCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Terrain.Terrain.getVoisinsCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des voisins de la cellule sur le terrain passée en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule dont on veut récupérer la liste des voisins sur le terrain</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">la liste des cellules voisines à celle passée en paramètre</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">Raises TerrainException:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">si la cellule n&#8217;est pas présente sur le terrain</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Terrain.Terrain.toString">
+<tt class="descname">toString</tt><big>(</big><big>)</big><a class="headerlink" href="#Terrain.Terrain.toString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne sous forme de chaine une représentation textuelle du terrain</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le terrain sous forme de chaine de caractères</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Strategie">
+<span id="strategie"></span><h2>Strategie<a class="headerlink" href="#module-Strategie" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Strategie.Strategie">
+<em class="property">class </em><tt class="descclassname">Strategie.</tt><tt class="descname">Strategie</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#Strategie.Strategie" title="Permalink to this definition">¶</a></dt>
+<dd><p>Classe abstraite à implémenter pour faire une stratégie</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; Le robot devant prendre une decision</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Strategie.Strategie.decider">
+<tt class="descname">decider</tt><big>(</big><big>)</big><a class="headerlink" href="#Strategie.Strategie.decider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Méthode abstraite, retourne la liste des mouvements à effectuer après analyse du terrain pour la prise de décision</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des nouveaux mouvements à effectuer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Mouvement&gt;</td>
+</tr>
+<tr class="field-odd field"><th class="field-name" colspan="2">Raises NotImplementedError:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">si la méthode n&#8217;a pas été redéfinie.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Strategie.Strategie.envoyerUnites">
+<tt class="descname">envoyerUnites</tt><big>(</big><em>depuis_cellule</em>, <em>vers_cellules</em>, <em>nb_unites</em><big>)</big><a class="headerlink" href="#Strategie.Strategie.envoyerUnites" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet d&#8217;envoyer des unités attaquantes d&#8217;une cellule vers une autre, ne fait que modifier le terrain (ne les envoie pas au serveur).
+On modifie le terrain afin de ne pas reprendre en compte les unitées déjà utilisées.
+Retourne le mouvement créé !</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>depuis_cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule qui envoie les unités attaquantes</li>
+<li><strong>vers_cellules</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule qui reçoit les unités attaquantes</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le mouvement créé</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Mouvement</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Strategie.Strategie.getRobot">
+<tt class="descname">getRobot</tt><big>(</big><big>)</big><a class="headerlink" href="#Strategie.Strategie.getRobot" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le robot</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">le robot</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-StrategieAnalyse">
+<span id="strategieanalyse"></span><h2>StrategieAnalyse<a class="headerlink" href="#module-StrategieAnalyse" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="StrategieAnalyse.StrategieAnalyse">
+<em class="property">class </em><tt class="descclassname">StrategieAnalyse.</tt><tt class="descname">StrategieAnalyse</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cette stratégie analyse le terrain afin de déduire où elle doit envoyer les unités des cellules.</p>
+<p>L&#8217;envoi des unités ainsi que leur destination sera déterminée après analyse du terrain.
+Les cellules seront réparties en deux groupes : les productrices et les attaquantes</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; Le robot devant prendre une decision</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.decider">
+<tt class="descname">decider</tt><big>(</big><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.decider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements à effectuer après analyse du terrain pour la prise de décision.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des nouveaux mouvements à effectuer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Mouvement&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.determinerCible">
+<tt class="descname">determinerCible</tt><big>(</big><em>attaquante</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.determinerCible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Détermine la cible d&#8217;une cellule attaquante (en utilisant l&#8217;indice P sur tous les voisins ennemies de la cellule attaquante).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attaquante</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la cellule attaquante cherchant une cible</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">la cellule cible</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Cellule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.envoyerUnitesAttaquantes">
+<tt class="descname">envoyerUnitesAttaquantes</tt><big>(</big><em>composante</em>, <em>mesCellules</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.envoyerUnitesAttaquantes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements correspondant aux mouvements des unités des cellules attaquantes vers les cellules ennemies les plus prometteuses.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>composante</strong> (<a class="reference internal" href="#module-Terrain" title="Terrain"><em>Terrain</em></a>) &#8211; la partie du terrain (sous graphe) où se trouvent nos cellules</li>
+<li><strong>mesCellules</strong> (<em>dict of list of Cellule</em>) &#8211; dictionnaire de liste de cellules</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">la liste des mouvements des unités des cellules attaquantes vers les cellules ennemies les plus prometteuses.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List&lt;Mouvement&gt;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.envoyerUnitesProductrices">
+<tt class="descname">envoyerUnitesProductrices</tt><big>(</big><em>composante</em>, <em>mesCellules</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.envoyerUnitesProductrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements correspondant aux mouvements des unités des cellules productrices vers les cellules attaquantes les plus proches.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>composante</strong> (<a class="reference internal" href="#module-Terrain" title="Terrain"><em>Terrain</em></a>) &#8211; la partie du terrain (sous graphe) où se trouvent nos cellules</li>
+<li><strong>mesCellules</strong> (<em>dict of list of Cellule</em>) &#8211; dictionnaire de liste de cellules</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">la liste des mouvements des unités des cellules productrices vers les cellules attaquantes les plus proches.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">List&lt;Mouvement&gt;</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getAttaquantesEnDanger">
+<tt class="descname">getAttaquantesEnDanger</tt><big>(</big><em>attaquantes</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getAttaquantesEnDanger" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste de nos cellules attaquantes en danger.
+Une cellule attaquante est en danger lorsqu&#8217;il y a des unités ennemies se dirigeant vers elle.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attaquantes</strong> (<em>List&lt;Cellule&gt;</em>) &#8211; la liste de toutes nos cellules attaquantes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">nos cellules attaquantes en danger</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getAttaquantesEnSurete">
+<tt class="descname">getAttaquantesEnSurete</tt><big>(</big><em>attaquantes</em>, <em>attaquantes_en_dangers</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getAttaquantesEnSurete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste de nos cellules attaquantes en sûreté</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getCellulesAttaquantes">
+<tt class="descname">getCellulesAttaquantes</tt><big>(</big><em>mesCellules</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getCellulesAttaquantes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste de nos cellules attaquantes.
+Une cellule est attaquante si elle est reliée à au moins un ennemi.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mesCellules</strong> (<em>List&lt;Cellule&gt;</em>) &#8211; nos cellules attaquantes</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getCellulesProductrices">
+<tt class="descname">getCellulesProductrices</tt><big>(</big><em>mesCellules</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getCellulesProductrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des cellules productrices.
+Une cellule est productrice si elle n&#8217;est reliée à aucun ennemi.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mesCellules</strong> (<em>List&lt;Cellule&gt;</em>) &#8211; nos cellules productrices</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getCoutCellule">
+<tt class="descname">getCoutCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getCoutCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcule le nombre d&#8217;unités que l&#8217;on doit envoyer sur une cellule ennemie afin de la capturer
+Ce coût peut être négatif si la cellule nous appartient déjà.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; Cellule ennemie</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">le nombre d&#8217;unités nécéssaire à la capture de la cellule</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">int</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getFullProductrices">
+<tt class="descname">getFullProductrices</tt><big>(</big><em>productrices</em>, <em>semi_productrices</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getFullProductrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste de nos cellules entièrement productrices (full-productrices).
+Une cellule est full-productrice si c&#8217;est une cellule productrice qui n&#8217;est reliée à aucune cellule attaquante.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getMesCellules">
+<tt class="descname">getMesCellules</tt><big>(</big><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getMesCellules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des cellules nous appartenant</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">les cellules nous appartenant</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.getSemiProductrices">
+<tt class="descname">getSemiProductrices</tt><big>(</big><em>productrices</em>, <em>attaquantes</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.getSemiProductrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste de nos cellules semi-productrices.
+Une cellule est semi-productrice si c&#8217;est une cellule productrice reliée à au moins une cellule attaquante</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">nos cellules semi-productrices</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Cellule&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.indiceP">
+<tt class="descname">indiceP</tt><big>(</big><em>origine</em>, <em>cellule</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.indiceP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcule l&#8217;indice P d&#8217;une cellule par rapport à la cellule d&#8217;origine voulant envoyer ses unités.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>origine</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule d&#8217;origine</li>
+<li><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule dont on veut calculer l&#8217;indice P</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">l&#8217;indice P de la cellule cible</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="StrategieAnalyse.StrategieAnalyse.nbUnitesAEnvoyer">
+<tt class="descname">nbUnitesAEnvoyer</tt><big>(</big><em>attaquante</em>, <em>cellule_cible</em><big>)</big><a class="headerlink" href="#StrategieAnalyse.StrategieAnalyse.nbUnitesAEnvoyer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Détermine le nombre d&#8217;unités à envoyer de la cellule attaquante vers une cellule_cible en fonction de l&#8217;excédent de l&#8217;attaquant et du coût de la cible. 
+Peut renvoyer 0, dans ce cas la, la cellule attaquante ne devra pas envoyer d&#8217;unités.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>attaquante</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la cellule de départ voulant déterminer le nombre d&#8217;unités à envoyer</li>
+<li><strong>cellule_cible</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la cellule ciblée</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">le nombre d&#8217;unités à envoyer vers la cellule ciblée</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">int</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-StrategiePrevision">
+<span id="strategieprevision"></span><h2>StrategiePrevision<a class="headerlink" href="#module-StrategiePrevision" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="StrategiePrevision.StrategiePrevision">
+<em class="property">class </em><tt class="descclassname">StrategiePrevision.</tt><tt class="descname">StrategiePrevision</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#StrategiePrevision.StrategiePrevision" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cette stratégie est une surcouche de la stratégie Analyse.
+Elle essaie de prendre les cellules au bon moment, afin de subir le moins de pertes possible</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; Le robot devant prendre une decision</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="StrategiePrevision.StrategiePrevision.determinerCible">
+<tt class="descname">determinerCible</tt><big>(</big><em>attaquante</em><big>)</big><a class="headerlink" href="#StrategiePrevision.StrategiePrevision.determinerCible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dértermine la cible d&#8217;une cellule attaquante</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>attaquante</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; la cellule attaquante cherchant une cible</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">la cellule cible</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Cellule</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-StrategieAleatoire">
+<span id="strategiealeatoire"></span><h2>StrategieAleatoire<a class="headerlink" href="#module-StrategieAleatoire" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="StrategieAleatoire.StrategieAleatoire">
+<em class="property">class </em><tt class="descclassname">StrategieAleatoire.</tt><tt class="descname">StrategieAleatoire</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#StrategieAleatoire.StrategieAleatoire" title="Permalink to this definition">¶</a></dt>
+<dd><p>1ere stratégie qui attaque aléatoirement.</p>
+<p>L&#8217;envoi des unités ainsi que leur destination sera déterminée aléatoirement.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; Le robot devant prendre une decision</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="StrategieAleatoire.StrategieAleatoire.decider">
+<tt class="descname">decider</tt><big>(</big><big>)</big><a class="headerlink" href="#StrategieAleatoire.StrategieAleatoire.decider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne la liste des mouvements à effectuer après analyse du terrain pour la prise de décision.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">la liste des nouveaux mouvements à effectuer</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">List&lt;Mouvement&gt;</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Graphique">
+<span id="graphique"></span><h2>Graphique<a class="headerlink" href="#module-Graphique" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="Graphique.Graphique">
+<em class="property">class </em><tt class="descclassname">Graphique.</tt><tt class="descname">Graphique</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#Graphique.Graphique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Représente L&#8217;interface graphique du jeu.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; Le robot du jeu</td>
+</tr>
+</tbody>
+</table>
+<dl class="method">
+<dt id="Graphique.Graphique.create_circle">
+<tt class="descname">create_circle</tt><big>(</big><em>x</em>, <em>y</em>, <em>r</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.create_circle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Créer un cercle dans le canvas</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; La position en X du centre du cercle</li>
+<li><strong>y</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; La position en Y du centre du cercle</li>
+<li><strong>r</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#int" title="(in Python v2.7)"><em>int</em></a>) &#8211; Le rayon du cercle</li>
+<li><strong>**kwargs</strong> &#8211; <p>Paramètres facultatifs de tkinter pour créer un cercle</p>
+</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.decalage_centre_cercle">
+<tt class="descname">decalage_centre_cercle</tt><big>(</big><em>u</em>, <em>v</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.decalage_centre_cercle" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de récupérer le point d&#8217;intersection entre le bord du cercle et le lien.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>u</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule de départ</li>
+<li><strong>v</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule d&#8217;arrivée</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.dessinerCellule">
+<tt class="descname">dessinerCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.dessinerCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de dessiner une cellule dans la fenêtre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule à dessiner</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.dessinerCellules">
+<tt class="descname">dessinerCellules</tt><big>(</big><big>)</big><a class="headerlink" href="#Graphique.Graphique.dessinerCellules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utilise la méthode &#8220;dessinerCellule&#8221; pour dessiner l&#8217;ensemble des cellules du jeu dans la fenêtre</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.dessinerLien">
+<tt class="descname">dessinerLien</tt><big>(</big><em>lien</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.dessinerLien" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de dessiner un lien dans la fenêtre.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>lien</strong> (<a class="reference internal" href="#module-Lien" title="Lien"><em>Lien</em></a>) &#8211; Le lien à dessiner</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.dessinerLiens">
+<tt class="descname">dessinerLiens</tt><big>(</big><big>)</big><a class="headerlink" href="#Graphique.Graphique.dessinerLiens" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utilise la méthode &#8220;dessinerLien&#8221; pour dessiner l&#8217;ensemble des liens sur la fenêtre</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.dessinerMouvement">
+<tt class="descname">dessinerMouvement</tt><big>(</big><em>mouvement</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.dessinerMouvement" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de dessiner un mouvement se déplaçant sur un lien</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>mouvement</strong> (<a class="reference internal" href="#module-Mouvement" title="Mouvement"><em>Mouvement</em></a>) &#8211; le mouvement à dessiner</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.dessinerMouvements">
+<tt class="descname">dessinerMouvements</tt><big>(</big><big>)</big><a class="headerlink" href="#Graphique.Graphique.dessinerMouvements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utilise la méthode &#8220;dessinerMouvement&#8221; pour dessiner tous les mouvements en cours du terrain</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.getTrueCoordonneeCellule">
+<tt class="descname">getTrueCoordonneeCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.getTrueCoordonneeCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet d&#8217;adapter les coordonnées de la cellule envoyées par le serveur en fonction des dimensions de la fenêtre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule à adapter</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.getTrueRayonCellule">
+<tt class="descname">getTrueRayonCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.getTrueRayonCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet d&#8217;adapter le rayon de la cellule envoyé par le serveur en fonction des dimensions de la fenêtre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule à adapter</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.redessinerCellule">
+<tt class="descname">redessinerCellule</tt><big>(</big><em>cellule</em><big>)</big><a class="headerlink" href="#Graphique.Graphique.redessinerCellule" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de redessiner une cellule</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>cellule</strong> (<a class="reference internal" href="#module-Cellule" title="Cellule"><em>Cellule</em></a>) &#8211; La cellule à redessiner</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Graphique.redessinerCellules">
+<tt class="descname">redessinerCellules</tt><big>(</big><big>)</big><a class="headerlink" href="#Graphique.Graphique.redessinerCellules" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utilise la méthode &#8220;redessinerCellule&#8221; pour redessiner toutes les cellules suivant l&#8217;évolution du jeu.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="Graphique.Point">
+<em class="property">class </em><tt class="descclassname">Graphique.</tt><tt class="descname">Point</tt><big>(</big><em>x</em>, <em>y</em><big>)</big><a class="headerlink" href="#Graphique.Point" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de créer un point aux coordonnées spécifiées en paramètre.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="Graphique.Vecteur">
+<em class="property">class </em><tt class="descclassname">Graphique.</tt><tt class="descname">Vecteur</tt><big>(</big><em>a</em>, <em>b</em><big>)</big><a class="headerlink" href="#Graphique.Vecteur" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet de représenter un vecteur avec les coordonnées spécifiées en paramètre.</p>
+<dl class="method">
+<dt id="Graphique.Vecteur.norme">
+<tt class="descname">norme</tt><big>(</big><big>)</big><a class="headerlink" href="#Graphique.Vecteur.norme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calcule la norme du vecteur</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Vecteur.produitScalaireBAC">
+<tt class="descname">produitScalaireBAC</tt><big>(</big><em>ab</em>, <em>ac</em><big>)</big><a class="headerlink" href="#Graphique.Vecteur.produitScalaireBAC" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retourne le produit scalaire des deux vecteurs passés en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>ab</strong> (<em>Vecteur</em>) &#8211; Le premier vecteur</li>
+<li><strong>ac</strong> (<em>Vecteur</em>) &#8211; Le second vecteur</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Vecteur.rotation">
+<tt class="descname">rotation</tt><big>(</big><em>angle</em><big>)</big><a class="headerlink" href="#Graphique.Vecteur.rotation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Rotation d&#8217;un vecteur de l&#8217;angle passé en paramètre</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>angle</strong> (<a class="reference external" href="http://docs.python.org/library/functions.html#float" title="(in Python v2.7)"><em>float</em></a>) &#8211; l&#8217;angle de rotation à appliquer au vecteur (en radians)</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="Graphique.Vecteur.translationPoint">
+<tt class="descname">translationPoint</tt><big>(</big><em>point</em><big>)</big><a class="headerlink" href="#Graphique.Vecteur.translationPoint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Effectue une translation du point passé en paramètre par rapport au vecteur</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>point</strong> (<em>Point</em>) &#8211; Le point à translater</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">Point</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-Exceptions">
+<span id="exceptions"></span><h2>Exceptions<a class="headerlink" href="#module-Exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="Exceptions.CelluleException">
+<em class="property">exception </em><tt class="descclassname">Exceptions.</tt><tt class="descname">CelluleException</tt><big>(</big><em>message</em><big>)</big><a class="headerlink" href="#Exceptions.CelluleException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se déclenche lors d&#8217;une exception dans la classe Cellule</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="Exceptions.LienException">
+<em class="property">exception </em><tt class="descclassname">Exceptions.</tt><tt class="descname">LienException</tt><a class="headerlink" href="#Exceptions.LienException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se déclenche lors d&#8217;une exception dans la classe Lien</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="Exceptions.MouvementException">
+<em class="property">exception </em><tt class="descclassname">Exceptions.</tt><tt class="descname">MouvementException</tt><a class="headerlink" href="#Exceptions.MouvementException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se déclenche lors d&#8217;une exception dans la classe Mouvement</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="Exceptions.RobotException">
+<em class="property">exception </em><tt class="descclassname">Exceptions.</tt><tt class="descname">RobotException</tt><a class="headerlink" href="#Exceptions.RobotException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se déclenche lors d&#8217;une exception dans la classe Robot</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="Exceptions.TerrainException">
+<em class="property">exception </em><tt class="descclassname">Exceptions.</tt><tt class="descname">TerrainException</tt><a class="headerlink" href="#Exceptions.TerrainException" title="Permalink to this definition">¶</a></dt>
+<dd><p>Se déclenche lors d&#8217;une exception dans la classe Terrain</p>
+</dd></dl>
+
+</div>
+<div class="section" id="graphique-lollipooo">
+<h2>Graphique_lollipooo<a class="headerlink" href="#graphique-lollipooo" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="graphique_lolipooo.register_pooo">
+<tt class="descclassname">graphique_lolipooo.</tt><tt class="descname">register_pooo</tt><big>(</big><em>uid</em><big>)</big><a class="headerlink" href="#graphique_lolipooo.register_pooo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inscrit un joueur et initialise le robot pour la compétition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uid</strong> (<em>chaîne de caractères str(UUID)</em>) &#8211; identifiant utilisateur</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>&#8220;0947e717-02a1-4d83-9470-a941b6e8ed07&#8221;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graphique_lolipooo.init_pooo">
+<tt class="descclassname">graphique_lolipooo.</tt><tt class="descname">init_pooo</tt><big>(</big><em>init_string</em><big>)</big><a class="headerlink" href="#graphique_lolipooo.init_pooo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise le robot pour un match</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>init_string</strong> (<em>chaîne de caractères (utf-8 string)</em>) &#8211; instruction du protocole de communication de Pooo (voire ci-dessous)</td>
+</tr>
+</tbody>
+</table>
+<p>INIT&lt;matchid&gt;TO&lt;#players&gt;[&lt;me&gt;];&lt;speed&gt;;    &lt;#cells&gt;CELLS:&lt;cellid&gt;(&lt;x&gt;,&lt;y&gt;)&#8217;&lt;radius&gt;&#8217;&lt;offsize&gt;&#8217;&lt;defsize&gt;&#8217;&lt;prod&gt;,...;    &lt;#lines&gt;LINES:&lt;cellid&gt;&#64;&lt;dist&gt;OF&lt;cellid&gt;,...</p>
+<p>&lt;me&gt; et &lt;owner&gt; désignent des numéros de &#8216;couleur&#8217; attribués aux joueurs. La couleur 0 est le neutre.
+le neutre n&#8217;est pas compté dans l&#8217;effectif de joueurs (&lt;#players&gt;).
+&#8216;...&#8217; signifie que l&#8217;on répète la séquence précédente autant de fois qu&#8217;il y a de cellules (ou d&#8217;arêtes).
+0CELLS ou 0LINES sont des cas particuliers sans suffixe.
+&lt;dist&gt; est la distance qui sépare 2 cellules, exprimée en... millisecondes !
+/!attention: un match à vitesse x2 réduit de moitié le temps effectif de trajet d&#8217;une cellule à l&#8217;autre par rapport à l&#8217;indication &lt;dist&gt;.
+De manière générale temps_de_trajet=&lt;dist&gt;/vitesse (division entière).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>&#8220;INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)&#8216;2&#8216;30&#8216;8&#8217;I,2(41,55)&#8216;1&#8216;30&#8216;8&#8217;II,3(23,103)&#8216;1&#8216;20&#8216;5&#8217;I;2LINES:<a class="reference external" href="mailto:1&#37;&#52;&#48;3433OF2">1<span>&#64;</span>3433OF2</a>,1&#64;6502OF3&#8221;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graphique_lolipooo.play_pooo">
+<tt class="descclassname">graphique_lolipooo.</tt><tt class="descname">play_pooo</tt><big>(</big><big>)</big><a class="headerlink" href="#graphique_lolipooo.play_pooo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Active le robot-joueur</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="graphique_lolipooo.updateGraphique">
+<tt class="descclassname">graphique_lolipooo.</tt><tt class="descname">updateGraphique</tt><big>(</big><em>graphique</em><big>)</big><a class="headerlink" href="#graphique_lolipooo.updateGraphique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet la mise à jour automatique de l&#8217;interface graphique</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graphique</strong> (<a class="reference internal" href="#module-Graphique" title="Graphique"><em>Graphique</em></a>) &#8211; l&#8217;interface graphique</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="graphique_lolipooo.updateTime">
+<tt class="descclassname">graphique_lolipooo.</tt><tt class="descname">updateTime</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#graphique_lolipooo.updateTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet la mise à jour automatique du temps.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; le robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="graphique_lolipooo.updateGame">
+<tt class="descclassname">graphique_lolipooo.</tt><tt class="descname">updateGame</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#graphique_lolipooo.updateGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet la mise à jour automatique de l&#8217;état du jeu (terrain...).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; le robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="graphique_lolipooo.sendDecisions">
+<tt class="descclassname">graphique_lolipooo.</tt><tt class="descname">sendDecisions</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#graphique_lolipooo.sendDecisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet l&#8217;envoi automatique des decisions au serveur.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; le robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="lollipooo">
+<h2>lollipooo<a class="headerlink" href="#lollipooo" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="lolipooo.register_pooo">
+<tt class="descclassname">lolipooo.</tt><tt class="descname">register_pooo</tt><big>(</big><em>uid</em><big>)</big><a class="headerlink" href="#lolipooo.register_pooo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Inscrit un joueur et initialise le robot pour la compétition</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>uid</strong> (<em>chaîne de caractères str(UUID)</em>) &#8211; identifiant utilisateur</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>&#8220;0947e717-02a1-4d83-9470-a941b6e8ed07&#8221;</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lolipooo.init_pooo">
+<tt class="descclassname">lolipooo.</tt><tt class="descname">init_pooo</tt><big>(</big><em>init_string</em><big>)</big><a class="headerlink" href="#lolipooo.init_pooo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialise le robot pour un match</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name" colspan="2">param init_string:</th></tr>
+<tr class="field-odd field"><td>&nbsp;</td><td class="field-body">instruction du protocole de communication de Pooo (voire ci-dessous)</td>
+</tr>
+<tr class="field-even field"><th class="field-name" colspan="2">type init_string:</th></tr>
+<tr class="field-even field"><td>&nbsp;</td><td class="field-body">chaîne de caractères (utf-8 string)</td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<p>INIT&lt;matchid&gt;TO&lt;#players&gt;[&lt;me&gt;];&lt;speed&gt;;       &lt;#cells&gt;CELLS:&lt;cellid&gt;(&lt;x&gt;,&lt;y&gt;)&#8217;&lt;radius&gt;&#8217;&lt;offsize&gt;&#8217;&lt;defsize&gt;&#8217;&lt;prod&gt;,...;       &lt;#lines&gt;LINES:&lt;cellid&gt;&#64;&lt;dist&gt;OF&lt;cellid&gt;,...</p>
+<p>&lt;me&gt; et &lt;owner&gt; désignent des numéros de &#8216;couleur&#8217; attribués aux joueurs. La couleur 0 est le neutre.
+le neutre n&#8217;est pas compté dans l&#8217;effectif de joueurs (&lt;#players&gt;).
+&#8216;...&#8217; signifie que l&#8217;on répète la séquence précédente autant de fois qu&#8217;il y a de cellules (ou d&#8217;arêtes).
+0CELLS ou 0LINES sont des cas particuliers sans suffixe.
+&lt;dist&gt; est la distance qui sépare 2 cellules, exprimée en... millisecondes !
+/!attention: un match à vitesse x2 réduit de moitié le temps effectif de trajet d&#8217;une cellule à l&#8217;autre par rapport à l&#8217;indication &lt;dist&gt;.
+De manière générale temps_de_trajet=&lt;dist&gt;/vitesse (division entière).</p>
+<blockquote>
+<div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Example:</th><td class="field-body"></td>
+</tr>
+</tbody>
+</table>
+<p>&#8220;INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)&#8216;2&#8216;30&#8216;8&#8217;I,2(41,55)&#8216;1&#8216;30&#8216;8&#8217;II,3(23,103)&#8216;1&#8216;20&#8216;5&#8217;I;2LINES:<a class="reference external" href="mailto:1&#37;&#52;&#48;3433OF2">1<span>&#64;</span>3433OF2</a>,1&#64;6502OF3&#8221;</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="lolipooo.play_pooo">
+<tt class="descclassname">lolipooo.</tt><tt class="descname">play_pooo</tt><big>(</big><big>)</big><a class="headerlink" href="#lolipooo.play_pooo" title="Permalink to this definition">¶</a></dt>
+<dd><p>Active le robot-joueur</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="lolipooo.updateGraphique">
+<tt class="descclassname">lolipooo.</tt><tt class="descname">updateGraphique</tt><big>(</big><em>graphique</em><big>)</big><a class="headerlink" href="#lolipooo.updateGraphique" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet la mise à jour automatique de l&#8217;interface graphique</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>graphique</strong> (<a class="reference internal" href="#module-Graphique" title="Graphique"><em>Graphique</em></a>) &#8211; l&#8217;interface graphique</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lolipooo.updateTime">
+<tt class="descclassname">lolipooo.</tt><tt class="descname">updateTime</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#lolipooo.updateTime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet la mise à jour automatique du temps.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; le robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lolipooo.updateGame">
+<tt class="descclassname">lolipooo.</tt><tt class="descname">updateGame</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#lolipooo.updateGame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet la mise à jour automatique de l&#8217;état du jeu (terrain...).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; le robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="lolipooo.sendDecisions">
+<tt class="descclassname">lolipooo.</tt><tt class="descname">sendDecisions</tt><big>(</big><em>robot</em><big>)</big><a class="headerlink" href="#lolipooo.sendDecisions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Permet l&#8217;envoi automatique des decisions au serveur.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>robot</strong> (<a class="reference internal" href="#module-Robot" title="Robot"><em>Robot</em></a>) &#8211; le robot</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Bienvenue sur cette documentation !</a><ul>
+<li><a class="reference internal" href="#module-Cellule">Cellule</a></li>
+<li><a class="reference internal" href="#module-Lien">Lien</a></li>
+<li><a class="reference internal" href="#module-Mouvement">Mouvement</a></li>
+<li><a class="reference internal" href="#module-Robot">Robot</a></li>
+<li><a class="reference internal" href="#module-Terrain">Terrain</a></li>
+<li><a class="reference internal" href="#module-Strategie">Strategie</a></li>
+<li><a class="reference internal" href="#module-StrategieAnalyse">StrategieAnalyse</a></li>
+<li><a class="reference internal" href="#module-StrategiePrevision">StrategiePrevision</a></li>
+<li><a class="reference internal" href="#module-StrategieAleatoire">StrategieAleatoire</a></li>
+<li><a class="reference internal" href="#module-Graphique">Graphique</a></li>
+<li><a class="reference internal" href="#module-Exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#graphique-lollipooo">Graphique_lollipooo</a></li>
+<li><a class="reference internal" href="#lollipooo">lollipooo</a></li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/index.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="#">Projet algo 1.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, CARON Cyril, HOULGATTE Pauline, PINEAU Maxime.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
