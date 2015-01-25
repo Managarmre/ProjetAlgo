@@ -29,6 +29,8 @@ class StrategiePrevision( stn.StrategieNormale ):
         # 
         #
         for attaquante in attaquantes:
+            
+            excedent = attaquante.getExcedent()
     
             # stratégie applicable pour les planètes attaquantes safe
             # ici on regarde si une planète voisine est sur le point de se faire prendre
@@ -42,7 +44,8 @@ class StrategiePrevision( stn.StrategieNormale ):
             for ennemi in attaquante.getVoisinsEnnemis():
                 
                 # si la planète est sur le point de se faire prendre et que les vars sont encore initialisées
-                if self.getPriseCellule(ennemi) and dist_mini==-1:
+                #if self.getPriseCellule(ennemi) and dist_mini==-1:
+                if ennemi.vaEtrePrise() and dist_mini==-1:
                     # on récupère ses coordonnées et son coût (-cout_cellule => pour le remettre en positif)
                     cout_mini=-self.getCoutCellule(ennemi)
                     dist_mini=self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()
@@ -62,7 +65,7 @@ class StrategiePrevision( stn.StrategieNormale ):
                     cout_mini=-self.getCoutCellule(ennemi)
                     couleur=ennemi.getCouleurJoueur()
                     cellule_cible=ennemi
-            logging.info( "{exce} et dist mini {dist_mini} ".format(exce=attaquante.getAttaque(),dist_mini=dist_mini) ) 
+            logging.info( "planète {numero} a {exce} et dist de la cible {dist_mini} ".format(numero=attaquante.getNumero(),exce=attaquante.getAttaque(),dist_mini=dist_mini) ) 
             # Si on a trouvé un planète dans ce cas là
             if dist_mini!=-1 and attaquante.getAttaque()>cout_mini:
                 logging.info( "Stratégie Prévision" )
@@ -79,14 +82,15 @@ class StrategiePrevision( stn.StrategieNormale ):
                     # si dist_mini > Temps_impact
                     if temps_impact<dist_mini and attaquante.getAttaque()>cout_mini:
                         # on envoie nos troupes pour prendre la planète
-                        
-                        #j'envoie tout
-                        a_envoyer=attaquante.getAttaque()
-                        
-                        # on envoie le nombre de troupes attaquantes + 10%
-                        #a_envoyer=cout_mini+(cout_mini*10//100)
-                        #if a_envoyer>attaquante.getAttaque() or a_envoyer==0:
-                        #    a_envoyer=attaquante.getAttaque()
+
+                        # on envoie 10% de troupes en plus
+                        a_envoyer=int(cout_mini+(cout_mini*10//100))
+                        if a_envoyer>attaquante.getAttaque() or a_envoyer==0:
+                            a_envoyer=attaquante.getAttaque()
+                    # gestion de l'excédent de la cellule
+                    elif cout_mini>attaquante.getAttaque() and excedent>0:
+                        a_envoyer=excedent
+                    
                             
 
             elif dist_mini==-1:  
@@ -111,7 +115,7 @@ class StrategiePrevision( stn.StrategieNormale ):
                 # sinon 
                 
                 cout_cellule = self.getCoutCellule( cellule_cible )
-                excedent = attaquante.getExcedent()
+               
                 
                 if( cout_cellule <= 0 ):
                     
@@ -136,8 +140,8 @@ class StrategiePrevision( stn.StrategieNormale ):
                     else:
                         a_envoyer = cout_cellule
                 
-        if a_envoyer!=0:
-            logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=cellule_cible.getNumero(),cell=a_envoyer) )
+        if a_envoyer>0 and a_envoyer<=attaquante.getAttaque():
+            logging.info( "{origin} attaque {cible} en envoyant {cell} et sur la planète il y a {total}!".format(origin=attaquante.getNumero(),cible=cellule_cible.getNumero(),cell=a_envoyer,total=attaquante.getAttaque()) )
     
             mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
             mouvements.append( mon_mouvement )   

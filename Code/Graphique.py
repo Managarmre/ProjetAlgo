@@ -241,4 +241,3 @@ class Vecteur:
 	def produitScalaireBAC( ab, ac ):
 		return ab.x*ac.x + ab.y*ac.y 
 
-

@@ -208,7 +208,7 @@ class Cellule:
 	def getMouvementsVersCellule( self ):
 		liste = []
 		for lien in self.getLiens() :
-			liste.append( lien.getMouvementsVersCellule(self) )
+			liste+= lien.getMouvementVersCellule(self)
 		return liste
 
 

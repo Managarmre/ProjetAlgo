@@ -28,7 +28,7 @@ import functools
 
 # notre robot
 from Robot import *
-from Graphique import *
+#from Graphique import *
 
 #import tkinter as tk
 
@@ -110,17 +110,18 @@ def play_pooo():
     
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
+
     """
     graphique = Graphique( cheshire )
     graphique.dessinerCellules()
     graphique.dessinerLiens()
     """
-    
+
     thread_updateTime = threading.Thread( target=updateTime, args=(cheshire,) )
     thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
     thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
     #thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
-    
+
     thread_updateTime.start()
     thread_updateGame.start()
     thread_sendDecisions.start()
@@ -128,7 +129,8 @@ def play_pooo():
 
     #graphique.canvas.after( 10, updateGraphique, args=(graphique,) )
     #graphique.canvas.after( 10, functools.partial(updateGraphique, graphique) )
-    graphique.fenetre.mainloop()    # start application main loop, bloquant
+    #graphique.fenetre.mainloop()    # start application main loop, bloquant
+
 
     thread_updateTime.join()
     thread_updateGame.join()
@@ -233,3 +235,32 @@ def sendDecisions( robot ):
     pass    
 
 
+
+"""
+def updateGraphique( graphique ):
+
+    event = threading.Event()
+
+    while( graphique.robot.partieEnCours() ):
+
+        graphique.redessinerCellules()
+        graphique.dessinerMouvements() 
+
+        #time.sleep( 0.05 )
+        event.wait( 0.05 )
+        #condition.wait( 0.05 )
+
+    graphique.fenetre.quit()    # ferme la fenetre
+
+    # normalement, renvoie une exception car on n'est pas dasn le thread principale
+    # alors que l'on essaie de tuer la fenetre principale (on n'en tient pas compte)
+    
+    try:
+        graphique.fenetre.destroy()
+    except Exception as e :
+        logging.info( e )
+        pass
+    
+    
+
+"""
