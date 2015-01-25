@@ -7,19 +7,20 @@ from Exceptions import LienException
 class Lien:
 	""" 
 	Les liens reliant les cellules du terrain (représentent les arêtes du graphe).
+	
+	On mettra toujours la cellule ayant le plus petit numéro dans l'attribut u.
+
+	:param u: Une cellule de l'une des extrémités du lien
+	:type u: Cellule
+	:param v: L'autre cellule de l'une des extrémités du lien
+	:type v: Cellule
+	:param int distance: la distance séparant les cellules u et valeur
+	:type distance: int
+	:raises LienException: si la distance est inférieure ou égale à 0
 	"""
 	
 
 	def __init__(self, u, v, distance):
-		"""
-		Constructeur de la classe Lien.
-		On mettra toujours la cellule ayant le plus petit numéro dans l'attribut u.
-
-		:param :class:'Cellule' u: Une cellule de l'une des extrémités du lien
-		:param :class:'Cellule' v: L'autre cellule de l'une des extrémités du lien
-		:param int distance: la distance séparant les cellules u et valeur
-		:raises :class:'LienException': si la distance est inférieure ou égale à 0
-		"""
 
 		# on vérifie les paramètres
 		if( not isinstance( u , ce.Cellule ) ):
@@ -56,7 +57,7 @@ class Lien:
 		Retourne la cellule enregistrée sous l'attribut U
 		
 		:returns: la cellule enregistrée dans U
-		:rtype: :class:'Cellule'
+		:rtype: Cellule
 		"""
 		return self.u
 
@@ -66,7 +67,7 @@ class Lien:
 		Retourne la cellule enregistrée sous l'attribut V
 		
 		:returns: la cellule enregistrée dans V
-		:rtype: :class:'Cellule'
+		:rtype: Cellule
 		"""
 		return self.v
 
@@ -86,9 +87,9 @@ class Lien:
 		"""
 		Selon la cellule donnée en paramètre, retourne l'autre cellule du lien (retourne U si on donne V et vice versa).
 		
-		:raises :class:'LienException': si la cellule inconnue n'appartient pas au lien
+		:raises LienException: si la cellule inconnue n'appartient pas au lien
 		:returns: l'autre cellule du lien
-		:rtype: :class:'Cellule'
+		:rtype: Cellule
 		"""
 		if( cellule_inconnue == self.getU() ):
 			return self.getV()
@@ -102,7 +103,8 @@ class Lien:
 		"""
 		Ajoute un mouvement vers la cellule enregistrée sous V
 		
-		:param :class:'Mouvement' mouvement: Le mouvement à ajouter.
+		:param mouvement: Le mouvement à ajouter.
+		:type mouvement: Mouvement
 		"""
 		self.vers_v.append( mouvement )
 	
@@ -111,7 +113,8 @@ class Lien:
 		"""
 		Ajoute un mouvement vers la cellule enregistrée sous U
 		
-		:param :class:'Mouvement' mouvement: Le mouvement à ajouter
+		:param mouvement: Le mouvement à ajouter
+		:type mouvement: Mouvement
 		"""
 		self.vers_u.append( mouvement )
 	
@@ -120,9 +123,11 @@ class Lien:
 		"""
 		Ajoute le mouvement passé en paramètre vers la cellule passée en paramètre
 		
-		:param :class:'Cellule' cellule: La cellule à laquelle on ajoute le mouvement
-		:param :class:'Mouvement' mouvement: Le mouvement à ajouter
-		:raises :class:'LienException': si la cellule n'appartient pas au lien
+		:param cellule: La cellule à laquelle on ajoute le mouvement
+		:type cellule: Cellule
+		:param mouvement: Le mouvement à ajouter
+		:type mouvement: Mouvement
+		:raises LienException: si la cellule n'appartient pas au lien
 		"""
 
 		# on vérifie les types des paramètres entrés
@@ -171,7 +176,7 @@ class Lien:
 		Retourne la liste des mouvements allant vers U
 
 		:returns: la liste des mouvements allant vers U
-		:rtype: list of :class:'Mouvement'
+		:rtype: List<Mouvement>
 		"""
 		return self.vers_u
 	
@@ -181,7 +186,7 @@ class Lien:
 		Retourne la liste des mouvements allant vers V
 
 		:returns: la liste des mouvements allant vers V
-		:rtype: list of :class:'Mouvement'
+		:rtype: List<Mouvement>
 		"""
 		return self.vers_v
 	
@@ -190,10 +195,11 @@ class Lien:
 		"""
 		Retourne la liste des mouvements allant vers la cellule passée en paramètre.
 		
-		:param :class:'Cellule' cellule: La cellule dont on veut récupérer les mouvements entrants
+		:param cellule: La cellule dont on veut récupérer les mouvements entrants
+		:type cellule: Cellule
 		:returns: la liste des mouvements allant vers cette cellule
-		:rtype: list of :class:'Mouvement'
-		:raises :class:'LienException': si la cellule n'appartient pas au lien
+		:rtype: List<Mouvement>
+		:raises LienException: si la cellule n'appartient pas au lien
 		"""
 		# on vérifie les types des paramètres entrés
 		if( not isinstance( cellule , ce.Cellule ) ):
@@ -214,7 +220,8 @@ class Lien:
 		"""
 		Retourne vrai si la cellule passée en paramètre appartient au lien, faux sinon.
 		
-		:param :class:'Cellule' cellule: Cellule dont on veut savoir si elle appartient au lien
+		:param cellule: Cellule dont on veut savoir si elle appartient au lien
+		:type cellule: Cellule
 		:rtype: booleen
 		"""
 		return cellule == self.getU() or cellule == self.getV() 
@@ -246,8 +253,10 @@ class Lien:
 		Permet de calculer la valeur unique qui identifie un lien supposé entre deux cellules, 
 		Retourne la valeur du hash d'un lien à partir de ces deux cellules.
 		
-		:param :class:'Cellule' cellule1: la première cellule
-		:param :class:'Cellule' cellule2: la deuxième cellule
+		:param cellule1: la première cellule
+		:type cellule1: Cellule
+		:param cellule2: la deuxième cellule
+		:type cellule2: Cellule
 		:returns: l'identifiant du lien supposé entre les deux cellules
 		:rtype: int
 		"""

@@ -14,12 +14,11 @@ class StrategiePrevision( ana.StrategieAnalyse ):
     Cette stratégie est une surcouche de la stratégie Analyse.
     Elle essaie de prendre les cellules au bon moment, afin de subir le moins de pertes possible
 
+    :param robot: Le robot devant prendre une decision
+    :type robot: Robot
     """
     
     def __init__( self, robot ):
-        """
-        Constructeur de la classe StrategiePrevision
-        """
         ana.StrategieAnalyse.__init__( self, robot )
 
 
@@ -29,9 +28,10 @@ class StrategiePrevision( ana.StrategieAnalyse ):
 
 
 
-        :param :class:'Cellule' attaquante: la cellule attaquante cherchant une cible
+        :param attaquante: la cellule attaquante cherchant une cible
+        :type attaquante: Cellule
         :returns: la cellule cible
-        :rtype: :class:'Cellule'
+        :rtype: Cellule
         """
 
         robot = self.getRobot()

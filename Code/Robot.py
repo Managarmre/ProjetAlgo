@@ -25,14 +25,16 @@ le robot du jeu, contiendra toutes les informations, et traduira les chaines que
 
 class Robot:
 
+    """
+    La classe Robot. 
+    Initialise le robot.
+    A appeler dans la procédure 'register_pooo(uid)'
+    
+    :param uid: identifiant unique du robot que le serveur lui a attribué
+    :type uid: str
+    """
+
     def __init__( self, uid ):
-        """
-        Constructeur le la classe Robot. 
-        Initialise le robot.
-        A appeler dans la procédure 'register_pooo(uid)'
-        
-        :param str uid: identifiant unique du robot que le serveur lui a attribué
-        """
         
         logging.info( "==== uid du robot : {chaine}".format(chaine=uid)  )
         
@@ -54,7 +56,8 @@ class Robot:
             - game over
             - end of game
 
-        :param str state: la chaine reçue, envoyée par le serveur, peut contenir un message STATE, GAMEOVER, ou ENDOFGAME 
+        :param state: la chaine reçue, envoyée par le serveur, peut contenir un message STATE, GAMEOVER, ou ENDOFGAME 
+        :type state: str
         """
 
         state_of_game = re.compile( r"\ASTATE(?P<id_match>.+)IS(?P<nbJoueurs>[0-9]+);(?P<nbCellules>[0-9]+)CELLS:?(?P<cellules>.*);(?P<nbMoves>[0-9]+)MOVES:?(?P<moves>.*)\Z"  )
@@ -88,7 +91,8 @@ class Robot:
         """
         L'un des participants du match a perdu, on analyse plus en détail la chaine reçue pour savoir si c'est ce robot qui ne peut plus jouer.
 
-        :param str state_game_over: chaine de caractère GAMEOVER envoyé par le serveur
+        :param state_game_over: chaine de caractère GAMEOVER envoyé par le serveur
+        :type state_game_over: str
         """
 
         regex_GameOver = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\]IN(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})\Z" ) 
@@ -118,7 +122,8 @@ class Robot:
 
         exemple : "INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)'2'30'8'I,2(41,55)'1'30'8'II,3(23,103)'1'20'5'I;2LINES:1@3433OF2,1@6502OF3"
         
-        :param str init_string: chaîne regroupant les informations envoyées par le serveur pour l'initialisation d'un nouveau match, sous la forme INIT.
+        :param init_string: chaîne regroupant les informations envoyées par le serveur pour l'initialisation d'un nouveau match, sous la forme INIT.
+        :type init_string: str
         """
 
         logging.info( "==== initialisation"  )
@@ -203,7 +208,8 @@ class Robot:
         exemple de chaine state
         state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
 
-        :param str state: la chaîne envoyée par le serveur, de la forme STATE
+        :param state: la chaîne envoyée par le serveur, de la forme STATE
+        :type state: str
         """
 
         self.mutex.acquire()
@@ -304,7 +310,7 @@ class Robot:
         exemple : [ '[0947e717-02a1-4d83-9470-a941b6e8ed07]100FROM0TO2', '[0947e717-02a1-4d83-9470-a941b6e8ed07]56FROM6TO4' ]
 
         :returns: la liste des décisions
-        :rtype: List<String>
+        :rtype: List<str>
         """
 
         self.mutex.acquire()
@@ -358,7 +364,7 @@ class Robot:
         Retourne le terrain du match en cours
         
         :return: le terrain du match en cours
-        :rtype: :class:'Terrain'
+        :rtype: Terrain
         """
         return self.terrain
         
@@ -368,7 +374,7 @@ class Robot:
         Retourne la stratégie du robot
         
         :returns: la stratégie du robot
-        :rtype: :class:'Strategie'
+        :rtype: Strategie
         """
         return self.strategie
     
@@ -408,7 +414,8 @@ class Robot:
         Modifie le temps actuel du jeu, c'est à dire la variable temps du Robot, 
         mais également touts les attributs temps_actuel des mouvements (modifiant ainsi le temps restant).
         
-        :param int temps: Le temps
+        :param temps: Le temps
+        :type temps: int
         """
         self.mutex.acquire()
         self.temps = temps 
@@ -423,7 +430,8 @@ class Robot:
         """
         Modifie la stratégie du robot
         
-        :param :class:'Strategie': la nouvelle stratégie du robot
+        :param strategie: la nouvelle stratégie du robot
+        :type strategie: Strategie
         """
         self.strategie = strategie
 

@@ -12,10 +12,6 @@ class Terrain:
 	"""
 
 	def __init__( self ):
-		"""
-		Constructeur de la classe Terrain. Initialise un terrain vide, sans cellule, ni lien.
-		"""
-
 		# les cellules représentent des sommets
 		# les liens représentent des arêtes
 
@@ -30,7 +26,8 @@ class Terrain:
 		"""
 		Ajoute la cellule passée en paramètre dans le terrain
 		
-		:param :class:'Cellule' cellule: la cellule à ajouter
+		:param cellule: la cellule à ajouter
+		:type cellule: Cellule
 		"""
 
 		if( not isinstance( cellule , ce.Cellule ) ):
@@ -44,8 +41,9 @@ class Terrain:
 		"""
 		Ajoute le lien passé en paramètre dans le terrain
 		
-		:param :class:'Lien' lien: Le lien à ajouter
-		:raises :class'TerrainException': si au moins l'une des cellule du lien n'est pas présente dans le terrain
+		:param lien: Le lien à ajouter
+		:type lien: Lien
+		:raises TerrainException: si au moins l'une des cellule du lien n'est pas présente dans le terrain
 		"""
 		
 		if( not isinstance(lien, li.Lien ) ):
@@ -61,7 +59,7 @@ class Terrain:
 		Retourne la liste des composantes connexes du graphe (le terrain se comporte comme un graphe).
 		
 		:returns: les composantes connexes du graphe.
-		:rtype: list of :class:'Terrain'
+		:rtype: List<Terrain>
 		"""
 
 		# initialisation
@@ -99,7 +97,7 @@ class Terrain:
 		Retourne le sous graphe contenant les cellules données en paramètre
 		
 		:param listeCellules: La liste des cellules
-		:type listeCellules: list of :class:'Cellule'
+		:type listeCellules: List<Cellules>
 		:returns: le sous graphe correspondant
 		:rtype: Terrain
 		"""
@@ -130,8 +128,10 @@ class Terrain:
 		"""
 		Retourne le plus court chemin entre deux cellules passées en paramètre
 		
-		:param :class:'Cellule' depart: La cellule de départ
-		:param :class:'Cellule' arrivee: La cellule d'arrivée
+		:param depart: La cellule de départ
+		:type depart: Cellule
+		:param arrivee: La cellule d'arrivée
+		:type arrivee: Cellule
 		:returns: le plus court chemin entre les deux cellules (une liste de numéro de cellule), et la distance totale à parcourir
 		:rtype: ( List<int> , int ) 
 		"""
@@ -194,11 +194,12 @@ class Terrain:
 		"""
 		Retourne le chemin depuis une cellule vers la cellule la plus proche selectionnée dans un ensemble
 		
-		:param :class:'Cellule' depart: La cellule de départ
+		:param depart: La cellule de départ
+		:type depart: Cellule
 		:param arrivees: L'ensemble des cellules d'arrivée
-		:type arrivees: list of :class:'Cellule'
+		:type arrivees: List<Cellules>
 		:returns: le chemin le plus court entre la cellule de départ et la cellule d'arrivée la plus proche (correspond à la liste des numéro des cellules composant le chemin)
-		:rtype: list of int
+		:rtype: List<int>
 		"""
 
 		infinity = float("inf")
@@ -223,10 +224,11 @@ class Terrain:
 		"""
 		Retourne la cellule du terrain ayant le numéro associé passé en paramètre
 		
-		:param int numero: Le numéro de la cellule recherchée
+		:param numero: Le numéro de la cellule recherchée
+		:type numero: int
 		:returns: la cellule associée au numéro
-		:rtype: :class:'Cellule'
-		:raises :class:'TerrainException': si il n'y a aucune cellule dans le terrain possédant ce numéro
+		:rtype: :Cellule
+		:raises TerrainException: si il n'y a aucune cellule dans le terrain possédant ce numéro
 		"""
 
 		try:
@@ -240,8 +242,9 @@ class Terrain:
 		Retourne la liste des cellules appartenant au joueur ayant la couleur passée en paramètre (-1 pour le neutre).
 		
 		:param int couleurJoueur: la couleur du joueur
+		:type couleurJoueur: int
 		:returns: la liste des cellules de ce joueur
-		:rtype: list of :class:'Cellule'
+		:rtype: List<Cellule>
 		"""
 		return [ cellule for numero, cellule in self.getCellules().items() if cellule.aPourCouleur( couleurJoueur )  ]
 		
@@ -260,10 +263,11 @@ class Terrain:
 		"""
 		Retourne la liste des voisins de la cellule sur le terrain passée en paramètre
 		
-		:param :class:'Cellule' cellule: La cellule dont on veut récupérer la liste des voisins sur le terrain
+		:param cellule: La cellule dont on veut récupérer la liste des voisins sur le terrain
+		:type cellule: Cellule
 		:returns: la liste des cellules voisine à celle passée en paramètre
-		:rtype: list of :class:'Cellule'
-		:raises :class:'TerrainException': si la cellule n'est pas présente sur le terrain
+		:rtype: List<Cellule>
+		:raises TerrainException: si la cellule n'est pas présente sur le terrain
 		"""
 
 		if( not isinstance( cellule , ce.Cellule ) ):
@@ -282,9 +286,10 @@ class Terrain:
 		Retourne le lien du terrain ayant le numéro associé passé en paramètre
 		
 		:param int numeroLien: Le numéro de le lien recherché
+		:type numeroLien: int
 		:returns: le lien associée au numéro
-		:rtype: :class:'Lien'
-		:raises :class:'TerrainException': si il n'y a aucun Lien dans le terrain possédant ce numéro
+		:rtype: Lien
+		:raises TerrainException: si il n'y a aucun Lien dans le terrain possédant ce numéro
 		"""
 		try:
 			return self.liens[ numeroLien ]
@@ -296,11 +301,13 @@ class Terrain:
 		"""
 		Retourne le lien sur le terrain entre les 2 cellules passées en paramètre
 		
-		:param :class:'Cellule' cellule_1: La première cellule
-		:param :class:'Cellule' cellule_2: La deuxième cellule
+		:param cellule_1: La première cellule
+		:type cellule1: Cellule
+		:param cellule_2: La deuxième cellule
+		:type cellule2: Cellule
 		:returns: le lien entre les deux cellules
-		:rtype: :class:'Lien'
-		:raises :class:'TerrainException': si le lien n'est pas présent dans le terrain
+		:rtype: Lien
+		:raises TerrainException: si le lien n'est pas présent dans le terrain
 		"""
 		numero = li.Lien.hachage( cellule_1, cellule_2 )
 		return self.getLien( numero )

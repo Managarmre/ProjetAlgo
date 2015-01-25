@@ -14,15 +14,12 @@ class StrategieAnalyse( st.Strategie ):
 
     L'envoi des unités ainsi que leur destination sera déterminée après analyse du terrain.
     Les cellules seront réparties en deux groupes : les productrices et les attaquantes
-
+    
+    :param robot: Le robot devant prendre une decision
+    :type robot: Robot
     """
 
     def __init__( self, robot ):
-        """
-        Constructeur de la classe StrategieAleatoire
-
-        :param :class:'Robot' robot: Le robot devant prendre une decision
-        """
         st.Strategie.__init__( self, robot )
         
         
@@ -32,7 +29,7 @@ class StrategieAnalyse( st.Strategie ):
         Retourne la liste des mouvements à effectuer après analyse du terrain pour la prise de décision.
 
         :returns: la liste des nouveaux mouvements à effectuer 
-        :rtype: list of :class:'Mouvement'
+        :rtype: List<Mouvement>
         """
         
         terrain = self.getRobot().getTerrain()
@@ -70,11 +67,12 @@ class StrategieAnalyse( st.Strategie ):
         """
         Retourne la liste des mouvements correspondant aux mouvements des unités des cellules productrices vers les cellules attaquantes les plus proches.
 
-        :param :class:'Terrain' composante: la partie du terrain (sous graphe) où se trouvent nos cellules
+        :param composante: la partie du terrain (sous graphe) où se trouvent nos cellules
+        :type composante: Terrain
         :param mesCellules: dictionnaire de liste de cellules
-        :type mesCellules: dict of list of :class:'Cellule'
+        :type mesCellules: dict of list of Cellule
         :returns: la liste des mouvements des unités des cellules productrices vers les cellules attaquantes les plus proches.
-        :rtype: list of :class:'Mouvement'
+        :rtype: List<Mouvement>
         """
 
         mouvements = []
@@ -107,11 +105,12 @@ class StrategieAnalyse( st.Strategie ):
         """
         Retourne la liste des mouvements correspondant aux mouvements des unités des cellules attaquantes vers les cellules ennemies les plus prometteuses.
 
-        :param :class:'Terrain' composante: la partie du terrain (sous graphe) où se trouvent nos cellules
+        :param composante: la partie du terrain (sous graphe) où se trouvent nos cellules
+        :type composante: Terrain
         :param mesCellules: dictionnaire de liste de cellules
-        :type mesCellules: dict of list of :class:'Cellule'
+        :type mesCellules: dict of list of Cellule
         :returns: la liste des mouvements des unités des cellules attaquantes vers les cellules ennemies les plus prometteuses.
-        :rtype: list of :class:'Mouvement'
+        :rtype: List<Mouvement>
         """
 
         mouvements = [] 
@@ -141,9 +140,10 @@ class StrategieAnalyse( st.Strategie ):
         """
         Dérermine la cible d'une cellule attaquante (en utilisant l'indice P sur tous les voisins ennemies de la cellule attaquante).
 
-        :param :class:'Cellule' attaquante: la cellule attaquante cherchant une cible
+        :param attaquante: la cellule attaquante cherchant une cible
+        :type attaquante: Cellule
         :returns: la cellule cible
-        :rtype: :class:'Cellule'
+        :rtype: Cellule
         """
 
         # recherche de la cible    
@@ -165,8 +165,10 @@ class StrategieAnalyse( st.Strategie ):
         Détermine le nombre d'unités à envoyer de la cellule attaquante vers une cellule_cible en fonction de l'excédant de l'attaquant et du cout de la cible 
         Peut renvoyer 0, dans ce cas la, la cellule attaquante ne devra pas envoyer d'unités.
 
-        :param :class:'Cellule' attaquante: la cellule de départ voulant déterminer le nombre d'unités à envoyer 
-        :param :class:'Cellule' cellule_cible: la cellule ciblée 
+        :param attaquante: la cellule de départ voulant déterminer le nombre d'unités à envoyer 
+        :type attaquante: Cellule
+        :param cellule_cible: la cellule ciblée 
+        :type cellule_cible: Cellule
         :returns: le nombre d'unités à envoyer vers la cellule ciblée
         :rtype: int 
         """
@@ -211,8 +213,10 @@ class StrategieAnalyse( st.Strategie ):
         """
         Calcule l'indice P d'une cellule par rapport à la cellule d'origine voulant envoyer ses unités.
         
-        :param :class:'Cellule' origine: La cellule d'origine
-        :param :class:'Cellule' cellule: La cellule dont on veut calculer l'indice P
+        :param origine: La cellule d'origine
+        :type origine: Cellule
+        :param cellule: La cellule dont on veut calculer l'indice P
+        :type cellule: Cellule
         :return: l'indice P de la cellule cible
         :rtype: float
         """
@@ -234,8 +238,9 @@ class StrategieAnalyse( st.Strategie ):
         Calcule le nombre d'unités que l'on doit envoyer sur une cellule ennemie afin de la capturer
         Ce cout peut est négatif si la cellule nous appartient déjà.
 
-        :param :class:'Cellule' cellule: Cellule ennemie
-        :eturn: le nombre d'unités nécéssaire à la capture de la cellule
+        :param cellule: Cellule ennemie
+        :type cellule: Cellule
+        :return: le nombre d'unités nécéssaire à la capture de la cellule
         :rtype: int
         """
 
@@ -298,7 +303,7 @@ class StrategieAnalyse( st.Strategie ):
         Retourne la liste des cellules nous appartenant
         
         :return: les cellules nous appartenant
-        :rtype: list of :class:'Cellule'
+        :rtype: List<Cellule>
         """
         return self.getRobot().getTerrain().getCellulesJoueur( self.getRobot().getMaCouleur() )
         
@@ -309,8 +314,8 @@ class StrategieAnalyse( st.Strategie ):
         Une cellule est productrice si elle n'est reliée à aucun ennemi.
         
         :param mesCellules: nos cellules productrices
-        :type mesCellules: list of :class:'Cellule'
-        :rtype: list of :class:'Cellule'
+        :type mesCellules: List<Cellule>
+        :rtype: List<Cellule>
         """
 
         maCouleur = self.getRobot().getMaCouleur()
@@ -323,8 +328,8 @@ class StrategieAnalyse( st.Strategie ):
         Une cellule est attaquante si elle est reliée à au moins un ennemi.
         
         :param mesCellules: nos cellules attaquantes
-        :type mesCellules: list of :class:'Cellule'
-        :rtype: list of :class:'Cellule'
+        :type mesCellules: List<Cellule>
+        :rtype: List<Cellule>
         """
         # correspond à : mesCellules - productrices
         #return list( set(mesCellules) - set(productrices) )
@@ -339,7 +344,7 @@ class StrategieAnalyse( st.Strategie ):
         Une cellule est semi-productrice si c'est une cellule productrice reliée à au moins une cellule attaquante
         
         :returns: nos cellules semi-productrice
-        :rtype: list of :class:'Cellule'
+        :rtype: List<Cellule>
         """
         return [ cellule for cellule in productrices if any( [ voisin in attaquantes for voisin in cellule.getVoisins() ]  ) ]
     
@@ -349,7 +354,7 @@ class StrategieAnalyse( st.Strategie ):
         Retourne la liste de nos cellules entièrement productrices (full-productrices).
         Une cellule est full-productrice si c'est une cellule productrice qui n'est reliée à aucune cellule attaquante.
         
-        :rtype: list of :class:'Cellule'
+        :rtype: List<Cellule>
         """
         return list( set(productrices) - set(semi_productrices) )
         
@@ -360,9 +365,9 @@ class StrategieAnalyse( st.Strategie ):
         Une cellule attaquante est en danger lorsqu'il y a des unités ennemies se dirigeant vers elle.
         
         :param attaquantes: la liste de toutes nos cellules attaquantes
-        :type attaquantes: list of :class:'Cellule'
+        :type attaquantes: List<Cellule>
         :returns: nos cellules attaquantes en danger
-        :rtype: list of :class:'Cellule'
+        :rtype: List<Cellule>
         """
 
         maCouleur = self.getRobot().getMaCouleur()
@@ -390,6 +395,6 @@ class StrategieAnalyse( st.Strategie ):
         """
         Retourne la liste de nos cellules attaquantes en sûreté
         
-        :rtype: list of :class:'Cellule'
+        :rtype: List<Cellule>
         """
         return list( set(attaquantes) - set(attaquantes_en_dangers) )

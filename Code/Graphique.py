@@ -7,15 +7,13 @@ import Lien as li
 
 class Graphique:
 	"""
-    Représente L'interface graphique du jeu.
-    """
+	Représente L'interface graphique du jeu.
+
+	:param robot: Le robot du jeu
+	:type robot: Robot
+	"""
 
 	def __init__( self, robot ):
-		"""
-		Constructeur de la classe Graphique
-	    :param robot: Le robot du jeu
-	    :type robot: robot
-	    """
 
 		self.robot = robot
 		self.terrain = robot.getTerrain()
@@ -46,34 +44,35 @@ class Graphique:
 
 	def create_circle( self, x, y, r, **kwargs):
 		"""
-        Créer un cercle dans le canvas
+		Créer un cercle dans le canvas
 
-        :param x: La position en X du centre du cercle
-        :type x: int
-        :param y: La position en Y du centre du cercle
-        :type y: int
-        :param r: Le rayon du cercle
-        :type r: int
-        :param **kwargs: Paramètres facultatifs de tkinter pour créer un cercle
+		:param x: La position en X du centre du cercle
+		:type x: int
+		:param y: La position en Y du centre du cercle
+		:type y: int
+		:param r: Le rayon du cercle
+		:type r: int
+		:param **kwargs: Paramètres facultatifs de tkinter pour créer un cercle
 
-        """
+		"""
 		return self.canvas.create_oval(x-r, y-r, x+r, y+r, **kwargs)
 
 
 	def dessinerCellules( self ):
 		"""
-        Utilise la méthode "dessinerCellule" pour dessiner l'ensemble des cellules du jeu dans la fenêtre
-        """
+		Utilise la méthode "dessinerCellule" pour dessiner l'ensemble des cellules du jeu dans la fenêtre
+		"""
 		for cellule in self.terrain.getCellules().values():
 			self.dessinerCellule( cellule )
 
 
 	def dessinerCellule( self, cellule ):
 		"""
-        Permet de dessiner une cellule dans la fenêtre
+		Permet de dessiner une cellule dans la fenêtre
 
-        :param :class:'Cellule' cellule: La cellule à dessiner
-        """
+		:param cellule: La cellule à dessiner
+		:type cellule: Cellule
+		"""
 
 		x, y = self.getTrueCoordonneeCellule( cellule )
 
@@ -103,19 +102,19 @@ class Graphique:
 
 	def dessinerLiens( self ):
 		"""
-        Utilise la méthode "dessinerLien" pour dessiner l'ensemble des liens sur la fenêtre
-        """
+		Utilise la méthode "dessinerLien" pour dessiner l'ensemble des liens sur la fenêtre
+		"""
 		for lien in self.terrain.getLiens().values():
 			self.dessinerLien( lien )
 
 
 	def dessinerLien( self, lien ):
 		"""
-        Permet de dessiner un lien dans la fenêtre.
+		Permet de dessiner un lien dans la fenêtre.
 
-        :param lien: Le lien à dessiner
-        :type lien: Lien
-        """
+		:param lien: Le lien à dessiner
+		:type lien: Lien
+		"""
 
 		u = lien.getU()
 		v = lien.getV()
@@ -128,19 +127,19 @@ class Graphique:
 											v.getNumero() : (arrivee.x, arrivee.y) }
 
 		self.canvas.create_line( depart.x , depart.y , arrivee.x , arrivee.y, fill="black" )
-	    
+		
 		pass
 
 
 	def decalage_centre_cercle( self,  u, v ):
 		"""
-        Permet de récupérer le point d'intersection entre le bord du cercle et le lien.
+		Permet de récupérer le point d'intersection entre le bord du cercle et le lien.
 
-        :param u: La cellule de départ
-        :type u: Cellule
-        :param v: La cellule d'arrivée
-        :type v: Cellule
-        """
+		:param u: La cellule de départ
+		:type u: Cellule
+		:param v: La cellule d'arrivée
+		:type v: Cellule
+		"""
 
 		# 
 		# AB.AC = ||AB|| x ||AC|| x cos( BAC )
@@ -177,8 +176,8 @@ class Graphique:
 
 	def dessinerMouvements( self ):
 		"""
-        Utilise la méthode "dessinerMouvement" pour dessiner tous les mouvements en cours du terrain
-        """
+		Utilise la méthode "dessinerMouvement" pour dessiner tous les mouvements en cours du terrain
+		"""
 
 		for id_mouv in self.mouvements_graphique:
 			self.canvas.delete( id_mouv )
@@ -190,11 +189,11 @@ class Graphique:
 
 	def dessinerMouvement( self, mouvement ):
 		"""
-        Permet de dessiner un mouvement se déplaçant sur un lien
+		Permet de dessiner un mouvement se déplaçant sur un lien
 
-        :param mouvement: le mouvement à dessiner
-        :type mouvement: Mouvement
-        """
+ 		:param mouvement: le mouvement à dessiner
+ 		:type mouvement: Mouvement
+ 		"""
 
 		u = mouvement.toCellule()
 		v = mouvement.fromCellule() 
@@ -224,8 +223,8 @@ class Graphique:
 
 	def redessinerCellules( self ):
 		"""
-        Utilise la méthode "redessinerCellule" pour redessiner toutes les cellules suivant l'évolution du jeu.
-        """
+		Utilise la méthode "redessinerCellule" pour redessiner toutes les cellules suivant l'évolution du jeu.
+		"""
 
 		for cellule in self.terrain.getCellules().values():
 			self.redessinerCellule( cellule ) 
@@ -233,11 +232,11 @@ class Graphique:
 
 	def redessinerCellule( self, cellule ):
 		"""
-        Permet de redessiner une cellule
+ 		Permet de redessiner une cellule
 
-        :param cellule: La cellule à redessiner
-        :type cellule: Cellule
-        """
+ 		:param cellule: La cellule à redessiner
+ 		:type cellule: Cellule
+ 		"""
 
 		numero = cellule.getNumero() 
 		chaineAttaque = "{actuel} / {max}".format( actuel=cellule.getAttaque(), max=cellule.getAttaqueMax() )
@@ -257,48 +256,48 @@ class Graphique:
 
 	def getTrueCoordonneeCellule( self, cellule ):
 		"""
-        Permet d'adapter les coordonnées de la cellule envoyées par le serveur en fonction des dimensions de la fenêtre
+ 		Permet d'adapter les coordonnées de la cellule envoyées par le serveur en fonction des dimensions de la fenêtre
 
-        :param cellule: La cellule à adapter
-        :type cellule: Cellule
-        :rtype: float
-        """
+ 		:param cellule: La cellule à adapter
+ 		:type cellule: Cellule
+ 		:rtype: float
+ 		"""
 		return ( cellule.x/15 + 100 , cellule.y/15 + 100 )
 
 	def getTrueRayonCellule( self, cellule ):
 		"""
-        Permet d'adapter le rayon de la cellule envoyé par le serveur en fonction des dimensions de la fenêtre
+ 		Permet d'adapter le rayon de la cellule envoyé par le serveur en fonction des dimensions de la fenêtre
 
-        :param cellule: La cellule à adapter
-        :type cellule: Cellule
+ 		:param cellule: La cellule à adapter
+ 		:type cellule: Cellule
 
-        :rtype: float
-        """
+ 		:rtype: float
+ 		"""
 		return cellule.rayon / 2.5
 
 
 
 class Point:
 	"""
-    Permet de créer un point aux coordonnées spécifiées en paramètre.
-    """
+	Permet de créer un point aux coordonnées spécifiées en paramètre.
+	"""
 	def __init__(self, x, y):
 		"""
 		Constructeur de la classe Point
 
-	    :param x: La coordonnée en x du point
-	    :type x: int
-	    :param y: La coordonnée en y du point
-	    :type y: int
-	    """
+		:param x: La coordonnée en x du point
+		:type x: int
+		:param y: La coordonnée en y du point
+		:type y: int
+		"""
 		self.x = x
 		self.y = y
 
 
 class Vecteur:
 	"""
-    Permet de représenter un vecteur avec les coordonnées spécifiées en paramètre.
-    """    
+ 	Permet de représenter un vecteur avec les coordonnées spécifiées en paramètre.
+ 	"""    
 
 	#         ->
 	# vecteur AB
@@ -306,29 +305,29 @@ class Vecteur:
 		"""
 		Constructeur de la classe Vecteur
 		:param a: Le premier point du vecteur
-	    :type point: Point
-	    :param b: Le second point du vecteur
-	    :type b: Point
-	    """
+		:type point: Point
+		:param b: Le second point du vecteur
+		:type b: Point
+		"""
 		self.x = b.x - a.x
 		self.y = b.y - a.y 
 
 	def norme( self ):
 		"""
-        Calcule la norme du vecteur
+ 		Calcule la norme du vecteur
 
-        :rtype: float
-        """
+ 		:rtype: float
+ 		"""
 		return math.sqrt( self.x * self.x + self.y * self.y )
 
 
 	def rotation( self, angle ):
 		"""
-        Rotation d'un vecteur de l'angle passé en paramètre
+ 		Rotation d'un vecteur de l'angle passé en paramètre
 
-        :param angle: l'angle de rotation à appliquer au vecteur (en radians)
-        :type angle: float
-        """
+ 		:param angle: l'angle de rotation à appliquer au vecteur (en radians)
+ 		:type angle: float
+ 		"""
 
 		cos = math.cos( angle )
 		sin = math.sin( angle )
@@ -342,26 +341,26 @@ class Vecteur:
 
 	def translationPoint( self, point ):
 		"""
-        Effectue une translation du point passé en paramètre par rapport au vecteur
+ 		Effectue une translation du point passé en paramètre par rapport au vecteur
 
-        :param point: Le point à translater
-        :type point: Point
+ 		:param point: Le point à translater
+ 		:type point: Point
 
-        :rtype: Point
-        """
+ 		:rtype: Point
+ 		"""
 		return Point( self.x + point.x , self.y + point.y )
 
 
 	def produitScalaireBAC( ab, ac ):
 		"""
-        Retourne le produit scalaire des deux vecteurs passés en paramètre
+ 		Retourne le produit scalaire des deux vecteurs passés en paramètre
 
-        :param ab: Le premier vecteur
-        :type ab: Vecteur
-        :param ac: Le second vecteur
-        :type ac: Vecteur
-        :rtype: float
-        """
+ 		:param ab: Le premier vecteur
+ 		:type ab: Vecteur
+ 		:param ac: Le second vecteur
+ 		:type ac: Vecteur
+ 		:rtype: float
+ 		"""
 		return ab.x*ac.x + ab.y*ac.y 
 
 

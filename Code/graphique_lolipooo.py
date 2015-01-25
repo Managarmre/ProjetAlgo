@@ -142,7 +142,8 @@ def updateGraphique( graphique ):
     """
     Permet la mise à jour automatique de l'interface graphique
 
-    :param :class'Graphique' graphique: l'interface graphique
+    :param graphique: l'interface graphique
+    :type graphique: Graphique
     """
     event = threading.Event()
 
@@ -171,7 +172,8 @@ def updateTime( robot ):
     """
     Permet la mise à jour automatique du temps.
 
-    :param :class:'Robot': le robot
+    :param robot: le robot
+    :type robot: Robot
     """
 
     event = threading.Event()
@@ -181,14 +183,13 @@ def updateTime( robot ):
         temps = poooc.etime()
         
         # logging.info( "==> temps du jeu: {t}".format(t=temps) )
-        robot.setTemps( temps )
-        """
+
         try:
             robot.setTemps( temps )
         
         except Exception as e : 
             logging.info( e )
-        """   
+        
 
         #time.sleep( 0.02 )
         event.wait( 0.02 )
@@ -200,7 +201,8 @@ def updateGame( robot ):
     """
     Permet la mise à jour automatique de l'état du jeu (terrain...).
 
-    :param :class:'Robot': le robot
+    :param robot: le robot
+    :type robot: Robot
     """
     event = threading.Event()
 
@@ -208,14 +210,12 @@ def updateGame( robot ):
 
         state = poooc.state_on_update()     # bloquant
 
-        robot.analyseMessage( state )
-        """
         try:
             robot.analyseMessage( state )
 
         except Exception as e :
             logging.info( e )
-        """
+        
 
         #time.sleep( 0.05 )
         event.wait( 0.02 )
@@ -226,22 +226,23 @@ def sendDecisions( robot ):
     """
     Permet l'envoi automatique des decisions au serveur.
 
-    :param :class:'Robot': le robot
+    :param robot: le robot
+    :type robot: Robot
     """
     event = threading.Event()
 
     while( robot.peutJouer() ):
 
-        #try: 
-        ordres = robot.getDecisions()
+        try: 
+            ordres = robot.getDecisions()
 
-        for ordre in ordres :
-            poooc.order( ordre )
+            for ordre in ordres :
+                poooc.order( ordre )
 
                 #time.sleep( 0.02 )
 
-        #except Exception as e :
-        #    logging.info( e )
+        except Exception as e :
+            logging.info( e )
 
         #time.sleep( 0.02 )
         event.wait( 0.02 )

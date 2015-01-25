@@ -10,14 +10,11 @@ class StrategieAleatoire( Strategie ):
 
     L'envoi des unités ainsi que leur destination sera déterminée aléatoirement.
 
+    :param robot: Le robot devant prendre une decision
+    :type robot: Robot
     """
 
     def __init__( self, robot ):
-        """
-        Constructeur de la classe StrategieAleatoire
-
-        :param :class:'Robot' robot: Le robot devant prendre une decision
-        """
         Strategie.__init__( self, robot )
         
         
@@ -26,7 +23,7 @@ class StrategieAleatoire( Strategie ):
         Retourne la liste des mouvements à effectuer après analyse du terrain pour la prise de décision.
 
         :returns: la liste des nouveaux mouvements à effectuer 
-        :rtype: list of :class:'Mouvement'
+        :rtype: List<Mouvement>
         """
 
         

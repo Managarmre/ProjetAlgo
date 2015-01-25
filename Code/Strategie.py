@@ -5,12 +5,12 @@ import Mouvement as mv
 class Strategie:
     """
     Classe abstraite à implémenter pour faire une stratégie
+    
+    :param robot: Le robot devant prendre une decision
+    :type robot: Robot
     """
     
     def __init__( self, robot ):
-        """
-        Constructeur de la classe abstraite Strategie
-        """
         self.robot = robot
         
         
@@ -19,7 +19,7 @@ class Strategie:
         Retourne le robot 
     
         :return: le robot
-        :rtype: :class:'Robot'
+        :rtype: Robot
         """
         return self.robot
     
@@ -30,7 +30,7 @@ class Strategie:
         Méthode abstraite, retourne la liste des mouvements à effectuer après analyse du terrain pour la prise de décision
 
         :returns: la liste des nouveaux mouvements à effectuer 
-        :rtype: list of :class:'Mouvement'
+        :rtype: List<Mouvement>
         :raises NotImplementedError: si la méthode n'a pas été redéfinie.
         """
         raise NotImplementedError( "Abstract Class : Should have implemented this" )
@@ -42,10 +42,12 @@ class Strategie:
         On modifie le terrain afin de ne pas reprendre en compte les unitées déjà utilisées.
         Retourne le mouvement créer !
     
-        :param :class:'Cellule' depuis_cellule: La cellule qui envoie les unités attaquantes
-        :param :class:'Cellule' vers_cellules: La cellule qui reçoit les unités attaquantes
+        :param depuis_cellule: La cellule qui envoie les unités attaquantes
+        :type depuis_cellule: Cellule
+        :param vers_cellules: La cellule qui reçoit les unités attaquantes
+        :type vers_cellules: Cellule
         :returns: le mouvement créé
-        :rtype: :class:'Mouvement'
+        :rtype: Mouvement
         """
 
         couleurJoueur =  depuis_cellule.getCouleur()

@@ -8,28 +8,33 @@ from Exceptions import CelluleException
 class Cellule:
 	"""
 	Une cellule du jeu. Elle peut être représentée par un sommet dans un graphe.
+	
+	:param numero: le numéro identifiant la cellule (unique pour chaque cellule)
+	:type numero: int
+	:param attaque: le nombre d'unités attaquantes sur la cellule actuellement
+	:type attaque: int
+	:param defense: le nombre d'unités defensives sur la cellule actuellement
+	:type defense: int
+	:param attaqueMax: le nombre d'unités attaquantes maximal sur la cellule
+	:type attaqueMax: int
+	:param defenseMax: le nombre d'unités defensives maximal sur la cellule
+	:type defenseMax: int
+	:param production: vitesse de production des unités de la cellule
+	:type production: int
+	:param couleurJoueur: couleur du joueur à qui appartient la cellule (-1 si neutre)
+	:type couleurJoueur: int
+	:param x: la coordonnée x de la cellule sur le terrain (graphique)
+	:type x: int
+	:param y: la coordonnée y de la cellule sur le terrain (graphique)
+	:type y: int
+	:param rayon: le rayon de la cellule (graphique)
+	:type rayon: int
+
+	:raises CelluleException: si l'attaque est inférieure à 0 ou supérieure à l'attaque maximale
+	:raises CelluleException: si la défense est inférieure à 0 ou supérieure à la défense maximale
 	"""
 
 	def __init__(self, numero, attaque, defense, attaqueMax, defenseMax, production, couleur, x, y, rayon):
-		"""
-		Constructeur de la classe Cellule
-
-		:param int numero: le numéro identifiant la cellule (unique pour chaque cellule)
-		:param int attaque: le nombre d'unités attaquantes sur la cellule actuellement
-		:param int defense: le nombre d'unités defensives sur la cellule actuellement
-		:param int attaqueMax: le nombre d'unités attaquantes maximales sur la cellule
-		:param int defenseMax: le nombre d'unités defensives maximales sur la cellule
-		:param in production: vitesse de production des unités attaquantes de la cellule
-		:param int couleur: couleur du joueur à qui appartient la cellule (-1 si neutre)
-		:param int x: la coordonnée x de la cellule sur le terrain (graphique)
-		:param int y: la coordonnée y de la cellule sur le terrain (graphique)
-		:param int rayon: le rayon de la cellule (graphique)
-
-		:returns: une cellule 
-		:rtype: class'Cellule'
-		:raises :class:'CelluleException': si l'attaque est inférieure à 0 ou supérieure à l'attaque maximale
-		:raises :class:'CelluleException': si la défense est inférieure à 0 ou supérieure à la défense maximale
-		"""
 
 		# on vérifie les paramètres entrés pour la création de la cellule
 		noms = [ "numero", "attaque", "defense", "attaqueMax", "defenseMax", "production", "couleur", "x", "y", "rayon" ]
@@ -156,7 +161,7 @@ class Cellule:
 		Retourne les liens dont cette cellule est l une des extrémités.
 		
 		:returns: la liste des liens 
-		:rtype: liste de :class:'Lien'
+		:rtype: List<Lien>
         """
 		return self.liens
 
@@ -170,7 +175,7 @@ class Cellule:
 		contrairement au terrain, ou l'on pourra ne considérer qu'une partie du terrain (un sous graphe), et donc qu'une partie des liens.
 		
 		:returns: la liste des cellules voisines 
-		:rtype: liste de :class:'Cellule'
+		:rtype: List<Cellules>
 		"""
 		# comme chaque cellule n'est reliée qu'au plus 1 seule fois à chaque cellule, pas besoin de vérifier les doublons ici
 		return [ lien.getOtherCellule(self) for lien in self.getLiens() ]
@@ -182,7 +187,7 @@ class Cellule:
 		Retourne la liste des cellules ennemies de cette cellule, c'est à dire celle qui n'ont pas la même couleur que celle de cette cellule.
 
 		:returns: la liste des cellules ennemies de cette cellule 
-		:rtype: liste de :class:'Cellule'
+		:rtype: List<Cellules>
 		"""
 		return [ lien.getOtherCellule(self) for lien in self.getLiens() if not lien.getOtherCellule(self).aPourCouleur( self.getCouleur() ) ]
 	
@@ -192,7 +197,7 @@ class Cellule:
 		Retourne la liste des cellules alliées de cette cellule, c'est à dire celles qui ont la même couleur que celle de cette cellule.
 
 		:returns: la liste des cellules alliées de cette cellule 
-		:rtype: liste de :class:'Cellule'
+		:rtype: List<Cellules>
 		"""
 		return [ lien.getOtherCellule(self) for lien in self.getLiens() if lien.getOtherCellule(self).aPourCouleur( self.getCouleur() ) ]
 	
@@ -252,7 +257,8 @@ class Cellule:
 		Affecte la valeur de la variable attaque actuelle.
 		La nouvelle valeur de l'attaque ne peut pas être inférieure à 0, ni excéder l'attaque maximale de la cellule.
 		
-		:param int attaque: la nouvelle valeur de l'attaque actuelle de la cellule 
+		:param attaque: la nouvelle valeur de l'attaque actuelle de la cellule 
+		:type attaque: int
 		:raises CelluleException: si l'attaque entrée en paramètre est inférieure à 0 ou supérieure à l'attaque maximale
 		"""
 
@@ -273,7 +279,8 @@ class Cellule:
 		Affecte la valeur de la variable defense actuelle.
 		La nouvelle valeur de la défense ne peut pas être inférieure à 0, ni excéder la défense maximale de la cellule.
 		
-		:param int defense: la nouvelle valeur de la défense actuelle de la cellule 
+		:param defense: la nouvelle valeur de la défense actuelle de la cellule 
+		:type defense: int
 		:raises CelluleException: si la défense entrée en paramètre est inférieure à 0 ou supérieure à la défense maximale
 		"""
 
@@ -294,8 +301,9 @@ class Cellule:
 		Affecte la valeur de la variable couleur (la cellule change de propriétaire). 
 		Cette couleur doit être supérieure ou égale à -1, -1 étant la couleur du joueur neutre.
 		
-		:param int couleur: la nouvelle couleur de la cellule.
-		:raises :class:'CelluleException': si la couleur n'est pas supérieure ou égale à -1. 
+		:param couleur: la nouvelle couleur de la cellule.
+		:type couleur: int
+		:raises CelluleException: si la couleur n'est pas supérieure ou égale à -1. 
 		"""
 
 		if( not isinstance( couleur, int ) ):
@@ -311,8 +319,9 @@ class Cellule:
 		"""
 		Ajoute un lien reliant cette cellule à une autre. 
 		
-		:param :class:'Lien' lien: le lien à ajouter
-		:raises :class:'CelluleException': si cette cellule n'est pas l'une des cellules aux extrémités du lien.
+		:param lien: le lien à ajouter
+		:type lien: Lien
+		:raises CelluleException: si cette cellule n'est pas l'une des cellules aux extrémités du lien.
 		"""
 
 		if( not isinstance( lien, li.Lien ) ):
@@ -329,7 +338,8 @@ class Cellule:
 		Retourne vrai si la cellule possède la couleur passée en paramètre, et faux sinon.
 		Autrement dit, elle retourne vrai si la cellule appartient au joueur ayant la couleur passée en paramètre.
 
-		:param int couleur: la couleur à vérifier 
+		:param couleur: la couleur à vérifier 
+		:type couleur: int
 
 		:returns: retourne vrai si la cellule a bien pour couleur la couleur donnée en paramètre, faux sinon.
 		:rtype: boolean 
@@ -342,7 +352,7 @@ class Cellule:
 		Méthode qui retourne la liste de tous les mouvements allant vers cette cellule.
 
 		:returns: la liste de tous les mouvements allant vers cette cellule.
-		:rtype: liste de :class:'Mouvement'
+		:rtype: List<Mouvement>
 		"""
 
 		liste = []
