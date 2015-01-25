@@ -6,19 +6,34 @@ import Lien as li
 import logging
 
 import random
-import math
-import functools 
-import operator 
 
 
-class StrategieNormale( st.Strategie ):
-    
+class StrategieAnalyse( st.Strategie ):
+    """
+    Cette stratégie analyse le terrain afin de déduire dans ou elle doit envoyer les unités des cellules.
+
+    L'envoie des unités ainsi que leur destination sera déterminé après analyse du terrain.
+    Les cellules seront répartient en deux groupes : les productrices et les attaquantes
+
+    """
+
     def __init__( self, robot ):
+        """
+        Constructeur de la classe StrategieAleatoire
+
+        :param :class:'Robot' robot: Le robot devant prendre une decision
+        """
         st.Strategie.__init__( self, robot )
         
         
     
     def decider(self):
+        """
+        Retourne la liste des mouvements à effectuer après analyse du terrain pour la prise de décision.
+
+        :returns: la liste des nouveaux mouvements à effectuer 
+        :rtype: list of :class:'Mouvement'
+        """
         
         terrain = self.getRobot().getTerrain()
         
@@ -33,7 +48,7 @@ class StrategieNormale( st.Strategie ):
             mesCellules[ "attaquantesEnDanger" ] = self.getAttaquantesEnDanger( mesCellules[ "attaquantes" ] )
             mesCellules[ "attaquantesEnSurete" ] = self.getAttaquantesEnSurete( mesCellules[ "attaquantes" ] , mesCellules[ "attaquantesEnDanger" ]  )      
             
-            StrategieNormale.afficherCellulesLogging( "cellules attaquantes" , mesCellules["attaquantes"] )
+            StrategieAnalyse.afficherCellulesLogging( "cellules attaquantes" , mesCellules["attaquantes"] )
             """
             StrategieNormale.afficherCellulesLogging( "mes cellules" , mesCellules["cellules"] )
             StrategieNormale.afficherCellulesLogging( "cellules productrices" , mesCellules["productrices"] )
@@ -46,12 +61,21 @@ class StrategieNormale( st.Strategie ):
 
                 mouvements += self.envoyerUnitesProductrices( composante, mesCellules )
 
-            mouvements += self.envoyerUnitesAttaquantes( terrain, composante, mesCellules )
+            mouvements += self.envoyerUnitesAttaquantes( composante, mesCellules )
                                         
         return mouvements
         
 
     def envoyerUnitesProductrices( self, composante, mesCellules ):
+        """
+        Retourne la liste des mouvements correspondant aux mouvements des unités des cellules productrices vers les cellules attaquantes les plus proches.
+
+        :param :class:'Terrain' composante: la partie du terrain (sous graphe) où se trouve nos cellules
+        :param mesCellules: dictionnaire de liste de cellules
+        :type mesCellules: dict of list of :class:'Cellule'
+        :returns: la liste des mouvements des unités des cellules productrices vers les cellules attaquantes les plus proches.
+        :rtype: list of :class:'Mouvement'
+        """
 
         mouvements = []
         productrices = mesCellules[ "productrices" ]
@@ -69,6 +93,7 @@ class StrategieNormale( st.Strategie ):
                 
                 nbUnites = productrice.getAttaque() 
 
+                
                 mouvement = self.envoyerUnites( productrice, vers, nbUnites )
                 mouvements.append( mouvement )
 
@@ -78,78 +103,120 @@ class StrategieNormale( st.Strategie ):
         return mouvements
 
 
+    def envoyerUnitesAttaquantes( self, composante, mesCellules ):
+        """
+        Retourne la liste des mouvements correspondant aux mouvements des unités des cellules attaquantes vers les cellules ennemies les plus prometteuses.
 
-    def envoyerUnitesAttaquantes( self, terrain, composante, mesCellules ):
+        :param :class:'Terrain' composante: la partie du terrain (sous graphe) où se trouve nos cellules
+        :param mesCellules: dictionnaire de liste de cellules
+        :type mesCellules: dict of list of :class:'Cellule'
+        :returns: la liste des mouvements des unités des cellules attaquantes vers les cellules ennemies les plus prometteuses.
+        :rtype: list of :class:'Mouvement'
+        """
 
         mouvements = [] 
         attaquantes = mesCellules[ "attaquantes" ]
         
-        #
         #   pour l'instant, pas de distinction entre les attaquants
-        # 
-        #
         for attaquante in attaquantes:
     
             logging.info( "Strategie Attaque" )
     
-    
-            # recherche de la cible    
-            tableau_p = {}
-            for ennemi in attaquante.getVoisinsEnnemis() :
-                tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi.getNumero() )
-                # tableau_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
-            
-            indice_p_max = max( tableau_p.keys() )
-            cellules_possibles = tableau_p[ indice_p_max ]
-            
-            num_cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
-            cellule_cible = terrain.getCellule(num_cellule_choisie)
-    
-            #
-            # => si qu'un seul voisin ennemi, j'envoi tout sur lui ?
-            #
-            # sinon 
-            
-            cout_cellule = self.getCoutCellule( cellule_cible )
-            excedent = attaquante.getExcedent()
-            
-            if( cout_cellule <= 0 ):
+            cellule_cible = self.determinerCible( attaquante )
+
+            if( cellule_cible ):
+
+                a_envoyer = self.nbUnitesAEnvoyer( attaquante, cellule_cible )
                 
-                if( excedent > 0 ):
-                    a_envoyer = excedent
-                else:
-                    continue
-            
-            else:
-                
-                if( cout_cellule < excedent ):
-                    a_envoyer = excedent
-                
-                elif( attaquante.getAttaque() < cout_cellule ):
-                    
-                    if( excedent > 0 ):
-                        a_envoyer = excedent
-                    else:
-                        logging.info( "j'attends d'être assez grand pour l'attaquer" )
-                        continue
-                    
-                else:
-                    a_envoyer = cout_cellule
-                
-            logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
-            logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=num_cellule_choisie,cell=a_envoyer) )
-    
-            mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
-            mouvements.append( mon_mouvement )
+                logging.info( "{origin} attaque {cible} en envoyant {cell} !".format(origin=attaquante.getNumero(),cible=cellule_cible.getNumero(),cell=a_envoyer) )
+        
+                if( a_envoyer > 0 ):
+                    mon_mouvement = self.envoyerUnites( attaquante, cellule_cible, a_envoyer )
+                    mouvements.append( mon_mouvement )
             
         return mouvements 
 
 
-    # calcul l'indice p d'une cellule par rapport à la cellule d'origine voulant envoyer ses unitées
-    # Cellule origine :
-    # Cellule cellule : la cellule dont on veut calculer l'indice p
-    def indiceP( self, origine, cellule ):
+    def determinerCible( self, attaquante ):
+        """
+        Dérermine la cible d'une cellule attaquante (en utilisant l'indice P sur tous les voisins ennemies de la cellule attaquante).
+
+        :param :class:'Cellule' attaquante: la cellule attaquante cherchant une cible
+        :returns: la cellule cible
+        :rtype: :class:'Cellule'
+        """
+
+        # recherche de la cible    
+        tableau_p = {}
+        for ennemi in attaquante.getVoisinsEnnemis() :
+            tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi )    # calcul indice P de l'ennemie
+            # tableau_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
         
+        indice_p_max = max( tableau_p.keys() )
+        cellules_possibles = tableau_p[ indice_p_max ]
+        
+        cellule_cible = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
+
+        return cellule_cible
+
+
+    def nbUnitesAEnvoyer( self, attaquante, cellule_cible ):
+        """
+        Détermine le nombre d'unités à envoyé de la cellule attaquante vers uen cellule_cible en fonction de l'excédant de l'attaquant et du coup de la cible 
+        Peut renvoyé 0, dans ce cas la, la cellule attaquante ne devra pas envoyé d'unités.
+
+        :param :class:'Cellule' attaquante: la cellule de départ voulant déterminé le nombre d'unité à envoyer 
+        :param :class:'Cellule' cellule_cible: la cellule ciblé 
+        :returns: le nombre d'unités à envoyé vers la cellule ciblé
+        :rtype: int 
+        """
+
+        cout_cellule = self.getCoutCellule( cellule_cible )
+        excedent = attaquante.getExcedent()
+        
+        # au départ, aucune unités à envoyé
+        a_envoyer = 0
+
+        if( cout_cellule <= 0 ):
+            
+            if( excedent > 0 ):
+                a_envoyer = excedent
+            else:
+                # cas ou la cellule n'a pas d'excédent
+                pass
+        
+        else:
+            
+            if( cout_cellule < excedent ):
+                a_envoyer = excedent
+            
+            elif( attaquante.getAttaque() < cout_cellule ):
+                
+                if( excedent > 0 ):
+                    a_envoyer = excedent
+                else:
+                    logging.info( "j'attends d'être assez grand pour l'attaquer" )
+                    # cas ou la cellule n'a pas d'excédent, et ne peut pas non plus attaqué la cellile cible
+                    pass
+                
+            else:
+                a_envoyer = cout_cellule
+
+        logging.info( "{exce} {cout_cell} ".format(exce=excedent,cout_cell=cout_cellule) ) 
+
+        return a_envoyer
+
+
+    def indiceP( self, origine, cellule ):
+        """
+        Calcule l'indice P d'une cellule par rapport à la cellule d'origine voulant envoyer ses unités.
+        
+        :param :class:'Cellule' origine: La cellule d'origine
+        :param :class:'Cellule' cellule: La cellule dont on veut calculer l'indice P
+        :return: l'indice P de la cellule cible
+        :rtype: float
+        """
+
         cout = self.getCoutCellule( cellule )
         cout = 1 if cout == 0 else cout        # pour éviter une division par 0
         
@@ -162,12 +229,18 @@ class StrategieNormale( st.Strategie ):
         return production / ( cout * nbVoisins * distance )
     
     
-    # calcul le nombre d'unités que l'on doit envoyer sur une cellule ennemie afin de la capturer
-    # retourne un entier
     def getCoutCellule( self, cellule ):
-        
+        """
+        Calcule le nombre d'unités que l'on doit envoyer sur une cellule ennemie afin de la capturer
+        Ce coup peut est négatif si la cellule nosu appartient déjà.
+
+        :param :class:'Cellule' cellule: Cellule ennemie
+        :eturn: le nombre d'unités nécéssaire à la capture de la cellule
+        :rtype: int
+        """
+
         maCouleur = self.getRobot().getMaCouleur()
-        couleurCellule = cellule.getCouleurJoueur()
+        couleurCellule = cellule.getCouleur()
         
         coutTotal = cellule.getCout()
         
@@ -175,9 +248,9 @@ class StrategieNormale( st.Strategie ):
             
             cellule_adjacente = lien.getOtherCellule(cellule)
             
-            for mouvement in lien.getMouvementVersCellule( cellule ):
+            for mouvement in lien.getMouvementsVersCellule( cellule ):
                 
-                couleurMouvement = mouvement.getCouleurJoueur()
+                couleurMouvement = mouvement.getCouleur()
                 
                 if( mouvement.aPourCouleur(couleurCellule) ):
                     coutTotal += mouvement.getNbUnites()
@@ -193,13 +266,13 @@ class StrategieNormale( st.Strategie ):
             # si c'est une de mes cellules
             if( cellule_adjacente.aPourCouleur(maCouleur) ):
             
-                for mouvement in lien.getMouvementVersCellule( cellule_adjacente ):
+                for mouvement in lien.getMouvementsVersCellule( cellule_adjacente ):
                     
                     # si ce n'est pas l'un de mes mouvement, cela augmente le coût
                     if( not mouvement.aPourCouleur(maCouleur) ):
                         coutTotal += mouvement.getNbUnites()
         
-        return coutTotal + 5
+        return coutTotal + 6
 
 
 
@@ -221,48 +294,77 @@ class StrategieNormale( st.Strategie ):
     
     # retourne la liste des cellules m'appartenant
     def getMesCellules( self ):
+        """
+        Retourne la liste des cellules nous appartenant
+        
+        :return: les cellules nous appartenant
+        :rtype: list of :class:'Cellule'
+        """
         return self.getRobot().getTerrain().getCellulesJoueur( self.getRobot().getMaCouleur() )
         
     
-    
-    # retourne la liste de mes cellules productrices
-    # une cellule est productrice si elle n'est relié à aucun ennemie
-    # List<Cellule> mesCellules : lalites des cellules m'appartenant
     def getCellulesProductrices( self, mesCellules ):
+        """
+        Retourne la liste des cellules productrices.
+        Une cellule est productrice si elle n'est reliée à aucun ennemi.
         
+        :param mesCellules: nos cellules productrices
+        :type mesCellules: list of :class:'Cellule'
+        :rtype: list of :class:'Cellule'
+        """
+
         maCouleur = self.getRobot().getMaCouleur()
-        return [ cellule for cellule in mesCellules if all( [ voisin.getCouleurJoueur() == maCouleur for voisin in cellule.getVoisins() ] ) ]
+        return [ cellule for cellule in mesCellules if all( [ voisin.aPourCouleur( maCouleur ) for voisin in cellule.getVoisins() ] ) ]
     
     
-    # retourne la liste de mes cellules attaquantes à partir de mes cellules productrices
-    # (calculé par différente - )
-    # une cellule est attaquante si elle est au moin relié à un ennemie
-    # List<Cellule> mesCellules : la liste des cellules m'appartenant
-    # List<Cellule> productrices : laliste de mes cellules productrices
     def getCellulesAttaquantes( self, mesCellules ):
+        """
+        Retourne la liste de nos cellules attaquantes.
+        Une cellule est attaquante si elle est reliée à au moins un ennemi.
+        
+        :param mesCellules: nos cellules attaquantes
+        :type mesCellules: list of :class:'Cellule'
+        :rtype: list of :class:'Cellule'
+        """
         # correspond à : mesCellules - productrices
         #return list( set(mesCellules) - set(productrices) )
 
         maCouleur = self.getRobot().getMaCouleur()
-        return [ cellule for cellule in mesCellules if any( [ voisin.getCouleurJoueur() != maCouleur for voisin in cellule.getVoisins() ] ) ]
+        return [ cellule for cellule in mesCellules if any( [ not voisin.aPourCouleur( maCouleur ) for voisin in cellule.getVoisins() ] ) ]
     
-        
-        
-    # retourne la liste de mes cellules semi-productrices
-    # une cellule est semi-prodictrice si c'est une cellule productrice relié à au moins une cellule attaquante
+             
     def getSemiProductrices( self, productrices, attaquantes ):
+        """
+        Retourne la liste de nos cellules semi-productrices.
+        Une cellule est semi-productrice si c'est une cellule productrice reliée à au moins une cellule attaquante
+        
+        :returns: nos cellules semi-productrice
+        :rtype: list of :class:'Cellule'
+        """
         return [ cellule for cellule in productrices if any( [ voisin in attaquantes for voisin in cellule.getVoisins() ]  ) ]
     
-    # retourne la liste de mes cellules full-productrices
-    # une cellule est full-productrice si c'est un ecellule productrice qui n'est relié à aucune cellule attaquante
+
     def getFullProductrices( self, productrices, semi_productrices ):
+        """
+        Retourne la liste de nos cellules entièrement productrices (full-productrices).
+        Une cellule est full-productrice si c'est une cellule productrice qui n'est reliée à aucune cellule attaquante.
+        
+        :rtype: list of :class:'Cellule'
+        """
         return list( set(productrices) - set(semi_productrices) )
         
         
-    # retroune la liste de mes cellules attaquantes en danger
-    # une cellule attaquante est en danger lorsqu'il y a des unités ennemie se dirigeant vers elle
     def getAttaquantesEnDanger( self, attaquantes ):
+        """
+        Retourne la liste de nos cellules attaquantes en danger.
+        Une cellule attaquante est en danger lorsqu'il y a des unités ennemies se dirigeant vers elle.
         
+        :param attaquantes: la liste de toutes nos cellules attaquantes
+        :type attaquantes: list of :class:'Cellule'
+        :returns: nos cellules attaquantes en danger
+        :rtype: list of :class:'Cellule'
+        """
+
         maCouleur = self.getRobot().getMaCouleur()
         
         en_danger = set()
@@ -270,9 +372,9 @@ class StrategieNormale( st.Strategie ):
             
             for lien in cellule.getLiens() :
                 
-                for mouvement in lien.getMouvementVersCellule( cellule ) :
+                for mouvement in lien.getMouvementsVersCellule( cellule ) :
                 
-                    if( mouvement.getCouleurJoueur() != maCouleur ):
+                    if( not mouvement.aPourCouleur( maCouleur ) ):
                         en_danger.add(cellule)
                 
                  
@@ -284,6 +386,10 @@ class StrategieNormale( st.Strategie ):
         return list( en_danger )
         
     
-    # retourne la liste de mes cellules attaquantes en sureté
     def getAttaquantesEnSurete( self , attaquantes , attaquantes_en_dangers ):
+        """
+        Retourne la liste de nos cellules attaquantes en sûreté
+        
+        :rtype: list of :class:'Cellule'
+        """
         return list( set(attaquantes) - set(attaquantes_en_dangers) )
