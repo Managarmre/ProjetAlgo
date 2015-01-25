@@ -29,7 +29,7 @@ class StrategiePrevision( stn.StrategieNormale ):
         # 
         #
         for attaquante in attaquantes:
-            
+            tableau_p = {}
             excedent = attaquante.getExcedent()
     
             # stratégie applicable pour les planètes attaquantes safe
@@ -39,31 +39,31 @@ class StrategiePrevision( stn.StrategieNormale ):
             # initialisation de variables
             dist_mini=-1
             cout_mini=-1
-            couleur=-1
             # pour chaque voisin on récupère le cout de la cellule et sa distance
             for ennemi in attaquante.getVoisinsEnnemis():
-                
+				# cas stratégie analyse
+				# recherche de la cible
+				tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi.getNumero())
+				# cas stratégie prévision
                 # si la planète est sur le point de se faire prendre et que les vars sont encore initialisées
                 #if self.getPriseCellule(ennemi) and dist_mini==-1:
-                if ennemi.vaEtrePrise() and dist_mini==-1:
+	            cout_mini=self.getCoutCellule(ennemi)
+                if ennemi.vaEtrePrise() and dist_mini==-1 and cout_mini > 0:
                     # on récupère ses coordonnées et son coût (-cout_cellule => pour le remettre en positif)
-                    cout_mini=-self.getCoutCellule(ennemi)
+                    cout_mini=self.getCoutCellule(ennemi)
                     dist_mini=self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()
-                    couleur=ennemi.getCouleurJoueur()
                     cellule_cible=ennemi
                 # sinon on compare les distances
                 # si la distance de la cellule est plus petite alors on récupère ses coordonnées et son coût
                 # on privilégie la distance
                 elif (self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()<dist_mini and self.getPriseCellule(ennemi) ):
                     dist_mini=self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()
-                    cout_mini=-self.getCoutCellule(ennemi)
-                    couleur=ennemi.getCouleurJoueur()
-                    cellule_ciblee=ennemi
+                    cout_mini=self.getCoutCellule(ennemi)
+                    cellule_cible=ennemi
                 # si deux planètes qui vont se faire prendre sont à la même distance, on compare leur cout
                 # on récupère le cout de la cellule la moins couteuse (pas besoin pour la distance car inchangée)
-                elif (self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()==dist_mini and (-self.getCoutCellule(ennemi))<cout_mini and self.getPriseCellule(ennemi) ):
-                    cout_mini=-self.getCoutCellule(ennemi)
-                    couleur=ennemi.getCouleurJoueur()
+                elif (self.getRobot().getTerrain().getLien(li.Lien.hachage(attaquante,ennemi)).getDistance()==dist_mini and (self.getCoutCellule(ennemi))<cout_mini and self.getPriseCellule(ennemi) ):
+                    cout_mini=self.getCoutCellule(ennemi)
                     cellule_cible=ennemi
             logging.info( "planète {numero} a {exce} et dist de la cible {dist_mini} ".format(numero=attaquante.getNumero(),exce=attaquante.getAttaque(),dist_mini=dist_mini) ) 
             # Si on a trouvé un planète dans ce cas là
@@ -76,6 +76,7 @@ class StrategiePrevision( stn.StrategieNormale ):
                     temps_impact=-1
                     for mouvement in lien.getMouvementVersCellule(cellule_cible):
                         temps_mouvement=mouvement.getTempsRestant()
+                        couleur=cellule_cible.getCouleur()
                         if not (mouvement.aPourCouleur(couleur) and mouvement.aPourCouleur(maCouleur)) and temps_impact<temps_mouvement:
                            temps_impact=temps_mouvement
                     # on compare ce temps avec le temps que nos troupes vont mettre pour atteindre la planète cible (dist_mini)
@@ -87,35 +88,17 @@ class StrategiePrevision( stn.StrategieNormale ):
                         a_envoyer=int(cout_mini+(cout_mini*10//100))
                         if a_envoyer>attaquante.getAttaque() or a_envoyer==0:
                             a_envoyer=attaquante.getAttaque()
-                    # gestion de l'excédent de la cellule
-                    elif cout_mini>attaquante.getAttaque() and excedent>0:
-                        a_envoyer=excedent
-                    
-                            
-
+	
             elif dist_mini==-1:  
                 logging.info( "Strategie Attaque" )
-        
-        
-                # recherche de la cible    
-                tableau_p = {}
-                for ennemi in attaquante.getVoisinsEnnemis() :
-                    tableau_p.setdefault( self.indiceP(attaquante,ennemi), [] ).append( ennemi.getNumero() )
-                    # tableau_p[ self.indiceP(ennemi) ] = [ ennemi.getNumero() , ... ]
-                
+    
                 indice_p_max = max( tableau_p.keys() )
                 cellules_possibles = tableau_p[ indice_p_max ]
                 
                 num_cellule_choisie = cellules_possibles[ random.randint( 0 , len(cellules_possibles)-1 ) ]
                 cellule_cible = terrain.getCellule(num_cellule_choisie)
-        
-                #
-                # => si qu'un seul voisin ennemi, j'envoi tout sur lui ?
-                #
-                # sinon 
                 
                 cout_cellule = self.getCoutCellule( cellule_cible )
-               
                 
                 if( cout_cellule <= 0 ):
                     
