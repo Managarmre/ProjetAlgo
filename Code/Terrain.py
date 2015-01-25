@@ -4,13 +4,17 @@
 
 import Cellule as ce 
 import Lien as li 
+from Exceptions import TerrainException
 
-
-# le terrain du jeu
-# représente un graphe
 class Terrain:
+	"""
+	Le terrain du jeu représente un graphe
+	"""
 
 	def __init__( self ):
+		"""
+		Constructeur de la classe Terrain. Initialise un terrain vide, sans cellule, ni lien.
+		"""
 
 		# les cellules représentent des sommets
 		# les liens représentent des arêtes
@@ -22,34 +26,43 @@ class Terrain:
 		# on utilise ici des dictionnaires (équivalent des hashmaps en python)
 
 
-
-	# ajoute une cellule dans le terrain / graphe
-	# Cellule cellule : la cellule à ajouter
 	def ajouterCellule(self, cellule):
+		"""
+		Ajoute la cellule passée en paramètre dans le terrain
 		
+		:param :class:'Cellule' cellule: la cellule à ajouter
+		"""
+
 		if( not isinstance( cellule , ce.Cellule ) ):
-			raise Exception("ce n'est pas une instance de l'objet Cellule")
+			raise TerrainException("ce n'est pas une instance de l'objet Cellule")
 		
 		# comme un numéro de cellule n'identifie qu'une seule cellule, on l'utilise pour retrouver la cellule
 		self.cellules[ cellule.getNumero() ] = cellule
 	
 
-	# ajoute un lien entre deux cellules dans le terrain
-	# Lien lien : le lien à ajouter
 	def ajouterLien(self, lien):
+		"""
+		Ajoute le lien passé en paramètre dans le terrain
+		
+		:param :class:'Lien' lien: Le lien à ajouter
+		:raises :class'TerrainException': si au moins l'une des cellule du lien n'est pas présente dans le terrain
+		"""
 		
 		if( not isinstance(lien, li.Lien ) ):
-			raise Exception("le parametre lien n'est pas une instance de l'objet Lien ")
+			raise TerrainException("le parametre lien n'est pas une instance de l'objet Lien ")
 		if( lien.getU() not in self.getCellules().values() or lien.getV() not in self.getCellules().values() ):
-			raise Exception("l'une des cellules (ou les deux) n'est pas présente dans le graphe")
+			raise TerrainException("l'une des cellules (ou les deux) n'est pas présente dans le graphe")
 			
 		self.liens[ lien.hash() ] = lien
 
 
-	
-	# retourne la liste des composantes connexes du graphe
-	# return : List<Terrain>
 	def getComposantesConnexes(self):
+		"""
+		Retourne la liste des composantes connexes du graphe (le terrain se comporte comme un graphe).
+		
+		:returns: les composantes connexes du graphe.
+		:rtype: list of :class:'Terrain'
+		"""
 
 		# initialisation
 		# au debut, à chaque sommet on fait correspondre un numéro de composante connexe différente
@@ -81,11 +94,16 @@ class Terrain:
 		return [ self.getSousGraphe(sommets_composante) for sommets_composante in composantes.values()  ]
 
 
-	# retourne le sous graphe contenant les cellules données en paramètre
-	# List<Cellule> listeCellules : la liste des cellules contenu dans le sous graphe
-	# return : Terrain
 	def getSousGraphe(self, listeCellules):
+		"""
+		Retourne le sous graphe contenant les cellules données en paramètre
 		
+		:param listeCellules: La liste des cellules
+		:type listeCellules: list of :class:'Cellule'
+		:returns: le sous graphe correspondant
+		:rtype: Terrain
+		"""
+
 		# on crée un nouveau terrain
 		terrain = Terrain()
 
@@ -108,13 +126,15 @@ class Terrain:
 		return terrain
 
 
-
-
-	# retourne le plus court chemin entre deux cellules/sommets
-	# Cellule depart : la cellule de départ
-	# Cellule arivee : la cellule d'arrivée
-	# retourne : le plus court chemin sous forme d'une liste de sommet et la distance totale à parcourir
 	def dijkstra( self, depart, arrivee ):
+		"""
+		Retourne le plus court chemin entre deux cellules passées en paramètre
+		
+		:param :class:'Cellule' depart: La cellule de départ
+		:param :class:'Cellule' arrivee: La cellule d'arrivée
+		:returns: le plus court chemin entre les deux cellules (une liste de numéro de cellule), et la distance totale à parcourir
+		:rtype: ( List<int> , int ) 
+		"""
 
 		infinity = float("inf")
 
@@ -170,11 +190,17 @@ class Terrain:
 		return ( chemin , parcouru[ arrivee.getNumero() ] )
 
 
-	# retourne le chemin depuis une cellule vers la cellule la plus proche selectionnée dans un ensemble
-	# Cellule depart
-	# List<Cellule> arrivees
 	def getCheminVersCellulePlusProche( self, depart, arrivees ):
+		"""
+		Retourne le chemin depuis une cellule vers la cellule la plus proche selectionnée dans un ensemble
 		
+		:param :class:'Cellule' depart: La cellule de départ
+		:param arrivees: L'ensemble des cellules d'arrivée
+		:type arrivees: list of :class:'Cellule'
+		:returns: le chemin le plus court entre la cellule de départ et la cellule d'arrivée la plus proche (correspond à la liste des numéro des cellules composant le chemin)
+		:rtype: list of int
+		"""
+
 		infinity = float("inf")
 		distance_min = infinity
 		chemin_min = []
@@ -194,31 +220,56 @@ class Terrain:
 	# si la cellule correspondant à ce numéro n'est pas dans le terrain, une exception est lancée.
 	# Int numero : le numéro de la cellule recherchée
 	def getCellule(self, numero):
+		"""
+		Retourne la cellule du terrain ayant le numéro associé passé en paramètre
+		
+		:param int numero: Le numéro de la cellule recherchée
+		:returns: la cellule associée au numéro
+		:rtype: :class:'Cellule'
+		:raises :class:'TerrainException': si il n'y a aucune cellule dans le terrain possédant ce numéro
+		"""
+
 		try:
 			return self.cellules[ numero ]
 		except Exception:
-			raise Exception( "il n'y a aucune cellule ayant ce numéro ({numero}) dans ce terrain".format(numero=numero) )
+			raise TerrainException( "il n'y a aucune cellule ayant ce numéro ({numero}) dans ce terrain".format(numero=numero) )
 
 
-	# retourne la liste des cellules appartenant au joueur ayant la couleur donnée (un entier)
 	def getCellulesJoueur(self, couleurJoueur):
-		return [ cellule for numero, cellule in self.getCellules().items() if cellule.getCouleurJoueur() == couleurJoueur  ]
+		"""
+		Retourne la liste des cellules appartenant au joueur ayant la couleur passé en paramètre (-1 pour le neutre).
+		
+		:param int couleurJoueur: la couleur du joueur
+		:returns: la liste des cellules de ce joueur
+		:rtype: list of :class:'Cellule'
+		"""
+		return [ cellule for numero, cellule in self.getCellules().items() if cellule.aPourCouleur( couleurJoueur )  ]
 		
 
-	# retourne la liste des cellules du terrain (sous forme d'un dictionnaire)
 	def getCellules(self):
+		"""
+		Retourne le dictionnaire contenant la liste de toutes les cellules du terrain
+		
+		:returns: le dictionnaire contenant les cellules du terrain
+		:rtype: dict
+		"""
 		return self.cellules
 
 
-	# retourne la liste des voisins de la cellule donnée en paramètre
-	# lance une exception si on entre autre chose qu'une Cellule
-	# lance une exception si la cellule n'appartient pas à ce graphe
 	def getVoisinsCellule( self, cellule ):
+		"""
+		Retourne la liste des voisins de la cellule sur le terrain passée en paramètre
 		
+		:param :class:'Cellule' cellule: La cellule dont on veut récupérer la liste des voisins sur le terrain
+		:returns: la liste des cellules voisine à celle passée en paramètre
+		:rtype: list of :class:'Cellule'
+		:raises :class:'TerrainException': si la cellule n'est pas présente sur le terrain
+		"""
+
 		if( not isinstance( cellule , ce.Cellule ) ):
-			raise Exception("le paramètre entrée n'est pas une instance de l'objet Cellule")
+			raise TerrainException("le paramètre entrée n'est pas une instance de l'objet Cellule")
 		if( cellule not in self.getCellules().values() ):
-			raise Exception("cette cellule n'est pas présente dasn ce terrain/graphe")
+			raise TerrainException("cette cellule n'est pas présente dasn ce terrain/graphe")
 		
 		return [ lien.getOtherCellule( cellule ) for numero,lien in self.getLiens().items() if lien.celluleAppartientAuLien(cellule) ]
 			
@@ -227,36 +278,76 @@ class Terrain:
 	# ce numéro peut être calculer en utilisant la méthode Lien.hashage(cellule1,cellule2) 
 	# Int numeroLien : le numéro unique identifiant le lien
 	def getLien(self, numeroLien):
+		"""
+		Retourne le lien du terrain ayant le numéro associé passé en paramètre
+		
+		:param int numeroLien: Le numéro de le lien recherché
+		:returns: le lien associée au numéro
+		:rtype: :class:'Lien'
+		:raises :class:'TerrainException': si il n'y a aucun Lien dans le terrain possédant ce numéro
+		"""
 		try:
 			return self.liens[ numeroLien ]
 		except Exception:
-			raise Exception("il n'y a aucun lien ayant ce numéro dans ce terrain")
+			raise TerrainException("il n'y a aucun lien ayant ce numéro dans ce terrain")
 
 
 	def getLienEntreCellules(self, cellule_1, cellule_2 ):
+		"""
+		Retourne le lien sur le terrain entre les 2 cellules passées en paramètre
+		
+		:param :class:'Cellule' cellule_1: La première cellule
+		:param :class:'Cellule' cellule_2: La deuxième cellule
+		:returns: le lien entre les deux cellules
+		:rtype: :class:'Lien'
+		:raises :class:'TerrainException': si le lien n'est pas présent dans le terrain
+		"""
 		numero = li.Lien.hachage( cellule_1, cellule_2 )
 		return self.getLien( numero )
 
-	# retourne la liste des liens du terrain (sous forme d'un dictionnaire)
+
 	def getLiens(self):
+		"""
+		Retourne le dictionnaire contenant la liste de touts les liens du terrain
+		
+		:returns: le dictionnaire contenant les liens du terrain
+		:rtype: dict
+		"""
 		return self.liens
 
 
-	# retourne le nombre de cellules présentes dans le graphe
 	def getNbCellules(self):
+		"""
+		Retourne le nombre de cellules présentes dans le terrain
+		
+		:returns: le nombre de cellules sur le terrain
+		:rtype: int
+		"""
 		return len(self.cellules)
 
-	# retourne le nombre de liens présents dans le graphe
+
 	def getNbLiens(self):
+		"""
+		Retourne le nombre de liens présentes dans le terrain
+		
+		:returns: le nombre de liens sur le terrain
+		:rtype: int
+		"""
 		return len(self.liens)
 
 
 	def toString(self):
+		"""
+		Retourne sous forme de chaine une représentation textuelle du terrain
+		
+		:returns: le terrain sous forme de chaine de caractères
+		:rtype: str
+		"""
 
 		chaine = "S = { "
 
 		for numero_cellule, cellule in self.cellules.items():
-			chaine += "\n( {numero}, {owner} ),".format( numero = cellule.getNumero(), owner = cellule.getCouleurJoueur() )
+			chaine += "\n( {numero}, {owner} ),".format( numero = cellule.getNumero(), owner = cellule.getCouleur() )
 
 
 		chaine += "}" + "\n" + "A = { "
@@ -266,4 +357,3 @@ class Terrain:
 
 		return chaine + "\n}"
 		
-

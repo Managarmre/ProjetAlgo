@@ -24,13 +24,12 @@ import inspect
 import time
 
 import threading
-import functools
+#import functools
 
 # notre robot
 from Robot import *
-#from Graphique import *
+from Graphique import *
 
-#import tkinter as tk
 
 cheshire = None
 
@@ -110,39 +109,41 @@ def play_pooo():
     
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
-
-    """
+    
     graphique = Graphique( cheshire )
     graphique.dessinerCellules()
     graphique.dessinerLiens()
-    """
+    
 
     thread_updateTime = threading.Thread( target=updateTime, args=(cheshire,) )
     thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
     thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
-    #thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
-
+    thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
+    
     thread_updateTime.start()
     thread_updateGame.start()
     thread_sendDecisions.start()
-    #thread_graphique.start()
+    thread_graphique.start()
 
     #graphique.canvas.after( 10, updateGraphique, args=(graphique,) )
     #graphique.canvas.after( 10, functools.partial(updateGraphique, graphique) )
-    #graphique.fenetre.mainloop()    # start application main loop, bloquant
-
+    graphique.fenetre.mainloop()    # start application main loop, bloquant
 
     thread_updateTime.join()
     thread_updateGame.join()
     thread_sendDecisions.join()  
-    #thread_graphique.join()         # probleme ici
+    thread_graphique.join()         # probleme ici
 
     pass
     
 
 
 def updateGraphique( graphique ):
+    """
+    Permet la mise à jour automatique de l'interface graphique
 
+    :param :class'Graphique' graphique: l'interface graphique
+    """
     event = threading.Event()
 
     while( graphique.robot.partie_en_cours ):
@@ -167,6 +168,11 @@ def updateGraphique( graphique ):
 
 
 def updateTime( robot ):
+    """
+    Permet la mise à jour automatique du temps.
+
+    :param :class:'Robot': le robot
+    """
 
     event = threading.Event()
 
@@ -191,7 +197,11 @@ def updateTime( robot ):
 
 
 def updateGame( robot ):
+    """
+    Permet la mise à jour automatique de l'état du jeu (terrain...).
 
+    :param :class:'Robot': le robot
+    """
     event = threading.Event()
 
     while( robot.partieEnCours() ):
@@ -213,7 +223,11 @@ def updateGame( robot ):
         
         
 def sendDecisions( robot ):
+    """
+    Permet l'envoie automatique des decisions au serveur.
 
+    :param :class:'Robot': le robot
+    """
     event = threading.Event()
 
     while( robot.peutJouer() ):
@@ -224,7 +238,7 @@ def sendDecisions( robot ):
         for ordre in ordres :
             poooc.order( ordre )
 
-            time.sleep( 0.02 )
+                #time.sleep( 0.02 )
 
         #except Exception as e :
         #    logging.info( e )
@@ -235,32 +249,3 @@ def sendDecisions( robot ):
     pass    
 
 
-
-"""
-def updateGraphique( graphique ):
-
-    event = threading.Event()
-
-    while( graphique.robot.partieEnCours() ):
-
-        graphique.redessinerCellules()
-        graphique.dessinerMouvements() 
-
-        #time.sleep( 0.05 )
-        event.wait( 0.05 )
-        #condition.wait( 0.05 )
-
-    graphique.fenetre.quit()    # ferme la fenetre
-
-    # normalement, renvoie une exception car on n'est pas dasn le thread principale
-    # alors que l'on essaie de tuer la fenetre principale (on n'en tient pas compte)
-    
-    try:
-        graphique.fenetre.destroy()
-    except Exception as e :
-        logging.info( e )
-        pass
-    
-    
-
-"""
