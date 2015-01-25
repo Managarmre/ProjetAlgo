@@ -5,9 +5,6 @@ import re
 import logging
 import threading
 
-# permet de générer l'aléatoire
-import random
-
 # le graphe modélisant le terrain
 import Terrain as te
 import Cellule as ce
@@ -15,24 +12,34 @@ import Lien as li
 import Mouvement as mv
 
 # on import les différentes stratégies utilisées
-from StrategieRandom import *
-import StrategieNormale as strat
-import StrategiePrevision as stratprev
+import StrategieAleatoire as alea
+import StrategieAnalyse as ana
+import StrategiePrevision as previ
 
+from Exceptions import RobotException
+
+
+"""
+le robot du jeu, contiendra toutes les informations, et traduira les chaines que nous renverra le serveur
+"""
 
 class Robot:
 
-    # initialise le robot (crée le robot)
-    # à appeler dans la procédure 'register_pooo(uid)'
-    # uid : (String) l'identifiant unique du robot que le serveur lui a attribué
     def __init__( self, uid ):
+        """
+        Constructeur le la classe Robot. 
+        Initialise le robot.
+        A appeler dans la procédure 'register_pooo(uid)'
+        
+        :param str uid: identifiant unique du robot que le serveur lui a attribué
+        """
         
         logging.info( "==== uid du robot : {chaine}".format(chaine=uid)  )
         
         self.uid = uid
         
-        self.strategie = stratprev.StrategiePrevision( self )
-        #self.strategie = strat.StrategieNormale( self )
+        self.strategie = previ.StrategiePrevision( self )
+        #self.strategie = ana.StrategieAnalyse( self )
 
         self.temps = 0
         self.joue = False
@@ -40,10 +47,16 @@ class Robot:
         self.mutex = threading.Semaphore(1)
 
 
-
-
     def analyseMessage( self, state ):
-        
+        """
+        Décompose la chaine state passée en paramètre et agit en conséquence, exécute soit :
+            - state of game
+            - game over
+            - end of game
+
+        :param str state: la chaine reçue, envoyée par le serveur, peut contenir un message STATE, GAMEOVER, ou ENDOFGAME 
+        """
+
         state_of_game = re.compile( r"\ASTATE(?P<id_match>.+)IS(?P<nbJoueurs>[0-9]+);(?P<nbCellules>[0-9]+)CELLS:?(?P<cellules>.*);(?P<nbMoves>[0-9]+)MOVES:?(?P<moves>.*)\Z"  )
         gameover = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\]IN(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})\Z" ) 
         end_of_game = re.compile( r"\AENDOFGAME(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})\Z" )
@@ -60,19 +73,24 @@ class Robot:
             self.end_of_game()
             
         else:
-            raise Exception("je ne comprend pas ce que c'est, ne correspond pas au protocole : {quezako} ".format( quezako=state ) )
+            raise RobotException("je ne comprends pas ce que c'est, ne correspond pas au protocole : {quezako} ".format( quezako=state ) )
             
-            
-    
-    # arrête le match en cours 
+
     def end_of_game(self):
+        """
+        Arrête le match en cours
+        """
         self.partie_en_cours = False
         logging.info("==== arret du match")
     
     
-    # arêt du match pour ce robot
     def game_over( self, state_game_over ):
-        
+        """
+        L'un des participants du match a perdu, on analyse plus en détail la chaine reçue pour savoir si c'est ce robot qui ne peut plus jouer.
+
+        :param str state_game_over: chaine de caractère GAMEOVER envoyé par le serveur
+        """
+
         regex_GameOver = re.compile( r"\AGAMEOVER\[(?P<id_joueur>[0-9]+)\]IN(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})\Z" ) 
         informations = regex_GameOver.match( state_game_over )
         
@@ -93,12 +111,16 @@ class Robot:
         self.nbJoueurs -= 1
         
         
-
-    # initialise le robot pour un match
-    # à appeler dans la procédure 'init_pooo(init_string)'
-    # init_string : (String) chaine regroupant les informations envoyé par le serveur pour l'initialisation d'un nouveau match
     def initialiserMatch( self, init_string ):
+        """
+        Initialise le robot pour un match.
+        A appeler dans la procédure 'init_pooo(init_string)'
+
+        exemple : "INIT20ac18ab-6d18-450e-94af-bee53fdc8fcaTO6[2];1;3CELLS:1(23,9)'2'30'8'I,2(41,55)'1'30'8'II,3(23,103)'1'20'5'I;2LINES:1@3433OF2,1@6502OF3"
         
+        :param str init_string: chaîne regroupant les informations envoyées par le serveur pour l'initialisation d'un nouveau match, sous la forme INIT.
+        """
+
         logging.info( "==== initialisation"  )
         
         regex_init = re.compile( r"INIT(?P<id_match>.{8}-.{4}-.{4}-.{4}-.{12})TO(?P<nb_joueurs>[0-9]*)\[(?P<maCouleur>[0-9]*)\];(?P<vitesse>[0-9]*);(?P<nbCellules>[0-9]*)CELLS:(?P<cellules>([0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+,?)*);(?P<nbLines>[0-9]*)LINES:(?P<lignes>([0-9]+@[0-9]+OF[0-9]+,?)*)" )
@@ -113,13 +135,13 @@ class Robot:
         self.nbJoueursInitial = int( informations.group('nb_joueurs') )
         self.nbJoueurs = self.nbJoueursInitial 
         
-        # création d'un terrain vide, que l'on remplira au fure et à mesure
+        # création d'un terrain vide, que l'on remplira au fur et à mesure
         self.terrain = te.Terrain()
 
         nbCellules = informations.group("nbCellules")
         
-        # on trouve toutes les correspondance au pattern correspondant à la description d'une cellule
-        # et pour chaque correspondance, on en extraits les informations de la cellule
+        # on trouve toutes les correspondances au pattern correspondant à la description d'une cellule
+        # et pour chaque correspondance, on en extrait les informations de la cellule
         regex_cellules = re.compile( r"[0-9]+\([0-9]+,[0-9]+\)'[0-9]+'[0-9]+'[0-9]+'I+" )
         regex_uneCellule = re.compile( r"(?P<id_cellule>[0-9]+)\((?P<x>[0-9]+),(?P<y>[0-9]+)\)'(?P<rayon>[0-9]+)'(?P<maxATT>[0-9]+)'(?P<maxDEF>[0-9]+)'(?P<production>I+)" )
         
@@ -174,14 +196,16 @@ class Robot:
         pass
 
 
-    
-    # met à jour les informations sur le terrain en fonction de la chaine state passé en paramètre
-    # la chaine state est récupérée avec la méthode poooc.state_on_update()
-    #
-    #
-    # exemple de chaine state
-    # state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
     def updateTerrain(self, state):
+        """
+        Met à jour les informations sur le terrain en fonction de la chaîne passée en paramètre
+        
+        exemple de chaine state
+        state = "STATE20ac18ab-6d18-450e-94af-bee53fdc8fcaIS2;3CELLS:1[2]12'4,2[2]15'2,3[1]33'6;4MOVES:1<5[2]@232'>6[2]@488'>3[1]@4330'2,1<10[1]@2241'3"
+
+        :param str state: la chaîne envoyée par le serveur, de la forme STATE
+        """
+
         self.mutex.acquire()
 
         logging.info( "==== mise à jour du terrain"  )
@@ -211,7 +235,7 @@ class Robot:
                  
                  # maj de la cellule
                  cellule = self.getTerrain().getCellule(int (ifs_cellule.group( 'id_cellule' ) ))
-                 cellule.setCouleurJoueur(int (ifs_cellule.group( 'owner' ) ))
+                 cellule.setCouleur(int (ifs_cellule.group( 'owner' ) ))
                  cellule.setAttaque(int (ifs_cellule.group( 'offunits' ) ))
                  cellule.setDefense(int (ifs_cellule.group( 'defunits' ) ))
         
@@ -219,7 +243,7 @@ class Robot:
         regex_unLien = re.compile(r"(?P<id_cellule_u>[0-9]+)((?P<deplacements>.+)')+(?P<id_cellule_v>[0-9]+)")
         regex_unDeplacement = re.compile( r"(?P<direction>\<|\>)(?P<offunits>[0-9]+)\[(?P<owner>[0-9]+)\]@(?P<timestamp>[0-9]+)" )
           
-        # parcourt de tous les liens qui ont des déplacements 
+        # parcours de tous les liens qui ont des déplacements 
         nbMoves = int( informations.group("nbMoves") )
         if( nbMoves > 0 ):
         
@@ -259,7 +283,7 @@ class Robot:
                     else:
                         raise Exception( "la direction n'est pas bonne... : {d}".format( d=direction)  )
                     
-                    # on calcul le temps réel restant avant que le mouvement n'arrive à destination
+                    # on calcule le temps réel restant avant que le mouvement n'arrive à destination
                     temps_actuel = self.getTemps()
                     distance = lien.getDistance() 
                     vitesse = self.getVitesse()
@@ -272,54 +296,120 @@ class Robot:
         pass
 
 
-
-    # retourne la liste des decisions, chacune conforme au protocole du serveur
     def getDecisions(self):
+        """
+        Retourne la liste des décisions, chacune conforme au protocole du serveur. 
+        Ces décisions sont prises selon la stratégie adoptée.
+        
+        exemple : [ '[0947e717-02a1-4d83-9470-a941b6e8ed07]100FROM0TO2', '[0947e717-02a1-4d83-9470-a941b6e8ed07]56FROM6TO4' ]
+
+        :returns: la liste des décisions
+        :rtype: List<String>
+        """
+
         self.mutex.acquire()
         ordres = [ mouv.toOrder( self.getUID() ) for mouv in self.getStrategie().decider() ]
         self.mutex.release()
         return ordres
 
 
-    # retourne l'uid du robot (string)
     def getUID(self):
+        """
+        Retourne l'identifiant du robot
+        
+        :returns: l'identifiant du robot
+        :rtype: str
+        """
         return self.uid
 
-    # retourne l'identifiant du match en cours (string)
+
     def getIdMatch(self):
+        """
+        Retourne l'identifiant du match
+        
+        :returns: l'identifiant du match
+        :rtype: str
+        """
         return self.id_match
 
-    # retourne la vitesse du match en cours (entier)
+
     def getVitesse(self):
+        """
+        Retourne la vitesse du match en cours
+        
+        :returns: la vitesse du match en cours
+        :rtype: int
+        """
         return self.vitesse
     
-    # retourne la couleur du robot (entier)
+
     def getMaCouleur(self):
+        """
+        Retourne la couleur du robot
+        
+        :return: la couleur du robot
+        :rtype: int
+        """
         return self.maCouleur
 
-    # retourne le terrain du match en cours (Terrain)
+
     def getTerrain(self):
+        """
+        Retourne le terrain du match en cours
+        
+        :return: le terrain du match en cours
+        :rtype: :class:'Terrain'
+        """
         return self.terrain
         
-    # retourne la stratégie du robot (une instance de la classe abstraite Strategie)
+
     def getStrategie(self):
+        """
+        Retourne la stratégie du robot
+        
+        :returns: la stratégie du robot
+        :rtype: :class:'Strategie'
+        """
         return self.strategie
     
-    # retourne le nombre de joueurs actuel
+
     def getNbJoueurs(self):
+        """
+        Retourne le nombre de joueurs actuellement en train de jouer
+        
+        :returns: le nombre de joueurs pouvant encore jouer
+        :rtype: int
+        """
         return self.nbJoueurs
     
-    # retourne le nombre de joueur initial
+
     def getNbJoueurInitial(self):
+        """
+        Retourne le nombre de joueurs initial
+        
+        :returns: le nombre de joueurs initial
+        :rtype: int
+        """
         return self.nbJoueursInitial
 
-    # retourne le temps actuel du jeu
+
     def getTemps(self):
+        """
+        Retourne le temps actuel du jeu (fournie par le serveur)
+        
+        :return: le temps actuel du jeu
+        :rtype: int
+        """
         return self.temps
 
 
-
     def setTemps( self , temps ):
+        """
+        Modifie le temps actuel du jeu, c'est à dire la variable temps du Robot, 
+        mais également touts les attributs temps_actuel des mouvements (modifiant ainsi le temps restant).
+        
+        :param int temps: Le temps
+        """
         self.mutex.acquire()
         self.temps = temps 
 
@@ -330,18 +420,34 @@ class Robot:
 
 
     def setStrategie( self, strategie ):
+        """
+        Modifie la stratégie du robot
+        
+        :param :class:'Strategie': la nouvelle stratégie du robot
+        """
         self.strategie = strategie
 
         
-    # retourne vrai si une partie est en cours, faux sinon
     def partieEnCours(self):
+        """
+        Retourne vrai si une partie est en cours, faux sinon
+        
+        :returns: vrai si une partie est en cours, faux sinon
+        :rtype: booleen
+        """
         self.mutex.acquire()
         en_cours = self.partie_en_cours
         self.mutex.release()
         return en_cours
         
-    # retourne vrai si le robot peut jouer (donc s'il n'a pas perdu)
+
     def peutJouer(self):
+        """
+        Retourne vrai si le robot peut jouer, et si il ne peut plus jouer
+        
+        :returns: vrai si le robot a le droit de jouer, faux sinon
+        :rtype: booleen
+        """
         self.mutex.acquire()
         play = self.peut_jouer
         self.mutex.release()

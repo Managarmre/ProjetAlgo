@@ -102,7 +102,7 @@ class TestCellule(unittest.TestCase):
 
     # ---------------------- test de la fonction 'ajouterLien' ---------------------- 
 
-    # un fonctionnement normale
+    # un fonctionnement normal
     def test_ajouterLien_ok(self):
         
         cellule2 = Cellule( numero = 2, attaque = 10, defense = 5, attaqueMax = 20, defenseMax = 30, production = 2, couleurJoueur = 0, x = 10, y = 60, rayon = 40 )

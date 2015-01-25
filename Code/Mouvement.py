@@ -1,32 +1,37 @@
 
-import Cellule as ce
-
 # on utilise 'math' pour trouver l'entier supérieur ou égal le plus proche
 import math
+from Exceptions import MouvementException
+import Cellule as ce
+
 
 class Mouvement:
-    
-    # Cellule depuis
-    # Cellule vers
-    # 
-    # Integer nbUnites
-    # Integer couleurJoueur
-    # Float temps_restant :  le temps restant avant l'arrivé des unités à destination
+    """
+    Un mouvement représente un déplacement d'unités sur un lien.
+    """
+
     def __init__(self, depuis, vers, nbUnites, couleurJoueur, distance, vitesse, temps_depart, temps_actuel ):
+        """
+        Constructeur de la classe Mouvement
+
+        :param :class:'Cellule' depuis: la cellule de départ du mouvement
+        :param :class:'Cellule' vers: la cellule d'arrivée du mouvement
+        :param int nbUnites: le nombre d'unités qui constitue le mouvement
+        :param int couleurJoueur: le numéro du joueur auquel appartiennent les unités offensives
+        :param int distance: la distance à parcourir sur le lien
+        :param int vitesse: vitesse à laquelle se déplace le mouvement
+        :param int temps_depart: temps du serveur lors de l'envoie du mouvement
+        :param int temps_actuel: temps du serveur actuel
+        """
         
         if( not ( isinstance( depuis, ce.Cellule ) and isinstance( vers, ce.Cellule ) ) ):
-            raise Exception("les paramètres 'de' et 'vers' sont des cellules")
+            raise MouvementException("les paramètres 'de' et 'vers' sont des cellules")
         
         if( not isinstance( nbUnites , int ) or nbUnites <= 0 ):
-            raise Exception("le paramètre 'nbUnites' doit être un entier supérieur à 0")
+            raise MouvementException("le paramètre 'nbUnites' doit être un entier supérieur à 0")
         
         if( not isinstance( couleurJoueur , int ) or couleurJoueur < 0 ):
-            raise Exception("le paramètre 'couleurJoueur' doit être un entier supérieur à 0")
-        
-        """ 
-        if( temps_restant < 0 ):
-            raise Exception("le paramètre 'temps_restant' ne peut pas être inférieur à 0")
-        """ 
+            raise MouvementException("le paramètre 'couleurJoueur' doit être un entier supérieur à 0")
             
         self.depuis = depuis
         self.vers = vers 
@@ -39,30 +44,55 @@ class Mouvement:
         self.temps_depart = temps_depart
         self.temps_actuel = temps_actuel
 
-        # self.temps_restant = temps_restant 
         
-        
-    # retourne la cellule vers laquelle le mouvement se dirige
     def toCellule(self):
+        """
+        Retourne la cellule vers laquelle le mouvement se dirige
+        
+        :returns: la cellule vers laquelle le mouvement se dirige
+        :rtype: :class:'Cellule'
+        """
         return self.vers
         
-    # retourne la cellule depuis laquelle le mouvement est originaire
+
     def fromCellule(self):
+        """
+        Retourne la cellule depuis laquelle le mouvement est originaire
+        
+        :returns: la cellule depuis laquelle le mouvement est originaire
+        :rtype: :class:'Cellule'
+        """
         return self.depuis 
     
+
     def getNbUnites(self):
+        """
+        Retourne le nombre d'unités sur le mouvement
+        
+        :returns: le nombre d'unités 
+        :rtype: int
+        """
         return self.nbUnites
         
-    def getCouleurJoueur(self):
-        return self.couleurJoueur
-    
 
-
-
-
-    # retourne le temps de trajet restant avant l'arrivée des unités à destination
-    def getTempsRestant(self):
+    def getCouleur(self):
+        """
+        Retourne la couleur du mouvement, c'est à dire le numéro du joueur qui envoie le mouvement.
         
+        :returns: la couleur du mouvement
+        :rtype: int
+        """
+        return self.couleurJoueur
+
+
+    def getTempsRestant(self):
+        """
+        Retourne le temps restant à parcourir avant l'arrivée du mouvement à destination.
+        
+        :returns: le temps restant à parcourir
+        :rtype: int
+        """
+
         distance_parcourue = self.temps_actuel - self.temps_depart
 
         temps_restant = ( self.distance - distance_parcourue ) / self.vitesse
@@ -71,31 +101,73 @@ class Mouvement:
 
 
     def getTempsDepart(self):
+        """
+        Retourne le temps de départ du mouvement
+        
+        :returns: le temps de départ du mouvement
+        :rtype: int
+        """
         return self.temps_depart
 
+
     def getVitesse(self):
+        """
+        Retourne la vitesse du mouvement
+        
+        :returns: la vitesse du mouvement
+        :rtype: int
+        """
         return self.vitesse
 
+
     def getDistance(self):
+        """
+        Retourne la distance totale à parcourir par le mouvement.
+        
+        :returns: la distance totale à parcourir par le mouvement
+        :rtype: int
+        """
         return self.distance
 
+
     def getTempsActuel(self):
+        """
+        Retourne le temps actuel du serveur
+        
+        :returns: le temps actuel du serveur
+        :rtype: int
+        """
         return self.temps_actuel
 
+
     def setTempsActuel( self, temps_actuel ):
+        """
+        Affecte la variable temps_actuel avec la valeur passée en paramètre
+        
+        :param int temps_actuel: le temps du serveur
+        """
         self.temps_actuel = temps_actuel
-
-
-
-
-
     
-    # retourne vrai si le mouvement a la couleur donnée (appartient au joueur ayant cette couleur)
+
     def aPourCouleur( self, couleurJoueur ):
+        """
+        Retourne vrai si le mouvement possède la couleur passée en paramètre.
+        (donc si le mouvement appartient au joueur ayant cette couleur)
+        
+        :param int couleurJoueur: la couleur du joueur
+        :returns: vrai si le mouvement possède cette couleur, faux sinon.
+        :rtype: booleen
+        """
         return self.couleurJoueur == couleurJoueur
     
-    # retourne dans la forme du protocole du serveur, l'ordre correspondant au mouvement associé
+
     def toOrder( self, uid ):
+        """
+        Retourne l'ordre correspondant au mouvement associé dans la forme du protocole du serveur
+
+        :returns: l'ordre correspondant au mouvement
+        :rtype: str
+        """
         pourcentage = math.ceil( self.getNbUnites() * 100 / ( self.fromCellule().getAttaque() + self.getNbUnites() ) )
         
         return "[{uid}]MOV{pourcentage}FROM{origine}TO{destination}".format(    uid = uid,

@@ -1,29 +1,36 @@
 
-#from Cellule import *
 import Cellule as ce
 import Mouvement as mouv
+from Exceptions import LienException
 
-# les liens reliant les cellules du terrain
-# représentent les arêtes du graphe
+
 class Lien:
+	""" 
+	Les liens reliant les cellules du terrain (représentent les arêtes du graphe).
+	"""
+	
 
-	# Cellule u : une cellule de l'un des bouts du lien
-	# Cellule v : l'autre cellule au bout du lien
-	# Int distance : la distance séparant les cellules u et v
 	def __init__(self, u, v, distance):
+		"""
+		Constructeur de la classe Lien.
+		On mettra toujours la cellule ayant le plus petit numéro dans l'attribut u.
+
+		:param :class:'Cellule' u: Une cellule de l'une des extrémités du lien
+		:param :class:'Cellule' v: L'autre cellule de l'une des extrémités du lien
+		:param int distance: la distance séparant les cellules u et valeur
+		:raises :class:'LienException': si la distance est inférieure ou égale à 0
+		"""
 
 		# on vérifie les paramètres
-		
 		if( not isinstance( u , ce.Cellule ) ):
-			raise Exception("le parametre 'u' doit être une cellule")
+			raise LienException("le parametre 'u' doit être une cellule")
 
 		if( not isinstance( v , ce.Cellule ) ):
-			raise Exception("le paramètre 'v' doit être une cellule")
+			raise LienException("le paramètre 'v' doit être une cellule")
 			
-		if( not isinstance( distance , int ) ):
-			raise Exception("le paramètre 'distance' doit être de type Entier")
+		if( not isinstance( distance , int ) and distance <= 0 ):
+			raise LienException("le paramètre 'distance' doit être de type Entier supérieur à 0")
 		
-
 
 		# on mettra toujours la cellule ayant le plus petit numéro en premier
 		if( u.getNumero() > v.getNumero() ):
@@ -44,56 +51,87 @@ class Lien:
 		self.vers_v = []		# mouvements de U vers V
 
 
-	# retourne la cellule enregistrée sous U
-	# return : Cellule
 	def getU(self):
+		"""
+		Retourne la cellule enregistrée sous l'attribut U
+		
+		:returns: la cellule enregistrée dans U
+		:rtype: :class:'Cellule'
+		"""
 		return self.u
 
-	# retourne la cellule enregistrée sous V
-	# return : Cellule
+
 	def getV(self):
+		"""
+		Retourne la cellule enregistrée sous l'attribut V
+		
+		:returns: la cellule enregistrée dans V
+		:rtype: :class:'Cellule'
+		"""
 		return self.v
 
-	# retourne la longueur du lien (la distance entre les deux cellules)
-	# return : Integer
+
 	def getDistance(self):
+		"""
+		Retourne la longueur du lien, c'est à dire la distance séparant les deux cellules aux extrémités du lien.
+		
+		:returns: la longueur du lien
+		:rtype: int
+		"""
 		return self.distance
 
 
 	# retourne l'autre cellule, si l'on donne U, on retourne V, et vise et versa
 	def getOtherCellule( self, cellule_inconnue ):
+		"""
+		Selon la cellule donnée en paramètre, retourne l'autre cellule du lien (retourne U si on donne V et vice versa).
+		
+		:raises :class:'LienException': si la cellule inconnue n'appartient pas au lien
+		:returns: l'autre cellule du lien
+		:rtype: :class:'Cellule'
+		"""
 		if( cellule_inconnue == self.getU() ):
 			return self.getV()
 		elif( cellule_inconnue == self.getV() ):
 			return self.getU() 
 		else:
-			raise Exception("Cette cellule n'est pas présente sur ce lien....")
+			raise LienException("Cette cellule n'est pas présente sur ce lien....")
 			
-		
-	# ajoute un mouvement VERS la cellule enregistrée sous V
-	# Mouvement mouvement : le mouvement à ajouter
+
 	def ajouterMouvementVersV( self, mouvement ):
+		"""
+		Ajoute un mouvement vers la cellule enregistrée sous V
+		
+		:param :class:'Mouvement' mouvement: Le mouvement à ajouter.
+		"""
 		self.vers_v.append( mouvement )
 	
-	# ajoute un mouvement VERS la cellule enregistrée sous U
-	# Mouvement mouvement : le mouvement à ajouter
+
 	def ajouterMouvementVersU( self, mouvement ):
+		"""
+		Ajoute un mouvement vers la cellule enregistrée sous U
+		
+		:param :class:'Mouvement' mouvement: Le mouvement à ajouter
+		"""
 		self.vers_u.append( mouvement )
 	
 	
-	# ajoute un mouvement VERS la cellule spécifiée
-	# si la cellule ne fait pas partie de ce lien, on lance une Exception
-	# Cellule cellule : la cellule vers lequel le mouvement est en direction
-	# Mouvement mouvement : le mouvement à ajouter
 	def ajouterMouvementVersCellule( self, cellule , mouvement ):
+		"""
+		Ajoute le mouvement passé en paramètre vers la cellule passée en paramètre
 		
+		:param :class:'Cellule' cellule: La cellule à laquelle on ajoute le mouvement
+		:param :class:'Mouvement' mouvement: Le mouvement à ajouter
+		:raises :class:'LienException': si la cellule n'appartient pas au lien
+		"""
+
 		# on vérifie les types des paramètres entrés
 		if( not isinstance( cellule , ce.Cellule ) ):
-			raise Exception("le paramètre 'cellule' doit être une instance de l'objet Cellule")
+			raise LienException("le paramètre 'cellule' doit être une instance de l'objet Cellule")
 		
 		if( not isinstance( mouvement , mouv.Mouvement ) ):
-			raise Exception("le parametre 'mouvement' doit petre une instance de l'objet Mouvement")
-		
+			raise LienException("le parametre 'mouvement' doit petre une instance de l'objet Mouvement")
+
 		
 		# on vérifie que la cellule est bien l'un des bords du lien
 		if( cellule == self.getU() ): 		# si c'est U
@@ -103,40 +141,63 @@ class Lien:
 			self.ajouterMouvementVersV(mouvement)
 			
 		else:
-			raise Exception("la cellule spécifiée ne fait pas partie de ce lien (ajouterMouvementCellule)")
+			raise LienException("la cellule spécifiée ne fait pas partie de ce lien (ajouterMouvementCellule)")
+		
 	
-
-	
-	
-	
-	# vide la liste des mouvements vers V
-	def clearVersV( self ):
+	def _clearVersV( self ):
+		"""
+		Vide la liste des mouvements vers V
+		"""
 		self.vers_v = []
 		
-	# vide la liste des mouvements vers U
-	def clearVersU( self ):
+
+	def _clearVersU( self ):
+		"""
+		Vide la liste des mouvements vers U
+		"""
 		self.vers_u = []
 	
-	# supprime tous les mouvements présents sur ce lien
+
 	def clearAllMouvements( self ):
-		self.clearVersU()
-		self.clearVersV()
-		
+		"""
+		Supprime tous les mouvements présents sur le lien.
+		"""
+		self._clearVersU()
+		self._clearVersV()
 		
 	
 	def getMouvementsVersU(self):
+		"""
+		Retourne la liste des mouvements allant vers U
+
+		:returns: la liste des mouvements allant vers U
+		:rtype: list of :class:'Mouvement'
+		"""
 		return self.vers_u
-		
+	
+
 	def getMouvementsVersV(self):
+		"""
+		Retourne la liste des mouvements allant vers V
+
+		:returns: la liste des mouvements allant vers V
+		:rtype: list of :class:'Mouvement'
+		"""
 		return self.vers_v
 	
-	# retourne la liste des mouvements allant vers la cellule donnée en paramètre
-	# lance une exception si cette cellule ne fait pas partie de ce lien
-	# Cellule cellule : la cellulle dont on veut récupérer les mouvements qui vont vers elle
-	def getMouvementVersCellule( self, cellule ):
+
+	def getMouvementsVersCellule( self, cellule ):
+		"""
+		Retourne la liste des mouvements allant vers la cellule passée en paramètre.
+		
+		:param :class:'Cellule' cellule: La cellule dont on veut récupérer les mouvements entrants
+		:returns: la liste des mouvements allant vers cette cellule
+		:rtype: list of :class:'Mouvement'
+		:raises :class:'LienException': si la cellule n'appartient pas au lien
+		"""
 		# on vérifie les types des paramètres entrés
 		if( not isinstance( cellule , ce.Cellule ) ):
-			raise Exception("le paramètre 'cellule' doit être une instance de l'objet Cellule")
+			raise LienException("le paramètre 'cellule' doit être une instance de l'objet Cellule")
 		
 		# on vérifie que la cellule est bien l'un des bords du lien
 		if( cellule == self.getU() ): 		# si c'est U
@@ -146,37 +207,53 @@ class Lien:
 			return self.getMouvementsVersV()
 			
 		else:
-			raise Exception("la cellule spécifiée ne fait pas partie de ce lien (ajouterMouvementCellule)")
+			raise LienException("la cellule spécifiée ne fait pas partie de ce lien (ajouterMouvementCellule)")
 		
 
-
-	# renvoie vrai si la cellule passée en paramètre appartient à ce lien
 	def celluleAppartientAuLien( self, cellule ):
+		"""
+		Retourne vrai si la cellule passée en paramètre appartient au lien, faux sinon.
+		
+		:param :class:'Cellule' cellule: Cellule dont on veut savoir si elle appartient au lien
+		:rtype: booleen
+		"""
 		return cellule == self.getU() or cellule == self.getV() 
 
 
-
 	def toString(self):
+		"""
+		Retourne des informations textuelles sur le lien
+		
+		:returns: le lien sous forme d'une chaine de caractère
+		:rtype: str
+		"""
 		return "( " + self.u.toString() + " ; " + self.v.toString() + " ; " + str(self.distance) + " )" 
 
 
-
-
-	# utliser pour ranger les liens dans un dictionnaire
-	# retourne la valeur unique qui identifie ce lien
 	def hash(self):
+		"""
+		Utilisée pour ranger les liens dans un dictionnaire
+		Retourne la valeur unique qui identifie le lien
+
+		:returns: la valeur unique identifiant le lien.
+		:rtype: int
+		"""
 		return int( str( self.u.getNumero() ) + str( self.v.getNumero() ) )
 
 
-	# détermine la valeur du hash d'un lien à partir de deux cellules
-	# permet de calculer à partir des cellules qui le compose, la valeur unique qui identifie ce lien
-	# appel : Lien.hachage(...)
-	# Cellule cellule1
-	# Cellule cellule2
 	def hachage(cellule1 , cellule2):
+		"""
+		Permet de calculer la valeur unique qui identifie un lien supposé entre deux cellules, 
+		Retourne la valeur du hash d'un lien à partir de ces deux cellules.
 		
+		:param :class:'Cellule' cellule1: la première cellule
+		:param :class:'Cellule' cellule2: la deuxième cellule
+		:returns: l'identifiant du lien supposé entre les deux cellules
+		:rtype: int
+		"""
+
 		if( not ( isinstance( cellule1 , ce.Cellule ) and isinstance( cellule2 , ce.Cellule ) ) ):
-			raise Exception("les deux paramètres doivent être des instances de l'objet Cellule")
+			raise LienException("les deux paramètres doivent être des instances de l'objet Cellule")
 		
 		nunero_1, numero_2 = cellule1.getNumero(), cellule2.getNumero()
 		if( nunero_1 > numero_2 ):
