@@ -110,19 +110,21 @@ def play_pooo():
     
     logging.info('Entering play_pooo fonction from {} module...'.format(inspect.currentframe().f_back.f_code.co_filename))
 
+    """
     graphique = Graphique( cheshire )
     graphique.dessinerCellules()
     graphique.dessinerLiens()
+    """
     
     thread_updateTime = threading.Thread( target=updateTime, args=(cheshire,) )
     thread_updateGame = threading.Thread( target=updateGame, args=(cheshire,) )
     thread_sendDecisions = threading.Thread( target=sendDecisions, args=(cheshire,) )
-    thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
+    #thread_graphique = threading.Thread( target=updateGraphique, args=(graphique,) )
     
     thread_updateTime.start()
     thread_updateGame.start()
     thread_sendDecisions.start()
-    thread_graphique.start()
+    #thread_graphique.start()
 
     #graphique.canvas.after( 10, updateGraphique, args=(graphique,) )
     #graphique.canvas.after( 10, functools.partial(updateGraphique, graphique) )
@@ -220,7 +222,7 @@ def sendDecisions( robot ):
         for ordre in ordres :
             poooc.order( ordre )
 
-                #time.sleep( 0.02 )
+            time.sleep( 0.02 )
 
         #except Exception as e :
         #    logging.info( e )

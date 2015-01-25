@@ -31,8 +31,8 @@ class Robot:
         
         self.uid = uid
         
-        #self.strategie = stratprev.StrategiePrevision( self )
-        self.strategie = strat.StrategieNormale( self )
+        self.strategie = stratprev.StrategiePrevision( self )
+        #self.strategie = strat.StrategieNormale( self )
 
         self.temps = 0
         self.joue = False
